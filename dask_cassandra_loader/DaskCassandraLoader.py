@@ -1,4 +1,7 @@
-from . import CassandraConnector, CassandraLoadingQuery, CassandraTable
+from dask_cassandra_loader.CassandraConnector import CassandraConnector
+from dask_cassandra_loader.CassandraLoadingQuery import CassandraLoadingQuery
+from dask_cassandra_loader.CassandraTable import CassandraTable
+
 import logging
 from dask.distributed import Client, LocalCluster
 
@@ -10,6 +13,7 @@ class DaskCassandraLoader(object):
         self.keyspace_tables = {}
         self.cassandra_con = None
         self.dask_client = None
+        return
 
         # Connect to Dask
 
@@ -17,9 +21,11 @@ class DaskCassandraLoader(object):
         self.logger.info('Create and connect to a local Dask cluster.')
         cluster = LocalCluster()  # kwargs={'local-directory':'/home/jupyter/'})
         self.dask_client = Client(cluster, processes=False)
+        return
 
     def disconnect_from_Dask(self):
         self.dask_client.close()
+        return
 
     def connect_to_cassandra(self):
         cassandra_keyspace = input("Cassandra keyspace:")
@@ -39,11 +45,13 @@ class DaskCassandraLoader(object):
                     self.cassandra_con = CassandraConnector(cassandra_clusters, cassandra_keyspace)
                 except:
                     raise Exception(
-                        "Either the provided IPs are invalida or it is not possible to connect to the Cassandra Cluster!!!")
+                        "Either the provided IPs are invalid or it is not possible to connect to the Cassandra Cluster!!!")
         return
 
     def disconnect_from_cassandra(self):
-        self.cassandra_con.shutdown()
+        if self.cassandra_con != None:
+            self.cassandra_con.shutdown()
+        return
 
     def load_cassandra_table(self):
         done = False
@@ -81,6 +89,8 @@ class DaskCassandraLoader(object):
             table.load_data(self.cassandra_con.session, loading_query)
             self.keyspace_tables[table_name] = table
             done = True
+        return
 
-        def unload_cassandra_table(self, table_name):
-            del self.keyspace_tables[table_name]
+    def unload_cassandra_table(self, table_name):
+        del self.keyspace_tables[table_name]
+        return
