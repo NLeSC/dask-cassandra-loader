@@ -1,4 +1,4 @@
-from . import PagedResultHandler
+from dask_cassandra_loader import PagedResultHandler
 import dask.dataframe as dd
 import dask
 import pandas as pd
@@ -22,6 +22,7 @@ class CassandraTable():
         # loading query
         self.loading_query = None
         self.data = None
+        return
 
     def load_metadata(self, cassandra_session):
         self.cols = list(cassandra_session.cluster.metadata.keyspaces[self.keyspace].tables[self.name].columns.keys())
@@ -43,10 +44,12 @@ class CassandraTable():
         self.predicate_cols = dict.fromkeys([f for f in self.cols if f not in list(self.partition_cols)])
         for col in self.cols:
             self.predicate_cols[col] = sql.expression.column(col)
+        return
 
     def print_metadata(self):
         print("The table columns are:" + str(self.table_cols))
         print("The partitionn columns are:" + str(self.partition_cols))
+        return
 
     def read_data_(self, sql_query, clusters, keyspace):
         from cassandra.cluster import Cluster
@@ -99,3 +102,4 @@ class CassandraTable():
         # Collect results
         df = dd.from_delayed(futures)
         self.data = df.compute()
+        return

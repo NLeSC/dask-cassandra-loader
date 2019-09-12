@@ -10,6 +10,7 @@ class CassandraLoadingQuery(object):
         self.projections = None
         self.and_predicates = None
         self.sql_query = None
+        return
 
     def set_projections(self, table):
         done = False
@@ -51,9 +52,11 @@ class CassandraLoadingQuery(object):
                 print("All columns will be projected!!!")
                 self.projections = str(table.cols)
                 done = True
+        return
 
     def drop_projections(self):
         self.projections = None
+        return
 
     # Functions to manage and_predicates and prune partitions
     def set_and_predicates(self, table):
@@ -102,9 +105,12 @@ class CassandraLoadingQuery(object):
             else:
                 print("No predicates defined!!!")
                 done = True
+        return
+
 
     def remove_and_predicates(self):
         self.and_predicates = None
+        return
 
     # Functions to manage partitions
     def partition_elimination(self, table):
@@ -168,6 +174,7 @@ class CassandraLoadingQuery(object):
         for col in list(part_cols_prun.keys()):
             if col in list(table.partition_cols):
                 table.partition_keys = table.partition_keys[table.partition_keys[col].isin(part_cols_prun[col])]
+        return
 
     # Build the query
     def build_query(self, table):
@@ -179,6 +186,7 @@ class CassandraLoadingQuery(object):
 
         if self.and_predicates is not None:
             self.sql_query = self.sql_query.where(sql.expression.and_(*self.and_predicates))
+        return
 
     def print_query(self):
         if self.sql_query is None:
@@ -186,3 +194,4 @@ class CassandraLoadingQuery(object):
             self.finished_event.set()
         else:
             print(self.sql_query.compile(compile_kwargs={"literal_binds": True}))
+        return

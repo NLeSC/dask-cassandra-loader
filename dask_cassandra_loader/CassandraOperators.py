@@ -7,6 +7,7 @@ class CassandraOperators(object):
         self.si_operators = ["less_than_equal", "less_than", "greater_than_equal", "greater_than", "equal", "like"]
         self.bi_operators = ["between"]
         self.li_operators = ["in_", "notin_"]
+        return
 
     # Predicates only for columns which are not primarey key columns:
     def create_predicate(self, table, op_name, col_name, values):
@@ -28,3 +29,4 @@ class CassandraOperators(object):
             return table.predicate_cols[col_name].in_(values)
         elif op_name == "notin_":
             return table.predicate_cols[col_name].notin_(values)
+        return

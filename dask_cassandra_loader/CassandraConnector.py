@@ -1,6 +1,6 @@
 import pandas as pd
 from cassandra.cluster import Cluster
-from cassandra.protocol import NumpyProtocolHandler, LazyProtocolHandler
+from cassandra.protocol import NumpyProtocolHandler
 
 class CassandraConnector(object):
     def __init__(self, cassandra_clusters, cassandra_keyspace):
@@ -12,6 +12,7 @@ class CassandraConnector(object):
             return pd.DataFrame(rows, columns=colnames)
 
         # Connect to Cassandra
+        print("connecting to:" + str(self.clusters) + ".\n")
         self.cluster = Cluster(self.clusters)
         self.session = self.cluster.connect(self.keyspace)
 
@@ -21,6 +22,8 @@ class CassandraConnector(object):
 
         # Tables
         self.tables = dict()
+        return
 
     def shutdown(self):
         self.session.shutdown()
+        return
