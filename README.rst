@@ -16,7 +16,7 @@ To install dask-cassandra-loader, do:
 
   git clone https://github.com/NLeSC/dask-cassandra-loader.git
   cd dask-cassandra-loader
-  pip install .
+  pip install . -r requirements.txt
 
 
 Run tests (including coverage) with:
