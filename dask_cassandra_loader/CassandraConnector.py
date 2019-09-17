@@ -2,7 +2,9 @@ import pandas as pd
 from cassandra.cluster import Cluster
 from cassandra.protocol import NumpyProtocolHandler
 
+
 class CassandraConnector(object):
+
     def __init__(self, cassandra_clusters, cassandra_keyspace):
         self.error = None
         self.clusters = cassandra_clusters

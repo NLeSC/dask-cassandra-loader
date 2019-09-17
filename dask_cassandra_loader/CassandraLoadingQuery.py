@@ -2,8 +2,9 @@ from . import CassandraOperators
 from sqlalchemy import sql
 from sqlalchemy.sql import text
 
-# For a single table
+
 class CassandraLoadingQuery(object):
+
     def __init__(self):
         self.error = None
         self.warning = None
@@ -12,162 +13,62 @@ class CassandraLoadingQuery(object):
         self.sql_query = None
         return
 
-    def set_projections(self, table):
-        done = False
-        while (done == False):
-            option = input("Do you want to set the list of columns to project? [yes | no]")
-            if option not in ["yes", "no"]:
-                print("Invalid Option!!!")
-            elif (option == "yes"):
-                try:
-                    my_list = []
-                    col = input("Please use one of the following columns: " + str(
-                        table.cols) + "!!!\n" + "Projections columns (Enter to exit):\n")
-                    if (col == ""):
-                        print("All columns will be projected!!!")
-                        my_list = str(table.cols)
-                        done = True
-                    elif col not in table.cols:
-                        raise
-                    else:
-                        my_list.append(str(col))
-                        while True:
-                            col = input()
-                            if (col == ""):
-                                break
-                            elif col not in table.cols:
-                                my_list = []
-                                raise
-                            elif col in my_list:
-                                print("Do not add the same column twice!!!")
-                            else:
-                                my_list.append(str(col))
-                except:
-                    print("Invalid column name: '" + col + "'!!!")
-                    print("Please use one of the following columns: " + str(table.cols) + "!!!")
-                else:
-                    self.projections = my_list
-                    done = True
-            else:
-                print("All columns will be projected!!!")
-                self.projections = str(table.cols)
-                done = True
+    def set_projections(self, table, projections):
+        if projections is None or len(projections) == 0:
+            print("All columns will be projected!!!")
+            self.projections = projections
+        else:
+            for col in projections:
+                if col not in table.cols:
+                    raise Exception("Invalid column, please use one of the following columns: " + str(table.cols)
+                                    + "!!!")
+            self.projections = list(dict.fromkeys(projections))
         return
 
     def drop_projections(self):
         self.projections = None
         return
 
-    # Functions to manage and_predicates and prune partitions
-    def set_and_predicates(self, table):
-        done = False
-        self.predicates = []
-        while (done == False):
-            option = input("Do you want to add predicates over the non partition key columns? [yes | no]")
-            if option not in ["yes", "no"]:
-                print("Invalid Option!!!")
-            elif (option == "yes"):
-                finished = False
-                while (finished == False):
-                    operators = CassandraOperators()
-                    op = input("Pick an operator " + str(operators.operators).replace("'", "") + " \n(Enter to exit):")
-                    if op == "":
-                        finished = True
-                    elif (op not in operators.operators):
-                        print("Incorrect operator!!!")
-                        break
-                    else:
-                        col = input("Pick a non-primary key column " + str(table.predicate_cols.keys()).replace("'",
-                                                                                                                "") + " \n(Enter to exit):")
-                        if col == "":
-                            finished = True
-                        elif (col not in table.predicate_cols):
-                            print("Incorrect column!!!")
-                            break
-                        else:
-                            try:
-                                if (op in operators.si_operators):
-                                    values = [float(input("Enter value: "))]
-                                    finished = True
-                                elif (op in operators.bi_operators):
-                                    values = [float(input("Enter bottom limit: ")), float(input("Enter upper limit: "))]
-                                    finished = True
-                                elif (op in operators.li_operators):
-                                    values = list(map(float, input(
-                                        "Enter the list of values seperated by space: ").strip().split()))
-                                    finished = True
-                            except:
-                                print("Only numbers are allowed!!!")
-                                break
-                            else:
-                                self.predicates.append(operators.create_predicate(table, op, col, values))
-                                done = finished
-            else:
-                print("No predicates defined!!!")
-                done = True
+    def set_and_predicates(self, table, predicates):
+        if predicates is None or len(predicates) == 0:
+            print("No predicates over the non primary key columns were defined!!!")
+        else:
+            operators = CassandraOperators()
+            for predicate in predicates:
+                (col, op, values) = predicate
+                if col not in table.predicate_cols:
+                    raise Exception("Predicate: " + str(predicate)
+                                    + " has an primary key column. Pick a non-primary key column "
+                                    + str(table.predicate_cols.keys() + "!!!\n"))
+                else:
+                    self.predicates.append(operators.create_predicate(table, op, col, values))
         return
-
 
     def remove_and_predicates(self):
         self.and_predicates = None
         return
 
-    # Functions to manage partitions
-    def partition_elimination(self, table):
-        done = False
+    @staticmethod
+    def partition_elimination(self, table, partitions_to_eliminate, force):
         part_cols_prun = dict.fromkeys(table.partition_cols)
-        while (done == False):
-            option = input("Do you want to do partition elimination? [yes | no]")
-            if option not in ["yes", "no"]:
-                print("Invalid Option!!!")
-            elif (option == "yes"):
-                col = input(
-                    "Pick a primary key column " + str(table.partition_cols).replace("'", "") + " \n(Enter to exit):")
-                if col == "":
-                    proceed = input(
-                        "ATTENTION: All partitions will be loaded, query might be aborted! Do you want to proceed? [yes | no]")
-                    if proceed not in ["yes", "no"]:
-                        print("Invalid Option, option 'no' will be used!!!")
-                    elif proceed == "yes":
-                        done = True
-                elif (col not in table.partition_cols):
-                    print("Incorrect column!!!")
-                    continue
+
+        if partitions_to_eliminate is None or len(partitions_to_eliminate) == 0:
+            if force is True:
+                return
+            else:
+                raise Exception("ATTENTION: All partitions will be loaded, query might be aborted!!!"
+                                + "To proceed re-call the function with force = True.")
+        else:
+            for partition in partitions_to_eliminate:
+                (col, part_keys) = partition
+                if col not in table.partition_cols:
+                    raise Exception("Column " + str(col) + " is not a partition column. It should be one of "
+                                    + str(table.partition_cols) + ".")
                 else:
                     try:
-                        part_keys = list(
-                            map(float, input("Enter the partition keys seperated by space: ").strip().split()))
-                    except:
-                        print("Only numbers are allowed!!!")
-                    else:
-                        part_cols_prun[col] = part_keys
-                        finished = False
-                        while (finished == False):
-                            col = input("Pick a primary key column " + str(table.partition_cols).replace("'",
-                                                                                                         "") + " \n(Enter to exit):")
-                            if col == "":
-                                finished = True
-                            elif (col not in table.partition_cols):
-                                print("Incorrect column!!!")
-                                break
-                            else:
-                                try:
-                                    part_keys = list(map(float, input(
-                                        "Enter the partition keys seperated by space: ").strip().split()))
-                                except:
-                                    print("Only numbers are allowed!!!")
-                                    break
-                                else:
-                                    part_cols_prun[col] = part_keys
-                                    done = finished
-                        done = finished
-            else:
-                proceed = input(
-                    "ATTENTION: All partitions will be loaded, query might be aborted! Do you want to proceed? [yes | no]")
-                if proceed not in ["yes", "no"]:
-                    print("Invalid Option, option 'no' will be used!!!")
-                elif proceed == "yes":
-                    done = True
+                        part_cols_prun[col] = list(map(float, part_keys))
+                    except Exception as e:
+                        raise("Invalid value in the partition keys list: " + str(e) + " !!!")
 
         # It prunes the partition keyvalues using a Dictionary passed as argument.
         # part_cols_prun is a dictionary (partition_col_name, values_to_prune).

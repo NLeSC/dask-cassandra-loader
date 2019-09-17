@@ -9,6 +9,7 @@ import copy
 
 
 class CassandraTable():
+
     def __init__(self, keyspace, name):
         self.error = None
         self.warning = None
@@ -48,7 +49,7 @@ class CassandraTable():
 
     def print_metadata(self):
         print("The table columns are:" + str(self.table_cols))
-        print("The partitionn columns are:" + str(self.partition_cols))
+        print("The partition columns are:" + str(self.partition_cols))
         return
 
     def read_data_(self, sql_query, clusters, keyspace):

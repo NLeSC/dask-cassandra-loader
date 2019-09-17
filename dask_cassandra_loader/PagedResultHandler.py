@@ -1,6 +1,8 @@
 from threading import Event
 
+
 class PagedResultHandler(object):
+
     def __init__(self, future):
         self.error = None
         self.finished_event = Event()
