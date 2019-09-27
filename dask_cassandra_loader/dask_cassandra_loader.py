@@ -99,19 +99,19 @@ class DaskCassandraLoader(object):
         loading_query = CassandraLoadingQuery()
         loading_query.set_projections(table, projections)
         if loading_query.error:
-            raise  Exception("load_cassandra_table failed: " + loading_query.error)
+            raise Exception("load_cassandra_table failed: " + loading_query.error)
 
         loading_query.set_and_predicates(table, and_predicates)
         if loading_query.error:
-            raise loading_query.error
+            raise Exception("load_cassandra_table failed: " + loading_query.error)
 
         loading_query.partition_elimination(table, partitions_to_load, force)
         if loading_query.error:
-            raise loading_query.error
+            raise Exception("load_cassandra_table failed: " + loading_query.error)
 
         loading_query.build_query(table)
         if loading_query.error:
-            raise loading_query.error
+            raise Exception("load_cassandra_table failed: " + loading_query.error)
 
         loading_query.print_query()
 
