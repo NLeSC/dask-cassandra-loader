@@ -1,4 +1,4 @@
-from dask_cassandra_loader import PagedResultHandler
+from dask_cassandra_loader.PagedResultHandler import PagedResultHandler
 import dask.dataframe as dd
 import dask
 import pandas as pd
@@ -41,8 +41,7 @@ class CassandraTable():
         :return:
         """
         self.cols = list(cassandra_connection.session.cluster.metadata.keyspaces[self.keyspace].tables[self.name].columns.keys())
-        self.partition_cols = [f.name for f in cassandra_connection.session.cluster.metadata.keyspaces[self.keyspace].tables[
-                                                   self.name].partition_key[:]]
+        self.partition_cols = [f.name for f in cassandra_connection.session.cluster.metadata.keyspaces[self.keyspace].tables[self.name].partition_key[:]]
 
         # load partition keys
         sql_query = sql.select([text(f) for f in self.partition_cols]).distinct().select_from(text(self.name))
@@ -111,12 +110,12 @@ class CassandraTable():
         session.shutdown()
         return df
 
-    def load_data(self, cassandra_connection, caLoadingQuery):
+    def load_data(self, cassandra_connection, ca_loading_query):
         """
         It defines a set of SQL queries to load partitions of a Cassandra table in parallel into a Dask DataFrame.
-        > load_data( cassandra_con, caLoadingQuery)
+        > load_data( cassandra_con, ca_loading_query)
         :param cassandra_connection: Instance of CassandraConnector.
-        :param caLoadingQuery: Instance of CassandraLoadingQuery.
+        :param ca_loading_query: Instance of CassandraLoadingQuery.
         :return:
         """
         futures = []
@@ -125,7 +124,7 @@ class CassandraTable():
             self.load_metadata(self.name, cassandra_connection)
 
         # Reset the table's query
-        self.loading_query = caLoadingQuery
+        self.loading_query = ca_loading_query
 
         # Schedule the reads
         partition_keys = self.partition_keys.to_numpy()
