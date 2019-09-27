@@ -19,10 +19,11 @@
 import os
 import sys
 
-import dask_cassandra_loader
 
 here = os.path.dirname(__file__)
 sys.path.insert(0, os.path.abspath(os.path.join(here, '..')))
+
+import dask_cassandra_loader
 
 
 # -- General configuration ------------------------------------------------
