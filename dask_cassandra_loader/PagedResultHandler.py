@@ -8,8 +8,7 @@ class PagedResultHandler(object):
         """
         Initialization of PagedResultHandler
         > handler = PagedResultHandler(future)
-
-        :param future: Future from Cassandra session asynchronous execution. 
+        :param future: Future from Cassandra session asynchronous execution.
         """
         self.error = None
         self.finished_event = Event()
@@ -23,9 +22,8 @@ class PagedResultHandler(object):
         """
         It pages the result of a Cassandra query.
         > handle_page(rows)
-        
-        :param rows: Cassandra's query result. 
-        :return: 
+        :param rows: Cassandra's query result.
+        :return:
         """
         if self.df is None:
             self.df = rows
@@ -41,9 +39,8 @@ class PagedResultHandler(object):
         """
         It handles and exception.
         > handle_error(exc)
-        
-        :param exc: It is a Python Exception. 
-        :return: 
+        :param exc: It is a Python Exception.
+        :return:
         """
         self.error = exc
         self.finished_event.set()
