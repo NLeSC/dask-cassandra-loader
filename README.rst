@@ -7,7 +7,7 @@
     :alt: Codacy Grade
     
 .. image:: https://api.codacy.com/project/badge/Coverage/e0685caa122140f582c64c479a5a1da5
-    :target: https://www.codacy.com/app/LourensVeen/cerulean
+    :target: https://www.codacy.com/manual/r.goncalves/dask-cassandra-loader
     :alt: Code Coverage
     
 ################################################################################
