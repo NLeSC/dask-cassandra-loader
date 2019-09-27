@@ -10,10 +10,9 @@ here = os.path.abspath(os.path.dirname(__file__))
 version = {}
 with open(os.path.join(here, 'dask_cassandra_loader', '__version__.py')) as f:
     d = {}
-    with open("file.txt") as f:
-        for line in f:
-            (key, val) = line.split(' = ')
-            d[int(key)] = val
+    for line in f:
+        (key, val) = line.split(' = ')
+        d[int(key)] = val
     version = d
 
 with open('README.rst') as readme_file:
