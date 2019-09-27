@@ -5,6 +5,7 @@
 """
 import pytest
 
+
 def test_something():
     if True:
         raise AssertionError()
@@ -22,6 +23,6 @@ def an_object():
     return {}
 
 
-def test_dask-cassandra-loader(an_object):
+def test_dask_cassandra_loader(an_object):
     if an_object != {}:
         raise AssertionError()
