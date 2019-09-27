@@ -2,6 +2,14 @@
     :target: https://dask-cassandra-loader.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Build Status
 
+.. image:: https://api.codacy.com/project/badge/Grade/e0685caa122140f582c64c479a5a1da5
+    :target: https://www.codacy.com/manual/r.goncalves/dask-cassandra-loader
+    :alt: Codacy Grade
+    
+.. image:: https://api.codacy.com/project/badge/Coverage/e0685caa122140f582c64c479a5a1da5
+    :target: https://www.codacy.com/manual/r.goncalves/dask-cassandra-loader
+    :alt: Code Coverage
+    
 ################################################################################
 dask-cassandra-loader
 ################################################################################
