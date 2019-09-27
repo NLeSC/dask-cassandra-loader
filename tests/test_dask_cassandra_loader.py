@@ -5,8 +5,6 @@
 """
 import pytest
 
-from dask_cassandra_loader import DaskCassandraLoader
-
 
 def test_something():
     assert True
