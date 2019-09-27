@@ -39,5 +39,5 @@ def test_pep8_conformance():
             Run `pip install --upgrade yapf` to install the latest version
             of yapf.
         """))
-
-    assert success, "Your code does not conform to PEP8"
+    else:
+        raise AssertionError("Your code does not conform to PEP8")
