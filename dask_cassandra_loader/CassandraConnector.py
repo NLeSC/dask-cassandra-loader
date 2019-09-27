@@ -11,7 +11,6 @@ class CassandraConnector(object):
         Initialization of CassandraConnector. It connects to a Cassandra cluster defined by a list of IPs.
         If the connection is successful, it then establishes a session with a Cassandra keyspace.
         > CassandraConnector(['10.0.1.1', '10.0.1.2'], 'test')
-        
         :param cassandra_clusters: It is a list of IPs with each IP represented as a string. 
         :param cassandra_keyspace: It is a string which contains an existent Cassandra keyspace.
         """
