@@ -68,7 +68,7 @@ class DaskCassandraLoader(object):
             self.cassandra_con.shutdown()
         return
 
-    def load_cassandra_table(self, table_name, projections, and_predicates, partitions_to_load):
+    def load_cassandra_table(self, table_name, projections, and_predicates, partitions_to_load, force):
         """
         It loads a Cassandra table into a Dask dataframe.
         > load_cassandra_table('tab1',
@@ -82,6 +82,8 @@ class DaskCassandraLoader(object):
         prints all available operators. It should only contain columns which are not partition columns.
         :param partitions_to_load: List of tuples. Each tuple as a column name as String
         and a list of keys which should be selected. It should only contain columns which are partition columns.
+        :param force: It is a boolean. In case all the partitions need to be loaded, which is not recommended,
+        it should be set to 'True'.
         :return:
         """
         if table_name in self.keyspace_tables.keys():
@@ -103,7 +105,7 @@ class DaskCassandraLoader(object):
         if loading_query.error:
             raise loading_query.error
 
-        loading_query.partition_elimination(table, partitions_to_load)
+        loading_query.partition_elimination(table, partitions_to_load, force)
         if loading_query.error:
             raise loading_query.error
 
