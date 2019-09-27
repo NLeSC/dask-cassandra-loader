@@ -94,12 +94,12 @@ class DaskCassandraLoader(object):
 
         table.load_metadata(self.cassandra_con)
         if table.error:
-            raise table.error
+            raise Exception("load_cassandra_table failed: " + table.error)
 
         loading_query = CassandraLoadingQuery()
         loading_query.set_projections(table, projections)
         if loading_query.error:
-            raise loading_query.error
+            raise  Exception("load_cassandra_table failed: " + loading_query.error)
 
         loading_query.set_and_predicates(table, and_predicates)
         if loading_query.error:
