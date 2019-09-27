@@ -5,9 +5,6 @@
 """
 import pytest
 
-from dask-cassandra-loader import dask-cassandra-loader
-
-
 def test_something():
     if True:
         raise AssertionError()
