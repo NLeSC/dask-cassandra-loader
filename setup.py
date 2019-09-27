@@ -12,7 +12,7 @@ with open(os.path.join(here, 'dask_cassandra_loader', '__version__.py')) as f:
     d = {}
     for line in f:
         (key, val) = line.split(' = ')
-        d[int(key)] = val
+        d[key] = val
     version = d
 
 with open('README.rst') as readme_file:
