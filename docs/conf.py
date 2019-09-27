@@ -24,6 +24,7 @@ here = os.path.dirname(__file__)
 sys.path.insert(0, os.path.abspath(os.path.join(here, '..')))
 
 import dask_cassandra_loader
+from dask_cassandra_loader.__version__ import __version__
 
 
 # -- General configuration ------------------------------------------------
@@ -59,7 +60,7 @@ author = u"Romulo Goncalves"
 # built documents.
 #
 # The short X.Y version.
-version = dask_cassandra_loader.__version__
+version = __version__
 # The full version, including alpha/beta/rc tags.
 release = dask_cassandra_loader.__version__
 
