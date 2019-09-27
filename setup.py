@@ -9,7 +9,6 @@ here = os.path.abspath(os.path.dirname(__file__))
 # To update the package version number, edit dask-cassandra-loader/__version__.py
 version = {}
 with open(os.path.join(here, 'dask_cassandra_loader', '__version__.py')) as f:
-    #exec(f.read(), version)
     d = {}
     with open("file.txt") as f:
         for line in f:
