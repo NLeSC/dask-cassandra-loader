@@ -1,3 +1,7 @@
+.. image:: https://readthedocs.org/projects/dask-cassandra-loader/badge/?version=latest
+    :target: https://dask-cassandra-loader.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Build Status
+
 ################################################################################
 dask-cassandra-loader
 ################################################################################
