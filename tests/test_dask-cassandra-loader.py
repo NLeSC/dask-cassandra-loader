@@ -8,6 +8,8 @@ import pytest
 
 def test_something():
     if True:
+        return
+    else:
         raise AssertionError()
 
 
