@@ -38,7 +38,6 @@ class CassandraConnector(object):
         """
         Shutdowns the existing connection with a Cassandra cluster.
         > shutdown()
-       
         :return:
         """
         self.session.shutdown()

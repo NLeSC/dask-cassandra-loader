@@ -15,7 +15,6 @@ class CassandraTable():
         """
         Initialization of a CassandraTable.
         > table = CassandraTable('test', 'tab1')
-       
         :param keyspace: It is a string which contains an existent Cassandra keyspace.
         :param name: It is a String.
         """
@@ -38,7 +37,6 @@ class CassandraTable():
         It loads metadata from a Cassandra Table. It loads the columns names, partition columns,
         and partition columns keys.
         > load_metadata( cassandra_con)
-       
         :param cassandra_connection: It is an instance from a CassandraConnector
         :return:
         """
@@ -67,7 +65,6 @@ class CassandraTable():
         """
         It prints the metadata of a CassandraTable.
         > print_metadata()
-       
         :return:
         """
         print("The table columns are:" + str(self.table_cols))
@@ -82,7 +79,6 @@ class CassandraTable():
             'SELECT id, year, month, day from tab1 where month<1 and day in (1,2,3,8,12,30) and id=1 and year=2019',
             ['10.0.1.1', '10.0.1.2'],
             'test' )
-       
         :param sql_query: A SQL query as string.
         :param clusters: It is a list of IPs with each IP represented as a string.
         :param keyspace: It is a string which contains an existent Cassandra keyspace.
@@ -119,7 +115,6 @@ class CassandraTable():
         """
         It defines a set of SQL queries to load partitions of a Cassandra table in parallel into a Dask DataFrame.
         > load_data( cassandra_con, caLoadingQuery)
-       
         :param cassandra_connection: Instance of CassandraConnector.
         :param caLoadingQuery: Instance of CassandraLoadingQuery.
         :return:

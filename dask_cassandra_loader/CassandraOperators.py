@@ -5,7 +5,6 @@ class CassandraOperators(object):
         """
         Initialization of CassandraOperators.
          > CassandraOperators()
-        
         """
         self.error = None
         self.warning = None
@@ -22,7 +21,6 @@ class CassandraOperators(object):
         It creates a single predicate over a table's column using an operator. Call CassandraOperators.print_operators()
          to print all available operators.
         > create_predicate(table, 'month', 'les_than', 1)
-       
         :param table: Instance of CassandraTable.
         :param col_name: Table's column name as string.
         :param op_name: Operators name as string.
@@ -55,7 +53,6 @@ class CassandraOperators(object):
         """
         Print all the operators that can be used in a SQL select statement over a Cassandra's table.
         > print_operators()
-       
         :return:
         """
         print("The single value operators - op(x) - are: " + str(self.si_operators) + ".")
