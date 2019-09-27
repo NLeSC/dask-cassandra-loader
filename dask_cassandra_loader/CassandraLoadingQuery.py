@@ -7,10 +7,9 @@ class CassandraLoadingQuery(object):
     """ Class to define a SQL select statement over a Cassandra table. """
 
     def __init__(self):
-        """ 
+        """
         Initialization of CassandraLoadingQuery
         > CassandraLoadingQuery()
-        
         """
         self.error = None
         self.warning = None
@@ -23,10 +22,9 @@ class CassandraLoadingQuery(object):
         """
         It set the list of columns to be projected, i.e., selected.
         > set_projections(table, ['id', 'year', 'month', 'day'])
-        
         :param table: Instance of class CassandraTable
         :param projections: A list of columns names. Each column name is a String.
-        :return: 
+        :return:
         """
         if projections is None or len(projections) == 0:
             print("All columns will be projected!!!")
@@ -43,22 +41,20 @@ class CassandraLoadingQuery(object):
         """
         It drops the list of columns to be projected, i.e., selected.
         > drop_projections()
-
-        :return: 
+        :return:
         """
         self.projections = None
         return
 
     def set_and_predicates(self, table, predicates):
         """
-        It sets a list of predicates with 'and' clause over the non partition columns of a Cassandra's table. 
+        It sets a list of predicates with 'and' clause over the non partition columns of a Cassandra's table.
         > set_and_predicates(table, [('month', 'less_than', 1), ('day', 'in_', [1,2,3,8,12,30])])
-        
         :param table: Instance of class CassandraTable.
         :param predicates: List of triples. Each triple contains column name as String,
         operator name as String, and a list of values depending on the operator. CassandraOperators.print_operators()
         prints all available operators. It should only contain columns which are not partition columns.
-        :return: 
+        :return:
         """
         if predicates is None or len(predicates) == 0:
             print("No predicates over the non primary key columns were defined!!!")
@@ -78,8 +74,7 @@ class CassandraLoadingQuery(object):
         """
         It drops the list of predicates with 'and' clause over the non partition columns of a Cassandra's table.
         > remove_and_predicates()
-        
-        :return: 
+        :return:
         """
         self.and_predicates = None
         return
@@ -89,13 +84,12 @@ class CassandraLoadingQuery(object):
         """
         It does partition elimination when by selecting only a range of partition key values.
         > partition_elimination( table, [(id, [1, 2, 3, 4, 5, 6]), ('year',[2019])] )
-         
         :param table: Instance of a CassandraTable
         :param partitions_to_eliminate: List of tuples. Each tuple as a column name as String
         and a list of keys which should be selected. It should only contain columns which are partition columns.
-        :param force: It is a boolean. In case all the partitions need to be loaded, which is not recommended, 
+        :param force: It is a boolean. In case all the partitions need to be loaded, which is not recommended,
         it should be set to 'True'.
-        :return: 
+        :return:
         """
         part_cols_prun = dict.fromkeys(table.partition_cols)
 
@@ -126,9 +120,8 @@ class CassandraLoadingQuery(object):
         """
         It builds and compiles the query which will be used to load data from a Cassandra table into a Dask Dataframe.
         > build_query(table)
-        
         :param table: Instance of CassandraTable.
-        :return: 
+        :return:
         """
         if self.projections is None:
             self.sql_query = sql.select([text('*')]).select_from(text(table.name))
@@ -143,8 +136,7 @@ class CassandraLoadingQuery(object):
         """
         It prints the query which will be used to load data from a Cassandra table into a Dask Dataframe.
         > print_query()
-        
-        :return: 
+        :return:
         """
         if self.sql_query is None:
             self.error = "The query needs first to be defined!!! "

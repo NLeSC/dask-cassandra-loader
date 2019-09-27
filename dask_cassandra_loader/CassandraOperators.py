@@ -2,10 +2,10 @@ class CassandraOperators(object):
     """ Operators for a valida SQL select statement over a Cassandra Table. """
 
     def __init__(self):
-        """ 
+        """
         Initialization of CassandraOperators.
          > CassandraOperators()
-         
+        
         """
         self.error = None
         self.warning = None
@@ -22,12 +22,12 @@ class CassandraOperators(object):
         It creates a single predicate over a table's column using an operator. Call CassandraOperators.print_operators()
          to print all available operators.
         > create_predicate(table, 'month', 'les_than', 1)
-        
+       
         :param table: Instance of CassandraTable.
-        :param col_name: Table's column name as string. 
+        :param col_name: Table's column name as string.
         :param op_name: Operators name as string.
         :param values: List of values. The number of values depends on the operator.
-        :return: 
+        :return:
         """
         if op_name == "less_than_equal":
             return table.predicate_cols[col_name] <= values[0]
@@ -55,8 +55,8 @@ class CassandraOperators(object):
         """
         Print all the operators that can be used in a SQL select statement over a Cassandra's table.
         > print_operators()
-        
-        :return: 
+       
+        :return:
         """
         print("The single value operators - op(x) - are: " + str(self.si_operators) + ".")
         print("The binary operators - op(x,y) - are: " + str(self.bi_operators) + ".")
