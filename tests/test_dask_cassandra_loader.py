@@ -7,7 +7,9 @@ import pytest
 
 
 def test_something():
-    assert True
+    if True:
+        raise AssertionError()
+        
 
 
 def test_with_error():
@@ -23,4 +25,5 @@ def an_object():
 
 
 def test_dask_cassandra_loader(an_object):
-    assert an_object == {}
+    if an_object == {}:
+        raise AssertionError()
