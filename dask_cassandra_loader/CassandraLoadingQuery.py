@@ -1,4 +1,4 @@
-from . import CassandraOperators
+from dask_cassandra_loader.CassandraOperators import CassandraOperators
 from sqlalchemy import sql
 from sqlalchemy.sql import text
 
