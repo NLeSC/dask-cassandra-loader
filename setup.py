@@ -17,8 +17,8 @@ with open('README.rst') as readme_file:
 setup(
     name='dask_cassandra_loader',
     version=version['__version__'],
-    description="A data loader which loads data from a Cassandra table into a Dask dataframe. It allows partition elimination, 
-        selection and projections pushdown.",
+    description="""A data loader which loads data from a Cassandra table into a Dask dataframe. It allows partition elimination,
+        selection and projections pushdown.""",
     long_description=readme + '\n\n',
     author="Romulo Goncalves",
     author_email='r.goncalves@esciencecenter.nl',
