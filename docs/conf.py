@@ -23,8 +23,6 @@ import sys
 here = os.path.dirname(__file__)
 sys.path.insert(0, os.path.abspath(os.path.join(here, '..')))
 
-import dask_cassandra_loader
-
 
 # -- General configuration ------------------------------------------------
 
@@ -81,6 +79,44 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
 
+
+# -- Run apidoc plug-in manually, as readthedocs doesn't support it -------
+# See https://github.com/rtfd/readthedocs.org/issues/1139
+def run_apidoc(_):
+    here = os.path.dirname(__file__)
+    out = os.path.abspath(os.path.join(here, 'apidocs'))
+    src = os.path.abspath(os.path.join(here, '..', 'dask_cassandra_loader'))
+
+    ignore_paths = [os.path.join(src, 'test')]
+
+    argv = [
+        "-f",
+        "-T",
+        "-e",
+        "-M",
+        "-o", out,
+        src
+    ] + ignore_paths
+
+    try:
+        # Sphinx 1.7+
+        from sphinx.ext import apidoc
+        apidoc.main(argv)
+    except ImportError:
+        # Sphinx 1.6 (and earlier)
+        from sphinx import apidoc
+        argv.insert(0, apidoc.__file__)
+        apidoc.main(argv)
+
+    index_file = os.path.join(out, 'dask_cassandra_loader.rst')
+    with open(index_file, 'r') as f:
+        lines = f.readlines()
+
+    with open(index_file, 'w') as f:
+        for line in lines:
+            if line.startswith('Submodules'):
+                break
+            f.write(line)
 
 
 # -- Options for HTML output ----------------------------------------------
