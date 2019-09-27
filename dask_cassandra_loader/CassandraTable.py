@@ -121,7 +121,7 @@ class CassandraTable():
         futures = []
 
         if self.cols is None:
-            self.load_metadata(self.name, cassandra_connection)
+            self.load_metadata(cassandra_connection)
 
         # Reset the table's query
         self.loading_query = ca_loading_query
