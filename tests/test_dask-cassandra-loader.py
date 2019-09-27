@@ -26,5 +26,5 @@ def an_object():
 
 
 def test_dask-cassandra-loader(an_object):
-    if an_object == {}:
+    if an_object != {}:
         raise AssertionError()
