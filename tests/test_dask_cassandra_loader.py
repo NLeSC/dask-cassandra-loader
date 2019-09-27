@@ -9,7 +9,6 @@ import pytest
 def test_something():
     if True:
         raise AssertionError()
-        
 
 
 def test_with_error():
