@@ -4,7 +4,8 @@ import dask
 import pandas as pd
 from sqlalchemy import sql
 from sqlalchemy.sql import text
-
+from cassandra.policies import RoundRobinPolicy
+from cassandra.auth import PlainTextAuthProvider
 import copy
 
 
@@ -71,7 +72,7 @@ class CassandraTable():
         return
 
     @staticmethod
-    def __read_data(sql_query, clusters, keyspace):
+    def __read_data(sql_query, clusters, keyspace, username, password):
         """
         It sets a connection with a Cassandra Cluster and loads a partition from a Cassandra table using a SQL statement.
         > __read_data(
@@ -90,7 +91,8 @@ class CassandraTable():
             return pd.DataFrame(rows, columns=colnames)
 
         # Set connection to a Cassandra Cluster
-        cluster = Cluster(clusters)
+        auth = PlainTextAuthProvider(username=username, password=password)
+        cluster = Cluster(clusters, auth_provider=auth, load_balancing_policy=RoundRobinPolicy())
         session = cluster.connect(keyspace)
 
         # Configure session to return a Pandas dataframe
@@ -110,7 +112,7 @@ class CassandraTable():
         session.shutdown()
         return df
 
-    def load_data(self, cassandra_connection, ca_loading_query):
+    def load_data(self, cassandra_connection, cassandra_auth, ca_loading_query):
         """
         It defines a set of SQL queries to load partitions of a Cassandra table in parallel into a Dask DataFrame.
         > load_data( cassandra_con, ca_loading_query)
@@ -134,7 +136,7 @@ class CassandraTable():
             sql_query.append_whereclause(
                 text(' and '.join('%s=%s' % t for t in zip(self.partition_cols, key_values)) + ' ALLOW FILTERING'))
             query = str(sql_query.compile(compile_kwargs={"literal_binds": True}))
-            future = dask.delayed(self.read_data_)(query, cassandra_connection.session.cluster.contact_points, self.keyspace)
+            future = dask.delayed(self.read_data_)(query, cassandra_connection.session.cluster.contact_points, self.keyspace, cassandra_auth.username, cassandra_auth.password)
             futures.append(future)
 
         # Collect results

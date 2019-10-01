@@ -42,7 +42,7 @@ class DaskCassandraLoader(object):
         self.dask_client.close()
         return
 
-    def connect_to_cassandra(self, cassandra_keyspace, cassandra_clusters):
+    def connect_to_cassandra(self, cassandra_keyspace, cassandra_clusters, username, password):
         """
         Connects to a Cassandra cluster specified by a list of IPs.
         > connect_to_cassandra('test', ['10.0.1.1', '10.0.1.2'])
@@ -53,7 +53,7 @@ class DaskCassandraLoader(object):
         if cassandra_keyspace == "":
             raise Exception("Key space can't be an empty string!!!")
         try:
-            self.cassandra_con = CassandraConnector(cassandra_clusters, cassandra_keyspace)
+            self.cassandra_con = CassandraConnector(cassandra_clusters, cassandra_keyspace, username, password)
         except Exception as e:
             raise Exception("It was not possible to set a connection with the Cassandra cluster: " + e)
         return
@@ -115,7 +115,7 @@ class DaskCassandraLoader(object):
 
         loading_query.print_query()
 
-        table.load_data(self.cassandra_con, loading_query)
+        table.load_data(self.cassandra_con, self.auth, loading_query)
         self.keyspace_tables[table_name] = table
         return
 
