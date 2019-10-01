@@ -39,7 +39,7 @@ def test_cassandra_connection():
     if table_df.empty:
         raise AssertionError()
     else:
-        if table_df['title'] == 'hello!':
+        if table_df['title'].str.contains("hello!"):
             print("It works!!!")
         else:
             raise AssertionError()
