@@ -1,4 +1,7 @@
 #!/bin/bash
+
+echo "test script 1"
+
 function cassandra_ready() {
     count=0
     echo "waiting for Cassandra"
