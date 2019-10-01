@@ -6,6 +6,13 @@ python:
   - "3.6"
   - "3.7"
 
+# https://docs.travis-ci.com/user/database-setup/#cassandra
+services:
+  - cassandra
+
+before_script:
+  - bash travis/setup_cassandra.sh
+
 # command to install dependencies
 install:
   - pip install -r requirements.txt
