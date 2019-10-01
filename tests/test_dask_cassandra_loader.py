@@ -83,7 +83,7 @@ def test_table_load():
 
     # Connect to Cassandra
     dask_cassandra_loader = DaskCassandraLoader()
-    dask_cassandra_loader.connect_to_cassandra(keyspace, clusters, username='cassandra', password='cassandra')
+    dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
 
     # Connect to Dask
     dask_cassandra_loader.connect_to_local_dask()
