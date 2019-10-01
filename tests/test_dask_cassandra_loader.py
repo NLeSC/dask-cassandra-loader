@@ -10,6 +10,7 @@ from cassandra.cluster import Cluster
 from cassandra.protocol import NumpyProtocolHandler
 from cassandra.auth import PlainTextAuthProvider
 from dask_cassandra_loader import PagedResultHandler
+from cassandra.policies import RoundRobinPolicy
 
 
 def test_cassandra_connection():
@@ -17,7 +18,7 @@ def test_cassandra_connection():
     keyspace = 'dev'
     clusters = ['127.0.0.1']
 
-    cluster = Cluster(clusters, auth_provider=auth)
+    cluster = Cluster(clusters, auth_provider=auth, load_balancing_policy=RoundRobinPolicy())
     session = cluster.connect(keyspace)
 
     def pandas_factory(colnames, rows):
