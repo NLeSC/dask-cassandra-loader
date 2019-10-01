@@ -42,7 +42,7 @@ class DaskCassandraLoader(object):
         self.dask_client.close()
         return
 
-    def connect_to_cassandra(self, cassandra_keyspace, cassandra_clusters, username, password):
+    def connect_to_cassandra(self, cassandra_clusters, cassandra_keyspace, username, password):
         """
         Connects to a Cassandra cluster specified by a list of IPs.
         > connect_to_cassandra('test', ['10.0.1.1', '10.0.1.2'])
@@ -55,7 +55,7 @@ class DaskCassandraLoader(object):
         try:
             self.cassandra_con = CassandraConnector(cassandra_clusters, cassandra_keyspace, username, password)
         except Exception as e:
-            raise Exception("It was not possible to set a connection with the Cassandra cluster: " + e)
+            raise Exception("It was not possible to set a connection with the Cassandra cluster: " + str(e))
         return
 
     def disconnect_from_cassandra(self):
