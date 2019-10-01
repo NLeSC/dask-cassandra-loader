@@ -19,6 +19,7 @@ def test_cassandra_connection():
     keyspace = 'dev'
     clusters = ['127.0.0.1']
 
+    # Connect to Cassandra and create a session
     cluster = Cluster(clusters, auth_provider=auth, load_balancing_policy=RoundRobinPolicy())
     session = cluster.connect(keyspace)
 
@@ -30,13 +31,17 @@ def test_cassandra_connection():
 
     sql_query = 'SELECT title from play WHERE code = 1'
 
+    # Eexecute an asynchronous query
     future = session.execute_async(str(sql_query))
     handler = PagedResultHandler(future)
     handler.finished_event.wait()
 
     table_df = handler.df
 
+    # Shutdown connection with the Cassandra Cluster
     session.shutdown()
+
+    # Inspect the query result
     if table_df.empty:
         raise AssertionError()
     else:
@@ -44,13 +49,13 @@ def test_cassandra_connection():
             print("It works!!!")
         else:
             raise AssertionError()
-
     return
 
 
 def test_dask_connection():
     dask_cassandra_con = DaskCassandraLoader()
 
+    # Connect to a local Dask
     dask_cassandra_con.connect_to_local_dask()
 
     def square(x):
@@ -59,10 +64,12 @@ def test_dask_connection():
     def neg(x):
         return -x
 
-    A = dask_cassandra_con.dask_client.map(square, range(10))
-    B = dask_cassandra_con.dask_client.map(neg, A)
-    total = dask_cassandra_con.dask_client.submit(sum, B)
+    # Run a computation on Dask
+    a = dask_cassandra_con.dask_client.map(square, range(10))
+    b = dask_cassandra_con.dask_client.map(neg, a)
+    total = dask_cassandra_con.dask_client.submit(sum, b)
 
+    # Disconnect from Dask
     dask_cassandra_con.disconnect_from_Dask()
 
     if total.result() != -285:
@@ -82,9 +89,9 @@ def test_table_load():
 
     # Load table 'tab1'
     dask_cassandra_loader.load_cassandra_table('tab1',
-                         ['id', 'year', 'month', 'day'],
-                         [('month', 'less_than', 1), ('day', 'in_', [1, 2, 3, 8, 12, 30])],
-                         [(id, [1, 2, 3, 4, 5, 6]), ('year', [2019])])
+        ['id', 'year', 'month', 'day'],
+        [('month', 'less_than', 1), ('day', 'in_', [1, 2, 3, 8, 12, 30])],
+        [(id, [1, 2, 3, 4, 5, 6]), ('year', [2019])], force=False)
     table = dask_cassandra_loader.keyspace_tables['tab1']
 
     # Disconnect from Dask
