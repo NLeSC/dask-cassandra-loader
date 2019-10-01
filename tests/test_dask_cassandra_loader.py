@@ -12,7 +12,7 @@ from dask_cassandra_loader import PagedResultHandler
 
 
 def test_cassandra_connection():
-    keyspace = dev
+    keyspace = 'dev'
     clusters = ['127.0.0.1']
 
     cluster = Cluster(clusters)
