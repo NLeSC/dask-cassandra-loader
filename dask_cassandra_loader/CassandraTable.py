@@ -51,7 +51,7 @@ class CassandraTable():
         handler.finished_event.wait()
 
         if handler.error:
-            raise Exception("load_metadata failed: " + handler.error)
+            raise Exception("load_metadata failed: " + str(handler.error))
         else:
             self.partition_keys = handler.df
 
@@ -104,7 +104,7 @@ class CassandraTable():
         handler = PagedResultHandler(future)
         handler.finished_event.wait()
         if handler.error:
-            raise Exception("__read_data failed: " + handler.error)
+            raise Exception("__read_data failed: " + str(handler.error))
         else:
             df = handler.df
 
