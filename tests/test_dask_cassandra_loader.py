@@ -9,7 +9,7 @@ import pandas as pd
 from cassandra.cluster import Cluster
 from cassandra.protocol import NumpyProtocolHandler
 from cassandra.auth import PlainTextAuthProvider
-from dask_cassandra_loader import PagedResultHandler
+from dask_cassandra_loader import PagedResultHandler, DaskCassandraLoader
 from cassandra.policies import RoundRobinPolicy
 
 
