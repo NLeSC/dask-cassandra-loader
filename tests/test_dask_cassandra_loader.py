@@ -69,11 +69,12 @@ def test_dask_connection():
     b = dask_cassandra_con.dask_client.map(neg, a)
     total = dask_cassandra_con.dask_client.submit(sum, b)
 
-    # Disconnect from Dask
-    dask_cassandra_con.disconnect_from_dask()
-
     if total.result() != -285:
+        dask_cassandra_con.disconnect_from_dask()
         raise AssertionError()
+
+    dask_cassandra_con.disconnect_from_dask()
+    return
 
 
 def test_table_load():
@@ -92,15 +93,15 @@ def test_table_load():
         ('day', 'in_', [1, 2, 3, 8, 12, 30])], [(id, [1, 2, 3, 4, 5, 6]), ('year', [2019])], force=False)
     table = dask_cassandra_loader.keyspace_tables['tab1']
 
+    # Inspect table information
+    table.data.info()
+    print(table.data.head())
+
     # Disconnect from Dask
     dask_cassandra_loader.disconnect_from_dask()
 
     # Disconnect from Cassandra
     dask_cassandra_loader.disconnect_from_cassandra()
-
-    # Inspect table information
-    table.data.info()
-    print(table.data.head())
 
 
 def test_with_error():
