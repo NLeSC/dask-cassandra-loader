@@ -136,7 +136,8 @@ class CassandraTable():
             sql_query.append_whereclause(
                 text(' and '.join('%s=%s' % t for t in zip(self.partition_cols, key_values)) + ' ALLOW FILTERING'))
             query = str(sql_query.compile(compile_kwargs={"literal_binds": True}))
-            future = dask.delayed(self.read_data_)(query, cassandra_connection.session.cluster.contact_points, self.keyspace, cassandra_auth.username, cassandra_auth.password)
+            future = dask.delayed(self.read_data_)(query, cassandra_connection.session.cluster.contact_points,
+                                                   self.keyspace, cassandra_auth.username, cassandra_auth.password)
             futures.append(future)
 
         # Collect results
