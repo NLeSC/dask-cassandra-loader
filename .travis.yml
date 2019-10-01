@@ -9,9 +9,8 @@ python:
 sudo: required
 
 # command to install dependencies
-install:
+before_install:
   - apt-get install cassandra
-  - pip3 install -r requirements.txt
 
 # https://docs.travis-ci.com/user/database-setup/#cassandra
 services:
@@ -19,6 +18,9 @@ services:
 
 before_script:
   - bash travis/setup_cassandra.sh
+
+install:
+  - pip3 install -r requirements.txt
 
 # command to run tests
 script: python setup.py test
