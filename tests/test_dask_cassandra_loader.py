@@ -38,7 +38,7 @@ def test_cassandra_connection():
         raise AssertionError()
     else:
         if table_df['title'] == 'hello!':
-            print "It works!!!"
+            print("It works!!!")
         else:
             raise AssertionError()
 
