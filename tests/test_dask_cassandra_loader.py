@@ -89,7 +89,8 @@ def test_table_load():
     dask_cassandra_loader.connect_to_local_dask()
 
     # Load table 'tab1'
-    dask_cassandra_loader.load_cassandra_table('tab1', ['id', 'year', 'month', 'day'], [('month', 'less_than', 1),
+    dask_cassandra_loader.load_cassandra_table(
+        'tab1', ['id', 'year', 'month', 'day'], [('month', 'less_than', 1),
         ('day', 'in_', [1, 2, 3, 8, 12, 30])], [(id, [1, 2, 3, 4, 5, 6]), ('year', [2019])], force=False)
     table = dask_cassandra_loader.keyspace_tables['tab1']
 
