@@ -10,7 +10,7 @@ sudo: required
 
 # command to install dependencies
 before_install:
-  - apt-get install cassandra
+  - sudo apt-get install cassandra
 
 # https://docs.travis-ci.com/user/database-setup/#cassandra
 services:
