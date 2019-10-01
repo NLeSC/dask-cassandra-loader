@@ -47,6 +47,25 @@ def test_cassandra_connection():
     return
 
 
+def test_dask_connection():
+    dask_cassandra_con = DaskCassandraLoader()
+
+    dask_cassandra_con.connect_to_local_dask()
+
+    def square(x):
+        return x ** 2
+
+    def neg(x):
+        return -x
+
+    A = dask_cassandra_con.dask_client.map(square, range(10))
+    B = dask_cassandra_con.dask_client.map(neg, A)
+    total = dask_cassandra_con.dask_client.submit(sum, B)
+
+    if total.result() != -285:
+        raise AssertionError()
+
+
 def test_with_error():
     with pytest.raises(ValueError):
         # Do something that raises a ValueError
