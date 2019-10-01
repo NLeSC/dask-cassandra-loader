@@ -1,5 +1,5 @@
 fsspec>=0.3.3
 pandas
-dask
+dask[complete]
 cassandra-driver
 sqlalchemy
