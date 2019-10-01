@@ -1,5 +1,7 @@
 #!/bin/bash
 
+pip3 install pytz
+
 function cassandra_ready() {
     count=0
     echo "waiting for Cassandra"
