@@ -4,14 +4,38 @@
 """Tests for the dask_cassandra_loader module.
 """
 import pytest
+import pandas as pd
+
+from cassandra.cluster import Cluster
+from cassandra.protocol import NumpyProtocolHandler
+from dask_cassandra_loader import PagedResultHandler
 
 
-def test_something():
-    if True:
-        return
-    else:
+def test_cassandra_connection():
+    keyspace = dev
+    clusters = ['127.0.0.1']
+
+    cluster = Cluster(clusters)
+    session = cluster.connect(keyspace)
+
+    def pandas_factory(colnames, rows):
+        return pd.DataFrame(rows, columns=colnames)
+
+    session.client_protocol_handler = NumpyProtocolHandler
+    session.row_factory = pandas_factory
+
+    future = session.execute_async(str(sql_query))
+    handler = PagedResultHandler(future)
+    handler.finished_event.wait()
+
+    table_df = handler.df
+
+    if table_df.empty:
+        session.shutdown()
         raise AssertionError()
-
+    else:
+        session.shutdown()
+        return
 
 def test_with_error():
     with pytest.raises(ValueError):
