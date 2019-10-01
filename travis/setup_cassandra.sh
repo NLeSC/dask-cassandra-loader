@@ -12,7 +12,7 @@ function cassandra_ready() {
             exit
         fi
         (( count += 1 ))
-        sleep 5
+        sleep 1
     done
     echo "cassandra is ready"
 }

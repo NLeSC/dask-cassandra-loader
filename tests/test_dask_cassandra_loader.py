@@ -107,6 +107,7 @@ def test_table_load():
 
     # Disconnect from Cassandra
     dask_cassandra_loader.disconnect_from_cassandra()
+    return
 
 
 def test_with_error():
