@@ -70,7 +70,7 @@ def test_dask_connection():
     total = dask_cassandra_con.dask_client.submit(sum, b)
 
     # Disconnect from Dask
-    dask_cassandra_con.disconnect_from_Dask()
+    dask_cassandra_con.disconnect_from_dask()
 
     if total.result() != -285:
         raise AssertionError()
