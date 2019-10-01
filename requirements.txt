@@ -1,5 +1,6 @@
 fsspec>=0.3.3
 pandas
+pytz
 dask[complete]
 cassandra-driver
 sqlalchemy
