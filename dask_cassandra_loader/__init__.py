@@ -3,20 +3,17 @@
 import logging
 
 from dask_cassandra_loader.__version__ import __version__
-
-logging.getLogger(__name__).addHandler(logging.NullHandler())
-
-__author__ = "Romulo Goncalves"
-__email__ = 'r.goncalves@esciencecenter.nl'
-
 from dask_cassandra_loader.PagedResultHandler import PagedResultHandler
 from dask_cassandra_loader.CassandraOperators import CassandraOperators
 from dask_cassandra_loader.CassandraConnector import CassandraConnector
 from dask_cassandra_loader.CassandraLoadingQuery import CassandraLoadingQuery
 from dask_cassandra_loader.CassandraTable import CassandraTable
 
-import logging
 
+logging.getLogger(__name__).addHandler(logging.NullHandler())
+
+__author__ = "Romulo Goncalves"
+__email__ = 'r.goncalves@esciencecenter.nl'
 
 logger = logging.getLogger('cerulean')
 """The Dask Cassandra Loader root logger. Use this to set Dask Cassandra Loader's log level.
