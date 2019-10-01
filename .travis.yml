@@ -1,6 +1,6 @@
 # Config file for automatic testing at travis-ci.org
 dist: xenial   # required for Python >= 3.7
-language: generic
+language: Python
 python:
   - "3.5"
   - "3.6"
@@ -20,7 +20,7 @@ before_script:
   - bash travis/setup_cassandra.sh
 
 install:
-  - pip3 install -r requirements.txt
+  - pip install -r requirements.txt
 
 # command to run tests
 script: python setup.py test
