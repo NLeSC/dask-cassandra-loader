@@ -12,11 +12,11 @@ from dask_cassandra_loader import PagedResultHandler
 
 
 def test_cassandra_connection():
-    auth={'username': 'cassandra', 'password': 'cassandra'} 
+    auth = {'username':'cassandra', 'password':'cassandra'} 
     keyspace = 'dev'
     clusters = ['127.0.0.1']
 
-    cluster = Cluster(clusters, auth_provider=getCredential)
+    cluster = Cluster(clusters, auth_provider=auth)
     session = cluster.connect(keyspace)
 
     def pandas_factory(colnames, rows):
@@ -43,6 +43,7 @@ def test_cassandra_connection():
             raise AssertionError()
 
     return
+
 
 def test_with_error():
     with pytest.raises(ValueError):
