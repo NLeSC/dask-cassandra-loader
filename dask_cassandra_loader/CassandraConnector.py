@@ -1,7 +1,6 @@
 import pandas as pd
 from cassandra.cluster import Cluster
 from cassandra.protocol import NumpyProtocolHandler
-from cassandra.policies import RoundRobinPolicy
 from cassandra.auth import PlainTextAuthProvider
 
 
@@ -15,18 +14,24 @@ class CassandraConnector(object):
         > CassandraConnector(['10.0.1.1', '10.0.1.2'], 'test')
         :param cassandra_clusters: It is a list of IPs with each IP represented as a string.
         :param cassandra_keyspace: It is a string which contains an existent Cassandra keyspace.
+        :param username: It is a String.
+        :param password: It is a String.
         """
         self.error = None
         self.clusters = cassandra_clusters
         self.keyspace = cassandra_keyspace
-        self.auth = PlainTextAuthProvider(username=username, password=password)
+        self.auth = None
 
         def pandas_factory(colnames, rows):
             return pd.DataFrame(rows, columns=colnames)
 
         # Connect to Cassandra
         print("connecting to:" + str(self.clusters) + ".\n")
-        self.cluster = Cluster(self.clusters, auth_provider=self.auth, load_balancing_policy=RoundRobinPolicy())
+        if username is None:
+            self.cluster = Cluster(self.clusters)
+        else:
+            self.auth = PlainTextAuthProvider(username=username, password=password)
+            self.cluster = Cluster(self.clusters, auth_provider=self.auth)
         self.session = self.cluster.connect(self.keyspace)
 
         # Configure session to return a Pandas dataframe

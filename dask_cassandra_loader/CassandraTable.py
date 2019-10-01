@@ -4,7 +4,6 @@ import dask
 import pandas as pd
 from sqlalchemy import sql
 from sqlalchemy.sql import text
-from cassandra.policies import RoundRobinPolicy
 from cassandra.auth import PlainTextAuthProvider
 import copy
 
@@ -82,6 +81,8 @@ class CassandraTable():
         :param sql_query: A SQL query as string.
         :param clusters: It is a list of IPs with each IP represented as a string.
         :param keyspace: It is a string which contains an existent Cassandra keyspace.
+        :param username: It is a string.
+        :param password: It is a string.
         :return:
         """
         from cassandra.cluster import Cluster
@@ -91,8 +92,13 @@ class CassandraTable():
             return pd.DataFrame(rows, columns=colnames)
 
         # Set connection to a Cassandra Cluster
-        auth = PlainTextAuthProvider(username=username, password=password)
-        cluster = Cluster(clusters, auth_provider=auth, load_balancing_policy=RoundRobinPolicy())
+
+        if username is None:
+            cluster = Cluster(clusters)
+        else:
+            auth = PlainTextAuthProvider(username=username, password=password)
+            cluster = Cluster(clusters, auth_provider=auth)
+
         session = cluster.connect(keyspace)
 
         # Configure session to return a Pandas dataframe

@@ -48,6 +48,8 @@ class DaskCassandraLoader(object):
         > connect_to_cassandra('test', ['10.0.1.1', '10.0.1.2'])
         :param cassandra_keyspace: It is a string which contains an existent Cassandra keyspace.
         :param cassandra_clusters: It is a list of IPs with each IP represented as a string.
+        :param username: It is a string.
+        :param password: It is a string.
         :return:
         """
         if cassandra_keyspace == "":
