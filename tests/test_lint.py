@@ -9,7 +9,6 @@ def test_pep8_conformance():
     """Test that we conform to PEP-8."""
     check_paths = [
         'dask_cassandra_loader',
-        'dask-cassandra-loader',
         'tests',
     ]
     exclude_paths = []
