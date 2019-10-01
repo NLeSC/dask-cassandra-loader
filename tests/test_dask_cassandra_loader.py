@@ -25,18 +25,24 @@ def test_cassandra_connection():
     session.client_protocol_handler = NumpyProtocolHandler
     session.row_factory = pandas_factory
 
+    sql_query = 'SELECT title from play WHERE code = 1'
+
     future = session.execute_async(str(sql_query))
     handler = PagedResultHandler(future)
     handler.finished_event.wait()
 
     table_df = handler.df
 
+    session.shutdown()
     if table_df.empty:
-        session.shutdown()
         raise AssertionError()
     else:
-        session.shutdown()
-        return
+        if table_df['title'] == 'hello!':
+            print "It works!!!"
+        else:
+            raise AssertionError()
+
+    return
 
 def test_with_error():
     with pytest.raises(ValueError):
