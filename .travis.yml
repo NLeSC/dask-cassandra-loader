@@ -14,6 +14,7 @@ services:
   - cassandra
 
 before_script:
+  - pip install pytz
   - bash travis/setup_cassandra.sh
 
 install:
