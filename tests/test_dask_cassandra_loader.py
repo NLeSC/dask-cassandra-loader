@@ -12,10 +12,11 @@ from dask_cassandra_loader import PagedResultHandler
 
 
 def test_cassandra_connection():
+    auth={'username': 'cassandra', 'password': 'cassandra'} 
     keyspace = 'dev'
     clusters = ['127.0.0.1']
 
-    cluster = Cluster(clusters)
+    cluster = Cluster(clusters, auth_provider=getCredential)
     session = cluster.connect(keyspace)
 
     def pandas_factory(colnames, rows):
