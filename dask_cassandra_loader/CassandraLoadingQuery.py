@@ -116,7 +116,7 @@ class CassandraLoadingQuery(object):
 
         for col in list(part_cols_prun.keys()):
             if col in list(table.partition_cols):
-                 table.partition_keys = table.partition_keys[table.partition_keys[col].tolist().isin(part_cols_prun[col])]
+                 table.partition_keys = table.partition_keys[table.partition_keys[col].isin(part_cols_prun[col].tolist())]
         return
 
     def build_query(self, table):
