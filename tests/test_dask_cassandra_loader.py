@@ -58,7 +58,7 @@ def test_dask_connection():
     dask_cassandra_con = DaskCassandraLoader()
 
     # Connect to a local Dask
-    dask_cassandra_con.connect_to_local_dask()
+    dask_cassandra_con.connect_to_local_dask(4)
 
     def square(x):
         return x ** 2
@@ -88,7 +88,7 @@ def test_table_load():
     dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
 
     # Connect to Dask
-    dask_cassandra_loader.connect_to_local_dask()
+    dask_cassandra_loader.connect_to_local_dask(4)
 
     # Load table 'tab1'
     dask_cassandra_loader.load_cassandra_table(
