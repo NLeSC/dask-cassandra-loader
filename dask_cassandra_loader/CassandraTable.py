@@ -118,7 +118,7 @@ class CassandraTable():
         session.shutdown()
         return df
 
-    def load_data(self, cassandra_connection, cassandra_auth, ca_loading_query):
+    def load_data(self, cassandra_connection, ca_loading_query):
         """
         It defines a set of SQL queries to load partitions of a Cassandra table in parallel into a Dask DataFrame.
         > load_data( cassandra_con, ca_loading_query)
@@ -143,7 +143,7 @@ class CassandraTable():
                 text(' and '.join('%s=%s' % t for t in zip(self.partition_cols, key_values)) + ' ALLOW FILTERING'))
             query = str(sql_query.compile(compile_kwargs={"literal_binds": True}))
             future = dask.delayed(self.read_data_)(query, cassandra_connection.session.cluster.contact_points,
-                                                   self.keyspace, cassandra_auth.username, cassandra_auth.password)
+                                                   self.keyspace, cassandra_connection.auth.username, cassandra_connection.auth.password)
             futures.append(future)
 
         # Collect results
