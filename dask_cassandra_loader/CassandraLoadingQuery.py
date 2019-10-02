@@ -67,7 +67,10 @@ class CassandraLoadingQuery(object):
                                     + " has an primary key column. Pick a non-primary key column "
                                     + str(table.predicate_cols.keys() + "!!!\n"))
                 else:
-                    self.and_predicates.append(operators.create_predicate(table, col, op, values))
+                    if self.and_predicates is None:
+                        self.and_predicates = [operators.create_predicate(table, col, op, values)]
+                    else:
+                        self.and_predicates.append(operators.create_predicate(table, col, op, values))
         return
 
     def remove_and_predicates(self):
