@@ -29,7 +29,7 @@ class DaskCassandraLoader(object):
         :return:
         """
         self.logger.info('Create and connect to a local Dask cluster.')
-        cluster = LocalCluster(diagnostics_port = 8785, n_workers=number_of_workers )  # kwargs={'local-directory':'/home/jupyter/'})
+        cluster = LocalCluster(diagnostics_port = 8785, n_workers=number_of_workers)
         self.dask_client = Client(cluster, processes=False)
         return
 
