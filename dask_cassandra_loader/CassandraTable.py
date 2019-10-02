@@ -52,7 +52,7 @@ class CassandraTable():
         if handler.error:
             raise Exception("load_metadata failed: " + str(handler.error))
         else:
-            self.partition_keys = handler.df
+            self.partition_keys = handler.df.tolist()
 
         # Create dictionary for columns which are not partition columns.
         self.predicate_cols = dict.fromkeys([f for f in self.cols if f not in list(self.partition_cols)])
