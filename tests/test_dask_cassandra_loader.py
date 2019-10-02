@@ -54,30 +54,30 @@ def test_cassandra_connection():
     return
 
 
-def test_dask_connection():
-    dask_cassandra_con = DaskCassandraLoader()
-
-    # Connect to a local Dask
-    dask_cassandra_con.connect_to_local_dask(1)
-
-    def square(x):
-        return x ** 2
-
-    def neg(x):
-        return -x
-
-    # Run a computation on Dask
-    a = dask_cassandra_con.dask_client.map(square, range(10))
-    b = dask_cassandra_con.dask_client.map(neg, a)
-    total = dask_cassandra_con.dask_client.submit(sum, b)
-    result = dask_cassandra_con.dask_client.gather(total)
-
-    if result != -285:
-        dask_cassandra_con.disconnect_from_dask()
-        raise AssertionError()
-
-    dask_cassandra_con.disconnect_from_dask()
-    return
+#def test_dask_connection():
+#    dask_cassandra_con = DaskCassandraLoader()
+#
+#    # Connect to a local Dask
+#    dask_cassandra_con.connect_to_local_dask(1)
+#
+#    def square(x):
+#        return x ** 2
+#
+#    def neg(x):
+#        return -x
+#
+#    # Run a computation on Dask
+#    a = dask_cassandra_con.dask_client.map(square, range(10))
+#    b = dask_cassandra_con.dask_client.map(neg, a)
+#    total = dask_cassandra_con.dask_client.submit(sum, b)
+#    result = dask_cassandra_con.dask_client.gather(total)
+#
+#    if result != -285:
+#        dask_cassandra_con.disconnect_from_dask()
+#        raise AssertionError()
+#
+#    dask_cassandra_con.disconnect_from_dask()
+#    return
 
 
 def test_table_load_empty():
