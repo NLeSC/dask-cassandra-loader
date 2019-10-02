@@ -70,12 +70,13 @@ def test_dask_connection():
     a = dask_cassandra_con.dask_client.map(square, range(10))
     b = dask_cassandra_con.dask_client.map(neg, a)
     total = dask_cassandra_con.dask_client.submit(sum, b)
+    result = dask_cassandra_con.dask_client.gather(total)
 
-    if total.result() != -285:
-    #    dask_cassandra_con.disconnect_from_dask()
+    if result != -285:
+        dask_cassandra_con.disconnect_from_dask()
         raise AssertionError()
 
-    #dask_cassandra_con.disconnect_from_dask()
+    dask_cassandra_con.disconnect_from_dask()
     return
 
 
