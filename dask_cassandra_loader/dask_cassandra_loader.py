@@ -75,7 +75,7 @@ class DaskCassandraLoader(object):
         It loads a Cassandra table into a Dask dataframe.
         > load_cassandra_table('tab1',
                 ['id', 'year', 'month', 'day'],
-                [('month', 'less_than', 1), ('day', 'in_', [1,2,3,8,12,30])],
+                [('month', 'less_than', [1]), ('day', 'in_', [1,2,3,8,12,30])],
                  [(id, [1, 2, 3, 4, 5, 6]), ('year',[2019])] )
         :param table_name: It is a String.
         :param projections: A list of columns names. Each column name is a String.
