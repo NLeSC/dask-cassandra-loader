@@ -80,7 +80,7 @@ def test_dask_connection():
     return
 
 
-def test_table_load():
+def test_table_load_empty():
     keyspace = 'dev'
     clusters = ['127.0.0.1']
 
@@ -104,9 +104,45 @@ def test_table_load():
     if table is None:
         raise AssertionError()
 
+    if table.data is not None:
+        raise AssertionError("Table.data is supposed to be None!!!")
+
+    # Disconnect from Dask
+    dask_cassandra_loader.disconnect_from_dask()
+
+    # Disconnect from Cassandra
+    dask_cassandra_loader.disconnect_from_cassandra()
+    return
+
+def test_table_load_with_data():
+    keyspace = 'dev'
+    clusters = ['127.0.0.1']
+
+    # Connect to Cassandra
+    dask_cassandra_loader = DaskCassandraLoader()
+    dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
+
+    # Connect to Dask
+    dask_cassandra_loader.connect_to_local_dask(1)
+
+    # Load table 'tab1'
+    dask_cassandra_loader.load_cassandra_table(
+        'tab1',
+        ['id', 'year', 'month', 'day'],
+        [('month', 'less_than', [1]), ('day', 'in_', [1, 2, 3, 8, 12, 30])],
+        [('id', [18]), ('year', [2018])],
+        force=False
+    )
+    table = dask_cassandra_loader.keyspace_tables['tab1']
+
+    if table is None:
+        raise AssertionError("Table is not supposed to be None!!!")
+
+    if table.data is None:
+        raise AssertionError("Table.data is not supposed to be None!!!")
+
     # Inspect table information
-    #table.data.info()
-    #print(table.data.head())
+    print(table.data.head())
 
     # Disconnect from Dask
     dask_cassandra_loader.disconnect_from_dask()
