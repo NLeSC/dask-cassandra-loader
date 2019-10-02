@@ -149,7 +149,8 @@ class CassandraTable():
 
         # Collect results
         if len(futures) == 0:
-            raise AssertionError("No Dask job was scheduled!!!")
-        df = dd.from_delayed(futures)
-        self.data = df.compute()
+            self.data = None
+        else:
+            df = dd.from_delayed(futures)
+            self.data = df.compute()
         return
