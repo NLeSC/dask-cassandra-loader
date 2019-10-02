@@ -58,7 +58,7 @@ def test_dask_connection():
     dask_cassandra_con = DaskCassandraLoader()
 
     # Connect to a local Dask
-    dask_cassandra_con.connect_to_local_dask(4)
+    dask_cassandra_con.connect_to_local_dask(1)
 
     def square(x):
         return x ** 2
@@ -71,11 +71,11 @@ def test_dask_connection():
     b = dask_cassandra_con.dask_client.map(neg, a)
     total = dask_cassandra_con.dask_client.submit(sum, b)
 
-    #if total.result() != -285:
+    if total.result() != -285:
     #    dask_cassandra_con.disconnect_from_dask()
-    #    raise AssertionError()
+        raise AssertionError()
 
-    dask_cassandra_con.disconnect_from_dask()
+    #dask_cassandra_con.disconnect_from_dask()
     return
 
 
@@ -88,7 +88,7 @@ def test_table_load():
     dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
 
     # Connect to Dask
-    dask_cassandra_loader.connect_to_local_dask(4)
+    dask_cassandra_loader.connect_to_local_dask(1)
 
     # Load table 'tab1'
     dask_cassandra_loader.load_cassandra_table(
