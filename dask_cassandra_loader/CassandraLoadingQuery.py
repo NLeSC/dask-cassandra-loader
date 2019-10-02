@@ -116,6 +116,11 @@ class CassandraLoadingQuery(object):
 
         for col in list(part_cols_prun.keys()):
             if col in list(table.partition_cols):
+                if table.partition_keys[col] is None:
+                    raise AssertionError("The column is not a partition column!!!")
+                if not isinstance(table.partition_keys[col], list):
+                    raise AssertionError("The partitions keys is not a list, it is " + str(type(table.partition_keys[col])))
+
                 table.partition_keys = table.partition_keys[table.partition_keys[col].isin(part_cols_prun[col])]
         return
 
