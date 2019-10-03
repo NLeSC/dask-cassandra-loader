@@ -110,7 +110,6 @@ class CassandraTable():
         try:
             future = session.execute_async(sql_query)
             handler = PagedResultHandler(future)
-            raise AssertionError("Waiting forever!!!")
             handler.finished_event.wait()
         except Exception as e:
             raise AssertionError("The __read_data failed: " + str(e))
