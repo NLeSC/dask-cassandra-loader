@@ -2,8 +2,7 @@
 dist: trusty   # required for Python >= 3.7
 language: Python
 
-#env:
-#    92a10722c0bd471ab1a8a46621d24bf1
+env:
 
 python:
   - "3.5"
@@ -29,4 +28,5 @@ script: travis_wait 30 python setup.py test
 
 # upload coverage information to Codacy
 after_success:
+  - export CODACY_PROJECT_TOKEN=92a10722c0bd471ab1a8a46621d24bf1
   - python-codacy-coverage -r coverage.xml
