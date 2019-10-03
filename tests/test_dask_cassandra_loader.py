@@ -53,7 +53,7 @@ def test_cassandra_connection():
     # Shutdown connection with the Cassandra Cluster
     session.shutdown()
     cluster.shutdown()
-
+    assert("I am done 1")
     return
 
 
@@ -115,6 +115,7 @@ def test_table_load_empty():
 
     # Disconnect from Cassandra
     dask_cassandra_loader.disconnect_from_cassandra()
+    assert ("I am done 2")
     return
 
 def test_table_load_with_data():
@@ -153,6 +154,7 @@ def test_table_load_with_data():
 
     # Disconnect from Cassandra
     dask_cassandra_loader.disconnect_from_cassandra()
+    assert("I am done 3")
     return
 
 
