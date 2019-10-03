@@ -49,4 +49,5 @@ class CassandraConnector(object):
         :return:
         """
         self.session.shutdown()
+        self.cluster.shutdown()
         return

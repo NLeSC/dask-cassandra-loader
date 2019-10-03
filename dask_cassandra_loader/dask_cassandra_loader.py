@@ -22,7 +22,7 @@ class DaskCassandraLoader(object):
         self.dask_client = None
         return
 
-    def connect_to_local_dask(self, number_of_workers):
+    def connect_to_local_dask(self):
         """
         Connects to a local Dask cluster.
         > connect_to_local_dask()
@@ -40,6 +40,7 @@ class DaskCassandraLoader(object):
         :return:
         """
         self.dask_client.close()
+        self.cluster.close(10)
         return
 
     def connect_to_cassandra(self, cassandra_clusters, cassandra_keyspace, username, password):
