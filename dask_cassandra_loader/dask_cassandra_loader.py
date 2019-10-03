@@ -29,8 +29,8 @@ class DaskCassandraLoader(object):
         :return:
         """
         self.logger.info('Create and connect to a local Dask cluster.')
-        #cluster = LocalCluster(n_workers=number_of_workers)
-        self.dask_client = Client() #cluster, processes=False)
+        cluster = LocalCluster()
+        self.dask_client = Client(cluster, processes=False)
         return
 
     def disconnect_from_dask(self):
