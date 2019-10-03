@@ -145,7 +145,7 @@ def test_table_load_with_data():
         raise AssertionError("Table.data is not supposed to be None!!!")
 
     # Inspect table information
-    print(table.data.head())
+    #print(table.data.head())
 
     # Disconnect from Dask
     dask_cassandra_loader.disconnect_from_dask()
