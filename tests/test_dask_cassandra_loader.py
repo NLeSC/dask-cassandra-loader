@@ -133,7 +133,7 @@ def test_table_load_with_data():
         'tab1',
         ['id', 'year', 'month', 'day'],
         [('day', 'in_', [1, 2, 3, 8, 12, 30])],
-        [('id', [18]), ('year', [2018])],
+        [('id', [18]), ('year', [2018]), ('month', [11])],
         force=False
     )
     table = dask_cassandra_loader.keyspace_tables['tab1']
