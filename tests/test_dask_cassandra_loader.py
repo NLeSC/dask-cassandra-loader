@@ -128,6 +128,7 @@ def test_table_load_with_data():
     # Connect to Dask
     dask_cassandra_loader.connect_to_local_dask()
 
+    assert ("I am here")
     # Load table 'tab1'
     dask_cassandra_loader.load_cassandra_table(
         'tab1',
