@@ -20,7 +20,7 @@ function cassandra_ready() {
 cassandra_ready
 cqlsh -e "create keyspace dev with replication = {'class': 'SimpleStrategy', 'replication_factor': 1}; USE dev; create table play(code int primary key, title varchar); insert into play (code, title) values (1, 'hello!');"
 
-cqlsh -e "USE dev; create table tab1(id int, year int, month int, day int, timest timestamp, lat float, lon float, PRIMARY KEY((id, year, month, day)));"
+cqlsh -e "USE dev; create table tab1(id int, year int, month int, day int, timest timestamp, lat float, lon float, PRIMARY KEY((id, year, month)));"
 
 cqlsh -e "USE dev; insert into tab1 (id, year, month, day, timest, lat, lon) values (18, 2018, 11, 8, 1541721599000, 53.330097, 6.932023);"
 cqlsh -e "USE dev; insert into tab1 (id, year, month, day, timest, lat, lon) values (18, 2018, 11, 8, 1541721597000, 53.330098, 6.932023);"
