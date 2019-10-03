@@ -128,7 +128,7 @@ def test_table_load_with_data():
 
     # Connect to Dask
     dask_cassandra_loader.connect_to_local_dask()
-
+    raise AssertionError ("I am here")
     # Load table 'tab1'
     dask_cassandra_loader.load_cassandra_table(
         'tab1',
@@ -138,8 +138,6 @@ def test_table_load_with_data():
         force=False
     )
     table = dask_cassandra_loader.keyspace_tables['tab1']
-
-    raise AssertionError ("I am here")
 
     if table is None:
         raise AssertionError("Table is not supposed to be None!!!")
