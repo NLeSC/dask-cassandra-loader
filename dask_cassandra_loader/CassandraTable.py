@@ -110,6 +110,7 @@ class CassandraTable():
         try:
             future = session.execute_async(sql_query)
             handler = PagedResultHandler(future)
+            raise AssertionError("Waiting forever!!!")
             handler.finished_event.wait()
         except Exception as e:
             raise AssertionError("The __read_data failed: " + str(e))
@@ -149,11 +150,10 @@ class CassandraTable():
             query = str(sql_query.compile(compile_kwargs={"literal_binds": True}))
             #future = dask.delayed(self.__read_data)(query, cassandra_connection.session.cluster.contact_points,
             #                                       self.keyspace, cassandra_connection.auth.username, cassandra_connection.auth.password)
-            #future = dask.delayed(self.__read_data)(query, ['127.0.0.1'],
+            future = dask.delayed(self.__read_data)(query, ['127.0.0.1'],
                                                     self.keyspace, cassandra_connection.auth.username,
                                                     cassandra_connection.auth.password)
-            #futures.append(future)
-            print("Query Skipped!!")
+            futures.append(future)
 
         # Collect results
         if len(futures) == 0:
