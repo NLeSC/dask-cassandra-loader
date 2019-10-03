@@ -104,7 +104,7 @@ class CassandraTable():
         # Configure session to return a Pandas dataframe
         session.client_protocol_handler = NumpyProtocolHandler
         session.row_factory = pandas_factory
-
+        raise AssertionError("I am here")
         # Query Cassandra
         df = None
         try:
@@ -149,9 +149,7 @@ class CassandraTable():
             query = str(sql_query.compile(compile_kwargs={"literal_binds": True}))
             #future = dask.delayed(self.__read_data)(query, cassandra_connection.session.cluster.contact_points,
             #                                       self.keyspace, cassandra_connection.auth.username, cassandra_connection.auth.password)
-            future = dask.delayed(self.__read_data)(query, ['127.0.0.1'],
-                                                    self.keyspace, cassandra_connection.auth.username,
-                                                    cassandra_connection.auth.password)
+            future = dask.delayed(self.__read_data)(query, ['127.0.0.1'], self.keyspace, 'cassandra', 'cassandra')
             futures.append(future)
 
         # Collect results
