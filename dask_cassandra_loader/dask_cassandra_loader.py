@@ -1,4 +1,3 @@
-#from dask_cassandra_loader.CassandraConnector import CassandraConnector
 from dask_cassandra_loader.CassandraConnector import CassandraConnector
 from dask_cassandra_loader.CassandraLoadingQuery import CassandraLoadingQuery
 from dask_cassandra_loader.CassandraTable import CassandraTable
