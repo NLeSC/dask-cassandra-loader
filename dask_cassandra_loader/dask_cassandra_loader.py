@@ -20,6 +20,7 @@ class DaskCassandraLoader(object):
         self.keyspace_tables = {}
         self.cassandra_con = None
         self.dask_client = None
+        self.dask_cluster = None
         return
 
     def connect_to_local_dask(self):
@@ -29,8 +30,8 @@ class DaskCassandraLoader(object):
         :return:
         """
         self.logger.info('Create and connect to a local Dask cluster.')
-        cluster = LocalCluster()
-        self.dask_client = Client(cluster, processes=False)
+        self.dask_cluster = LocalCluster()
+        self.dask_client = Client(self.dask_cluster, processes=False)
         return
 
     def disconnect_from_dask(self):
@@ -40,7 +41,7 @@ class DaskCassandraLoader(object):
         :return:
         """
         self.dask_client.close()
-        self.cluster.close(10)
+        self.dask_cluster.close(10)
         return
 
     def connect_to_cassandra(self, cassandra_clusters, cassandra_keyspace, username, password):
