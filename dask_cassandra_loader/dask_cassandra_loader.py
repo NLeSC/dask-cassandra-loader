@@ -121,6 +121,7 @@ class DaskCassandraLoader(object):
 
         loading_query.print_query()
 
+        print("We go to load the data!!!")
         table.load_data(self.cassandra_con, loading_query)
         self.keyspace_tables[table_name] = table
         return

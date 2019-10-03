@@ -137,7 +137,7 @@ class CassandraTable():
         # Schedule the reads
         partition_keys = self.partition_keys.to_numpy()
         for key_values in partition_keys:
-            print(key_values)
+            print("schedule read")
             sql_query = copy.deepcopy(self.loading_query.sql_query)
             sql_query.append_whereclause(
                 text(' and '.join('%s=%s' % t for t in zip(self.partition_cols, key_values)) + ' ALLOW FILTERING'))
@@ -153,6 +153,9 @@ class CassandraTable():
         if len(futures) == 0:
             self.data = None
         else:
+            print("Wait for reads")
             df = dd.from_delayed(futures)
+            print("Start computing")
             self.data = df.compute()
+            print("Computing endede")
         return
