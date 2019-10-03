@@ -40,16 +40,19 @@ def test_cassandra_connection():
     # Inspect the query result
     if table_df.empty:
         session.shutdown()
+        cluster.shutdown()
         raise AssertionError()
     else:
         if table_df['title'][0] == "hello!":
             print("It works!!!")
         else:
             session.shutdown()
+            cluster.shutdown()
             raise AssertionError()
 
     # Shutdown connection with the Cassandra Cluster
     session.shutdown()
+    cluster.shutdown()
 
     return
 
