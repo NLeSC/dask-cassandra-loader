@@ -29,9 +29,11 @@ class DaskCassandraLoader(object):
         > connect_to_local_dask()
         :return:
         """
+        print("Connecting to Dask")
         self.logger.info('Create and connect to a local Dask cluster.')
-        self.dask_cluster = LocalCluster()
+        self.dask_cluster = LocalCluster(silence_logs=False)
         self.dask_client = Client(self.dask_cluster, processes=False)
+        print("Connected to Dask")
         return
 
     def disconnect_from_dask(self):
