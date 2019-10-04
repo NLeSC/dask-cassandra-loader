@@ -13,9 +13,10 @@ from cassandra.auth import PlainTextAuthProvider
 from dask_cassandra_loader.dask_cassandra_loader import PagedResultHandler, DaskCassandraLoader
 from dask.distributed import Client,LocalCluster
 
+
 class TestDaskCassandraConnector(unittest.TestCase):
 
-    def test_cassandra_connection():
+    def test_cassandra_connection(self):
         auth = PlainTextAuthProvider(username='cassandra', password='cassandra')
         keyspace = 'dev'
         clusters = ['127.0.0.1']
@@ -57,10 +58,17 @@ class TestDaskCassandraConnector(unittest.TestCase):
         cluster.shutdown()
         return
 
+    def test_dask_connection(self):
+        cluster = yield LocalCluster(
+            0,
+            scheduler_port=0,
+            silence_logs=False,
+            processes=False,
+            dashboard_address=None,
+            asynchronous=True,
+        )
+        client = yield Client(cluster, asynchronous=True)
 
-    def test_dask_connection():
-        cluster = LocalCluster(silence_logs=False)
-        client = Client(cluster, processes=False)
         def square(x):
             return x ** 2
 
@@ -71,15 +79,16 @@ class TestDaskCassandraConnector(unittest.TestCase):
         a = client.map(square, range(10))
         b = client.map(neg, a)
         total = client.submit(sum, b)
-        result = client.gather(total)
+        result = total.result()
 
         if result != -285:
             raise AssertionError()
 
+        client.close()
+        cluster.close()
         return True
 
-
-    def test_table_load_empty():
+    def test_table_load_empty(self):
         keyspace = 'dev'
         clusters = ['127.0.0.1']
 
@@ -88,8 +97,15 @@ class TestDaskCassandraConnector(unittest.TestCase):
         dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
 
         # Connect to Dask
-        cluster = LocalCluster(silence_logs=False)
-        client = Client(cluster, processes=False)
+        cluster = yield LocalCluster(
+            0,
+            scheduler_port=0,
+            silence_logs=False,
+            processes=False,
+            dashboard_address=None,
+            asynchronous=True,
+        )
+        client = yield Client(cluster, asynchronous=True)
         dask_cassandra_loader.connect_to_local_dask(cluster, client)
 
         # Load table 'tab1'
@@ -110,12 +126,14 @@ class TestDaskCassandraConnector(unittest.TestCase):
 
         # Disconnect from Dask
         #dask_cassandra_loader.disconnect_from_dask()
+        client.close()
+        cluster.close()
 
         # Disconnect from Cassandra
         dask_cassandra_loader.disconnect_from_cassandra()
         return
 
-    def test_table_load_with_data():
+    def test_table_load_with_data(self):
         keyspace = 'dev'
         clusters = ['127.0.0.1']
 
@@ -124,8 +142,15 @@ class TestDaskCassandraConnector(unittest.TestCase):
         dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
 
         # Connect to Dask
-        cluster = LocalCluster(silence_logs=False)
-        client = Client(cluster, processes=False)
+        cluster = yield LocalCluster(
+            0,
+            scheduler_port=0,
+            silence_logs=False,
+            processes=False,
+            dashboard_address=None,
+            asynchronous=True,
+        )
+        client = yield Client(cluster, asynchronous=True)
         dask_cassandra_loader.connect_to_local_dask(cluster, client)
         # Load table 'tab1'
         dask_cassandra_loader.load_cassandra_table(
@@ -148,18 +173,18 @@ class TestDaskCassandraConnector(unittest.TestCase):
 
         # Disconnect from Dask
         #dask_cassandra_loader.disconnect_from_dask()
+        client.close()
+        cluster.close()
 
         # Disconnect from Cassandra
         dask_cassandra_loader.disconnect_from_cassandra()
         return
 
-
-    def test_with_error():
+    def test_with_error(self):
         with pytest.raises(ValueError):
             # Do something that raises a ValueError
             raise(ValueError)
 
-
-    def test_dask_cassandra_loader(an_object):
-        if an_object != {}:
+    def test_dask_cassandra_loader(self, n_object):
+        if n_object != {}:
             raise AssertionError()
