@@ -7,7 +7,7 @@ python:
   - "3.6"
 # - "3.7"
 
-sudo: required
+sudo: false
 
 # https://docs.travis-ci.com/user/database-setup/#cassandra
 services:
@@ -23,9 +23,10 @@ install:
   - pip install 'requests<2.20' codacy-coverage 'pytest>=3.6.0'
 
 # command to run tests
-script: python setup.py test
+script:
+- pytest --cov=dask_cassandra_loader --cov-report xml:coverage.xml
 
 # upload coverage information to Codacy
 after_success:
-  - export CODACY_PROJECT_TOKEN=92a10722c0bd471ab1a8a46621d24bf1
   - python-codacy-coverage -r coverage.xml
+  - coveralls
