@@ -3,12 +3,6 @@
 import logging
 
 from dask_cassandra_loader.__version__ import __version__
-from dask_cassandra_loader.PagedResultHandler import PagedResultHandler
-from dask_cassandra_loader.CassandraOperators import CassandraOperators
-from dask_cassandra_loader.CassandraConnector import CassandraConnector
-from dask_cassandra_loader.CassandraLoadingQuery import CassandraLoadingQuery
-from dask_cassandra_loader.CassandraTable import CassandraTable
-
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
