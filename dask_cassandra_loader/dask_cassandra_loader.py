@@ -32,7 +32,7 @@ class DaskCassandraLoader(object):
         print("Connecting to Dask")
         self.logger.info('Create and connect to a local Dask cluster.')
         self.dask_cluster = LocalCluster(silence_logs=False)
-        self.dask_client = Client(self.dask_cluster)
+        self.dask_client = Client(self.dask_cluster, processes=False)
         print("Connected to Dask")
         return
 
