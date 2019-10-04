@@ -145,7 +145,6 @@ def test_table_load_with_data():
 
     # Disconnect from Cassandra
     dask_cassandra_loader.disconnect_from_cassandra()
-    raise AssertionError("I am done 3")
     return
 
 
