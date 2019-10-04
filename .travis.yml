@@ -29,6 +29,7 @@ before_install:
 
 # command to run tests
 script:
+- python setup.py
 - pytest --cov=dask_cassandra_loader --cov-report xml:coverage.xml
 
 # upload coverage information to Codacy
