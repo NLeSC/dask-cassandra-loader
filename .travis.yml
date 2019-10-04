@@ -18,6 +18,7 @@ before_script:
   - bash travis/setup_cassandra.sh
 
 install:
+  - pip install virtualenv==15.2.0
   - pip install -r requirements.txt
   - pip install 'requests<2.20' codacy-coverage 'pytest>=3.6.0'
 
