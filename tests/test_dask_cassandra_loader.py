@@ -11,7 +11,7 @@ from cassandra.protocol import NumpyProtocolHandler
 from cassandra.auth import PlainTextAuthProvider
 from dask_cassandra_loader import PagedResultHandler
 from dask_cassandra_loader.dask_cassandra_loader import DaskCassandraLoader
-from dask.distributed import Client
+from dask.distributed import Client,LocalCluster
 
 def test_cassandra_connection():
     auth = PlainTextAuthProvider(username='cassandra', password='cassandra')
@@ -57,8 +57,6 @@ def test_cassandra_connection():
 
 
 def test_dask_connection():
-    client = Client(processes=False)
-
     def square(x):
         return x ** 2
 
@@ -86,7 +84,7 @@ def test_table_load_empty():
     dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
 
     # Connect to Dask
-    dask_cassandra_loader.connect_to_local_dask()
+    dask_cassandra_loader.connect_to_local_dask(cluster, client)
 
     # Load table 'tab1'
     dask_cassandra_loader.load_cassandra_table(
@@ -105,7 +103,7 @@ def test_table_load_empty():
         raise AssertionError("Table.data is supposed to be None!!!")
 
     # Disconnect from Dask
-    dask_cassandra_loader.disconnect_from_dask()
+    #dask_cassandra_loader.disconnect_from_dask()
 
     # Disconnect from Cassandra
     dask_cassandra_loader.disconnect_from_cassandra()
@@ -120,7 +118,7 @@ def test_table_load_with_data():
     dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
 
     # Connect to Dask
-    dask_cassandra_loader.connect_to_local_dask()
+    dask_cassandra_loader.connect_to_local_dask(cluster, client)
     # Load table 'tab1'
     dask_cassandra_loader.load_cassandra_table(
         'tab1',
@@ -141,7 +139,7 @@ def test_table_load_with_data():
     #print(table.data.head())
 
     # Disconnect from Dask
-    dask_cassandra_loader.disconnect_from_dask()
+    #dask_cassandra_loader.disconnect_from_dask()
 
     # Disconnect from Cassandra
     dask_cassandra_loader.disconnect_from_cassandra()
@@ -163,3 +161,7 @@ def an_object():
 def test_dask_cassandra_loader(an_object):
     if an_object != {}:
         raise AssertionError()
+
+if __name__ == '__main__':
+    cluster = LocalCluster(silence_logs=False)
+    client = Client(cluster, processes=False)

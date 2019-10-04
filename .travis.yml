@@ -18,8 +18,8 @@ before_script:
   - bash travis/setup_cassandra.sh
 
 install:
-  - pip install tornado==5.1.0
   - pip install -r requirements.txt
+  - pip install tornado==5.1.0
   - pip install 'requests<2.20' codacy-coverage 'pytest>=3.6.0'
 
 # command to run tests

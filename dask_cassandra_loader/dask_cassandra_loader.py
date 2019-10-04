@@ -23,7 +23,7 @@ class DaskCassandraLoader(object):
         self.dask_cluster = None
         return
 
-    def connect_to_local_dask(self):
+    def connect_to_local_dask(self, cluster, client):
         """
         Connects to a local Dask cluster.
         > connect_to_local_dask()
@@ -31,8 +31,10 @@ class DaskCassandraLoader(object):
         """
         print("Connecting to Dask")
         self.logger.info('Create and connect to a local Dask cluster.')
-        self.dask_cluster = LocalCluster(silence_logs=False)
-        self.dask_client = Client(self.dask_cluster, processes=False)
+        #self.dask_cluster = LocalCluster(silence_logs=False)
+        #self.dask_client = Client(self.dask_cluster, processes=False)
+        self.dask_cluster = cluster
+        self.dask_client = client
         print("Connected to Dask")
         return
 
