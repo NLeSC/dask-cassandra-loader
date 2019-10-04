@@ -159,6 +159,7 @@ class CassandraTable():
             print("Wait for reads")
             df = dd.from_delayed(futures)
             print("Start computing")
+            raise AssertionError("I am here 4")
             self.data = df.compute()
             print("Computing endede")
         return
