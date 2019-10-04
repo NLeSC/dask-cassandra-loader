@@ -56,7 +56,7 @@ def test_cassandra_connection():
     return
 
 
-def test_dask_connection():
+def test_dask_connection(client):
     def square(x):
         return x ** 2
 
@@ -75,7 +75,7 @@ def test_dask_connection():
     return True
 
 
-def test_table_load_empty():
+def test_table_load_empty(cluster, client):
     keyspace = 'dev'
     clusters = ['127.0.0.1']
 
@@ -109,7 +109,7 @@ def test_table_load_empty():
     dask_cassandra_loader.disconnect_from_cassandra()
     return
 
-def test_table_load_with_data():
+def test_table_load_with_data(cluster, client):
     keyspace = 'dev'
     clusters = ['127.0.0.1']
 
@@ -152,12 +152,6 @@ def test_with_error():
         raise(ValueError)
 
 
-# Fixture example
-@pytest.fixture
-def an_object():
-    return {}
-
-
 def test_dask_cassandra_loader(an_object):
     if an_object != {}:
         raise AssertionError()
@@ -165,3 +159,11 @@ def test_dask_cassandra_loader(an_object):
 if __name__ == '__main__':
     cluster = LocalCluster(silence_logs=False)
     client = Client(cluster, processes=False)
+
+    test_cassandra_connection()
+    test_dask_connection(client)
+    test_table_load_empty(cluster, client)
+    test_table_load_with_data(cluster, client)
+    test_with_error()
+
+
