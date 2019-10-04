@@ -58,6 +58,7 @@ def test_cassandra_connection():
 
 def test_dask_connection():
     client = Client(processes=False)
+
     def square(x):
         return x ** 2
 
