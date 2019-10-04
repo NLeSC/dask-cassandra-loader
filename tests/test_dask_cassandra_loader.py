@@ -3,6 +3,7 @@
 
 """Tests for the dask_cassandra_loader module.
 """
+import unittest
 import pytest
 import pandas as pd
 
@@ -13,157 +14,153 @@ from dask_cassandra_loader import PagedResultHandler
 from dask_cassandra_loader.dask_cassandra_loader import DaskCassandraLoader
 from dask.distributed import Client,LocalCluster
 
-def test_cassandra_connection():
-    auth = PlainTextAuthProvider(username='cassandra', password='cassandra')
-    keyspace = 'dev'
-    clusters = ['127.0.0.1']
+class TestDaskCassandraConnector(unittest.TestCase):
 
-    # Connect to Cassandra and create a session
-    cluster = Cluster(clusters, auth_provider=auth)
-    session = cluster.connect(keyspace)
+    def test_cassandra_connection():
+        auth = PlainTextAuthProvider(username='cassandra', password='cassandra')
+        keyspace = 'dev'
+        clusters = ['127.0.0.1']
 
-    def pandas_factory(colnames, rows):
-        return pd.DataFrame(rows, columns=colnames)
+        # Connect to Cassandra and create a session
+        cluster = Cluster(clusters, auth_provider=auth)
+        session = cluster.connect(keyspace)
 
-    session.client_protocol_handler = NumpyProtocolHandler
-    session.row_factory = pandas_factory
+        def pandas_factory(colnames, rows):
+            return pd.DataFrame(rows, columns=colnames)
 
-    sql_query = 'SELECT title from play WHERE code = 1'
+        session.client_protocol_handler = NumpyProtocolHandler
+        session.row_factory = pandas_factory
 
-    # Eexecute an asynchronous query
-    future = session.execute_async(str(sql_query))
-    handler = PagedResultHandler(future)
-    handler.finished_event.wait()
+        sql_query = 'SELECT title from play WHERE code = 1'
 
-    table_df = handler.df
+        # Eexecute an asynchronous query
+        future = session.execute_async(str(sql_query))
+        handler = PagedResultHandler(future)
+        handler.finished_event.wait()
 
-    # Inspect the query result
-    if table_df.empty:
-        session.shutdown()
-        cluster.shutdown()
-        raise AssertionError()
-    else:
-        if table_df['title'][0] == "hello!":
-            print("It works!!!")
-        else:
+        table_df = handler.df
+
+        # Inspect the query result
+        if table_df.empty:
             session.shutdown()
             cluster.shutdown()
             raise AssertionError()
+        else:
+            if table_df['title'][0] == "hello!":
+                print("It works!!!")
+            else:
+                session.shutdown()
+                cluster.shutdown()
+                raise AssertionError()
 
-    # Shutdown connection with the Cassandra Cluster
-    session.shutdown()
-    cluster.shutdown()
-    return
-
-
-def test_dask_connection(client):
-    def square(x):
-        return x ** 2
-
-    def neg(x):
-        return -x
-
-    # Run a computation on Dask
-    a = client.map(square, range(10))
-    b = client.map(neg, a)
-    total = client.submit(sum, b)
-    result = client.gather(total)
-
-    if result != -285:
-        raise AssertionError()
-
-    return True
+        # Shutdown connection with the Cassandra Cluster
+        session.shutdown()
+        cluster.shutdown()
+        return
 
 
-def test_table_load_empty(cluster, client):
-    keyspace = 'dev'
-    clusters = ['127.0.0.1']
+    def test_dask_connection():
+        cluster = LocalCluster(silence_logs=False)
+        client = Client(cluster, processes=False)
+        def square(x):
+            return x ** 2
 
-    # Connect to Cassandra
-    dask_cassandra_loader = DaskCassandraLoader()
-    dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
+        def neg(x):
+            return -x
 
-    # Connect to Dask
-    dask_cassandra_loader.connect_to_local_dask(cluster, client)
+        # Run a computation on Dask
+        a = client.map(square, range(10))
+        b = client.map(neg, a)
+        total = client.submit(sum, b)
+        result = client.gather(total)
 
-    # Load table 'tab1'
-    dask_cassandra_loader.load_cassandra_table(
-        'tab1',
-        ['id', 'year', 'month', 'day'],
-        [('month', 'less_than', [1]), ('day', 'in_', [1, 2, 3, 8, 12, 30])],
-        [('id', [1, 2, 3, 4, 5, 6]), ('year', [2019])],
-        force=False
-    )
-    table = dask_cassandra_loader.keyspace_tables['tab1']
+        if result != -285:
+            raise AssertionError()
 
-    if table is None:
-        raise AssertionError()
-
-    if table.data is not None:
-        raise AssertionError("Table.data is supposed to be None!!!")
-
-    # Disconnect from Dask
-    #dask_cassandra_loader.disconnect_from_dask()
-
-    # Disconnect from Cassandra
-    dask_cassandra_loader.disconnect_from_cassandra()
-    return
-
-def test_table_load_with_data(cluster, client):
-    keyspace = 'dev'
-    clusters = ['127.0.0.1']
-
-    # Connect to Cassandra
-    dask_cassandra_loader = DaskCassandraLoader()
-    dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
-
-    # Connect to Dask
-    dask_cassandra_loader.connect_to_local_dask(cluster, client)
-    # Load table 'tab1'
-    dask_cassandra_loader.load_cassandra_table(
-        'tab1',
-        ['id', 'year', 'month', 'day'],
-        [('day', 'equal', [8])],
-        [('id', [18]), ('year', [2018]), ('month', [11])],
-        force=False
-    )
-    table = dask_cassandra_loader.keyspace_tables['tab1']
-
-    if table is None:
-        raise AssertionError("Table is not supposed to be None!!!")
-
-    if table.data is None:
-        raise AssertionError("Table.data is not supposed to be None!!!")
-
-    # Inspect table information
-    #print(table.data.head())
-
-    # Disconnect from Dask
-    #dask_cassandra_loader.disconnect_from_dask()
-
-    # Disconnect from Cassandra
-    dask_cassandra_loader.disconnect_from_cassandra()
-    return
+        return True
 
 
-def test_with_error():
-    with pytest.raises(ValueError):
-        # Do something that raises a ValueError
-        raise(ValueError)
+    def test_table_load_empty():
+        keyspace = 'dev'
+        clusters = ['127.0.0.1']
+
+        # Connect to Cassandra
+        dask_cassandra_loader = DaskCassandraLoader()
+        dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
+
+        # Connect to Dask
+        cluster = LocalCluster(silence_logs=False)
+        client = Client(cluster, processes=False)
+        dask_cassandra_loader.connect_to_local_dask(cluster, client)
+
+        # Load table 'tab1'
+        dask_cassandra_loader.load_cassandra_table(
+                'tab1',
+                ['id', 'year', 'month', 'day'],
+                [('month', 'less_than', [1]), ('day', 'in_', [1, 2, 3, 8, 12, 30])],
+                [('id', [1, 2, 3, 4, 5, 6]), ('year', [2019])],
+                force=False
+                )
+        table = dask_cassandra_loader.keyspace_tables['tab1']
+
+        if table is None:
+            raise AssertionError()
+
+        if table.data is not None:
+            raise AssertionError("Table.data is supposed to be None!!!")
+
+        # Disconnect from Dask
+        #dask_cassandra_loader.disconnect_from_dask()
+
+        # Disconnect from Cassandra
+        dask_cassandra_loader.disconnect_from_cassandra()
+        return
+
+    def test_table_load_with_data():
+        keyspace = 'dev'
+        clusters = ['127.0.0.1']
+
+        # Connect to Cassandra
+        dask_cassandra_loader = DaskCassandraLoader()
+        dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
+
+        # Connect to Dask
+        cluster = LocalCluster(silence_logs=False)
+        client = Client(cluster, processes=False)
+        dask_cassandra_loader.connect_to_local_dask(cluster, client)
+        # Load table 'tab1'
+        dask_cassandra_loader.load_cassandra_table(
+                'tab1',
+                ['id', 'year', 'month', 'day'],
+                [('day', 'equal', [8])],
+                [('id', [18]), ('year', [2018]), ('month', [11])],
+                force=False
+                )
+        table = dask_cassandra_loader.keyspace_tables['tab1']
+
+        if table is None:
+            raise AssertionError("Table is not supposed to be None!!!")
+
+        if table.data is None:
+            raise AssertionError("Table.data is not supposed to be None!!!")
+
+        # Inspect table information
+        #print(table.data.head())
+
+        # Disconnect from Dask
+        #dask_cassandra_loader.disconnect_from_dask()
+
+        # Disconnect from Cassandra
+        dask_cassandra_loader.disconnect_from_cassandra()
+        return
 
 
-def test_dask_cassandra_loader(an_object):
-    if an_object != {}:
-        raise AssertionError()
-
-if __name__ == '__main__':
-    cluster = LocalCluster(silence_logs=False)
-    client = Client(cluster, processes=False)
-
-    test_cassandra_connection()
-    test_dask_connection(client)
-    test_table_load_empty(cluster, client)
-    test_table_load_with_data(cluster, client)
-    test_with_error()
+    def test_with_error():
+        with pytest.raises(ValueError):
+            # Do something that raises a ValueError
+            raise(ValueError)
 
 
+    def test_dask_cassandra_loader(an_object):
+        if an_object != {}:
+            raise AssertionError()
