@@ -92,8 +92,6 @@ class CassandraTable():
             return pd.DataFrame(rows, columns=colnames)
 
         df = None
-        if True:
-            return pd.DataFrame([1,2,3,4])
 
         # Set connection to a Cassandra Cluster
 
@@ -104,7 +102,9 @@ class CassandraTable():
             cluster = Cluster(clusters, auth_provider=auth)
 
         session = cluster.connect(keyspace)
-
+        if True:
+            return pd.DataFrame([1,2,3,4])
+        
         # Configure session to return a Pandas dataframe
         session.client_protocol_handler = NumpyProtocolHandler
         session.row_factory = pandas_factory
