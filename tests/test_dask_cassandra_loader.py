@@ -56,8 +56,9 @@ def test_cassandra_connection():
     cluster.shutdown()
     return
 
+
 def test_dask_connection():
-    cluster = yield LocalCluster(
+    cluster = LocalCluster(
         0,
         scheduler_port=0,
         silence_logs=False,
@@ -65,7 +66,7 @@ def test_dask_connection():
         dashboard_address=None,
         asynchronous=True,
     )
-    client = yield Client(cluster, asynchronous=True)
+    client = Client(cluster, asynchronous=True)
 
     def square(x):
         return x ** 2
@@ -86,6 +87,7 @@ def test_dask_connection():
     cluster.close()
     return True
 
+
 def test_table_load_empty():
     keyspace = 'dev'
     clusters = ['127.0.0.1']
@@ -95,7 +97,7 @@ def test_table_load_empty():
     dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
 
     # Connect to Dask
-    cluster = yield LocalCluster(
+    cluster = LocalCluster(
         0,
         scheduler_port=0,
         silence_logs=False,
@@ -103,7 +105,7 @@ def test_table_load_empty():
         dashboard_address=None,
         asynchronous=True,
     )
-    client = yield Client(cluster, asynchronous=True)
+    client = Client(cluster, asynchronous=True)
     dask_cassandra_loader.connect_to_local_dask(cluster, client)
 
     # Load table 'tab1'
@@ -131,6 +133,7 @@ def test_table_load_empty():
     dask_cassandra_loader.disconnect_from_cassandra()
     return
 
+
 def test_table_load_with_data():
     keyspace = 'dev'
     clusters = ['127.0.0.1']
@@ -140,7 +143,7 @@ def test_table_load_with_data():
     dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
 
     # Connect to Dask
-    cluster = yield LocalCluster(
+    cluster = LocalCluster(
         0,
         scheduler_port=0,
         silence_logs=False,
@@ -148,7 +151,7 @@ def test_table_load_with_data():
         dashboard_address=None,
         asynchronous=True,
     )
-    client = yield Client(cluster, asynchronous=True)
+    client = Client(cluster, asynchronous=True)
     dask_cassandra_loader.connect_to_local_dask(cluster, client)
     # Load table 'tab1'
     dask_cassandra_loader.load_cassandra_table(
@@ -178,10 +181,12 @@ def test_table_load_with_data():
     dask_cassandra_loader.disconnect_from_cassandra()
     return
 
+
 def test_with_error():
     with pytest.raises(ValueError):
         # Do something that raises a ValueError
         raise(ValueError)
+
 
 def test_dask_cassandra_loader(n_object):
     if n_object != {}:
