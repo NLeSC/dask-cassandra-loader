@@ -92,7 +92,8 @@ class CassandraTable():
             return pd.DataFrame(rows, columns=colnames)
 
         df = None
-        raise AssertionError("Kill worker")
+        if True:
+            return pd.DataFrame([1,2,3,4])
 
         # Set connection to a Cassandra Cluster
 
