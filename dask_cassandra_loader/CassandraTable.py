@@ -91,6 +91,9 @@ class CassandraTable():
         def pandas_factory(colnames, rows):
             return pd.DataFrame(rows, columns=colnames)
 
+        df = None
+        raise AssertionError("Kill worker")
+
         # Set connection to a Cassandra Cluster
 
         if username is None:
@@ -104,9 +107,7 @@ class CassandraTable():
         # Configure session to return a Pandas dataframe
         session.client_protocol_handler = NumpyProtocolHandler
         session.row_factory = pandas_factory
-        raise AssertionError("I am here")
         # Query Cassandra
-        df = None
         try:
             future = session.execute_async(sql_query)
             handler = PagedResultHandler(future)
