@@ -19,6 +19,7 @@ before_script:
 
 before_install:
   - pip install -q --upgrade pip
+  - pip install -q pycodestyle
   - pip install -q coverage
   - pip install -q pytest-cov
   - pip install -q codacy-coverage
