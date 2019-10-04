@@ -392,8 +392,6 @@ class CassandraTable():
         :param password: It is a string.
         :return:
         """
-        from cassandra.cluster import Cluster
-        from cassandra.protocol import NumpyProtocolHandler
 
         def pandas_factory(colnames, rows):
             return pd.DataFrame(rows, columns=colnames)
