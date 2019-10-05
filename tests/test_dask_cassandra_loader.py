@@ -80,7 +80,7 @@ def test_dask_connection():
     result = total.result()
 
     if result != -285:
-        raise AssertionError()
+        raise AssertionError("Result is "+ str(result))
 
     client.close()
     cluster.close()
