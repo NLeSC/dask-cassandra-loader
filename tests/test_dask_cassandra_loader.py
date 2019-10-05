@@ -63,9 +63,9 @@ def test_dask_connection():
         silence_logs=False,
         processes=False,
         dashboard_address=None,
-        asynchronous=True,
+        asynchronous=False,
     )
-    client = Client(cluster, asynchronous=True)
+    client = Client(cluster, asynchronous=False)
 
     def square(x):
         return x ** 2
@@ -101,9 +101,9 @@ def test_table_load_empty():
         silence_logs=False,
         processes=False,
         dashboard_address=None,
-        asynchronous=True,
+        asynchronous=False,
     )
-    client = Client(cluster, asynchronous=True)
+    client = Client(cluster, asynchronous=False)
     dask_cassandra_loader.connect_to_local_dask(cluster, client)
 
     # Load table 'tab1'
@@ -146,9 +146,9 @@ def test_table_load_with_data():
         silence_logs=False,
         processes=False,
         dashboard_address=None,
-        asynchronous=True,
+        asynchronous=False,
     )
-    client = Client(cluster, asynchronous=True)
+    client = Client(cluster, asynchronous=False)
     dask_cassandra_loader.connect_to_local_dask(cluster, client)
     # Load table 'tab1'
     dask_cassandra_loader.load_cassandra_table(
