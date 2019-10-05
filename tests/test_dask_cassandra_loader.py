@@ -184,7 +184,10 @@ def test_with_error():
         # Do something that raises a ValueError
         raise(ValueError)
 
+@pytest.fixture
+def an_object():
+    return {}
 
-def test_dask_cassandra_loader(n_object):
-    if n_object != {}:
+def test_dask_cassandra_loader(an_object):
+    if an_object != {}:
         raise AssertionError()
