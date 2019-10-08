@@ -1,5 +1,5 @@
 # Config file for automatic testing at travis-ci.org
-dist: trusty   # required for Python >= 3.7
+dist: bionic   # required for Python >= 3.7
 language: Python
 
 python:
