@@ -5,15 +5,18 @@ language: Python
 python:
   - "3.5"
   - "3.6"
-# - "3.7"
+  - "3.7"
 
 sudo: false
 
 # https://docs.travis-ci.com/user/database-setup/#cassandra
 services:
-  - cassandra
+  - docker
 
 before_script:
+  - docker run -d cassandra:3.11.4 -p 9042:9042
+  - sleep 30  
+  - docker ps
   - pip install pytz
   - bash travis/setup_cassandra.sh
 
