@@ -452,7 +452,7 @@ class CassandraTable():
             sql_query.append_whereclause(
                 text(' and '.join('%s=%s' % t for t in zip(self.partition_cols, key_values)) + ' ALLOW FILTERING'))
             query = str(sql_query.compile(compile_kwargs={"literal_binds": True}))
-            #future = dask.delayed(self.__read_data)(query, cassandra_connection.session.cluster.contact_points,
+            # future = dask.delayed(self.__read_data)(query, cassandra_connection.session.cluster.contact_points,
             #                                       self.keyspace, cassandra_connection.auth.username, cassandra_connection.auth.password)
             future = dask.delayed(self.__read_data)(query, ['127.0.0.1'], self.keyspace, 'cassandra', 'cassandra')
             futures.append(future)
@@ -494,8 +494,8 @@ class DaskCassandraLoader(object):
         """
         print("Connecting to Dask")
         self.logger.info('Create and connect to a local Dask cluster.')
-        #self.dask_cluster = LocalCluster(silence_logs=False)
-        #self.dask_client = Client(self.dask_cluster, processes=False)
+        # self.dask_cluster = LocalCluster(silence_logs=False)
+        # self.dask_client = Client(self.dask_cluster, processes=False)
         self.dask_cluster = cluster
         self.dask_client = client
         print("Connected to Dask")
