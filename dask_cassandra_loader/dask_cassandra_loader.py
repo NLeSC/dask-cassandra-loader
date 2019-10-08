@@ -128,6 +128,7 @@ class CassandraOperators(object):
         """
         It creates a single predicate over a table's column using an operator. Call CassandraOperators.print_operators()
          to print all available operators.
+
         > create_predicate(table, 'month', 'les_than', 1)
         :param table: Instance of CassandraTable.
         :param col_name: Table's column name as string.
@@ -214,7 +215,7 @@ class CassandraLoadingQuery(object):
     def set_and_predicates(self, table, predicates):
         """
         It sets a list of predicates with 'and' clause over the non partition columns of a Cassandra's table.
-        > set_and_predicates(table, [('month', 'less_than', 1), ('day', 'in_', [1,2,3,8,12,30])])
+        > set_and_predicates(table, [('month', 'less_than', 1), ('day', 'in\_', [1,2,3,8,12,30])])
         :param table: Instance of class CassandraTable.
         :param predicates: List of triples. Each triple contains column name as String,
         operator name as String, and a list of values depending on the operator. CassandraOperators.print_operators()
@@ -316,7 +317,7 @@ class CassandraLoadingQuery(object):
 
 
 class CassandraTable():
-    """ It stores and manages metadata and data from a Cassandra table loaded into a Dask DataFrame."""
+    """It stores and manages metadata and data from a Cassandra table loaded into a Dask DataFrame."""
 
     def __init__(self, keyspace, name):
         """
@@ -542,19 +543,21 @@ class DaskCassandraLoader(object):
     def load_cassandra_table(self, table_name, projections, and_predicates, partitions_to_load, force):
         """
         It loads a Cassandra table into a Dask dataframe.
+
         > load_cassandra_table('tab1',
-                ['id', 'year', 'month', 'day'],
-                [('month', 'less_than', [1]), ('day', 'in_', [1,2,3,8,12,30])],
-                 [('id', [1, 2, 3, 4, 5, 6]), ('year',[2019])] )
+                               ['id', 'year', 'month', 'day'],
+                               [('month', 'less_than', [1]), ('day', 'in\_', [1,2,3,8,12,30])],
+                               [('id', [1, 2, 3, 4, 5, 6]), ('year',[2019])])
+
         :param table_name: It is a String.
         :param projections: A list of columns names. Each column name is a String.
         :param and_predicates: List of triples. Each triple contains column name as String,
-        operator name as String, and a list of values depending on the operator. CassandraOperators.print_operators()
-        prints all available operators. It should only contain columns which are not partition columns.
-        :param partitions_to_load: List of tuples. Each tuple as a column name as String
-        and a list of keys which should be selected. It should only contain columns which are partition columns.
+         operator name as String, and a list of values depending on the operator. CassandraOperators.print_operators()
+         prints all available operators. It should only contain columns which are not partition columns.
+        :param partitions_to_load: List of tuples. Each tuple as a column name as String.
+         and a list of keys which should be selected. It should only contain columns which are partition columns.
         :param force: It is a boolean. In case all the partitions need to be loaded, which is not recommended,
-        it should be set to 'True'.
+         it should be set to 'True'.
         :return:
         """
         if table_name in self.keyspace_tables.keys():
