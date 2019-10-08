@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# dask-cassandra-loader documentation build configuration file, created by
+# dask_cassandra_loader documentation build configuration file, created by
 # sphinx-quickstart on Fri Aug 30 15:09:00 2019.
 #
 # This file is execfile()d with the current directory set to its
@@ -50,7 +50,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'dask-cassandra-loader'
+project = u'dask_cassandra_loader'
 copyright = u'2019, Netherlands eScience Center'
 author = u"Romulo Goncalves"
 
@@ -120,6 +120,9 @@ def run_apidoc(_):
                 break
             f.write(line)
 
+def setup(app):
+    app.connect('builder-inited', run_apidoc)
+
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -160,7 +163,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'dask-cassandra-loader_doc'
+htmlhelp_basename = 'dask_cassandra_loader_doc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -187,7 +190,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'dask-cassandra-loader.tex', u'dask-cassandra-loader Documentation',
+    (master_doc, 'dask_cassandra_loader.tex', u'dask_cassandra_loader Documentation',
      u"Romulo Goncalves", 'manual'),
 ]
 
@@ -197,7 +200,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'dask-cassandra-loader', u'dask-cassandra-loader Documentation',
+    (master_doc, 'dask_cassandra_loader', u'dask_cassandra_loader Documentation',
      [author], 1)
 ]
 
@@ -208,7 +211,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'dask-cassandra-loader', u'dask-cassandra-loader Documentation',
-     author, 'dask-cassandra-loader', "A data loader which loads data from a Cassandra table into a Dask dataframe. It allows partition elimination, selection and projections pushdown.",
+    (master_doc, 'dask_cassandra_loader', u'dask_cassandra_loader Documentation',
+     author, 'dask_cassandra_loader', "A data loader which loads data from a Cassandra table into a Dask dataframe. It allows partition elimination, selection and projections pushdown.",
      'Miscellaneous'),
 ]

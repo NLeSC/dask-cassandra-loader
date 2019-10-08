@@ -8,7 +8,7 @@ Welcome to dask-cassandra-loader's documentation!
 A data loader which loads data from a Cassandra table into a Dask dataframe. It allows partition elimination, selection and projections pushdown.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
 
@@ -18,7 +18,8 @@ API Reference
 .. toctree::
   :maxdepth: 1
 
-   API reference <apidocs/dask-cassandra-loader.rst>
+   API reference <apidocs/dask_cassandra_loader.dask_cassandra_loader.rst>
+   API reference <apidocs/dask_cassandra_loader.rst>
 
 Indices and tables
 ==================
