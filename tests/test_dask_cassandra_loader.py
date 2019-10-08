@@ -10,7 +10,7 @@ import pandas as pd
 from cassandra.cluster import Cluster
 from cassandra.protocol import NumpyProtocolHandler
 from cassandra.auth import PlainTextAuthProvider
-from dask_cassandra_loader.dask_cassandra_loader import PagedResultHandler, DaskCassandraLoader
+from dask_cassandra_loader import PagedResultHandler, DaskCassandraLoader
 from dask.distributed import Client,LocalCluster
 
 
