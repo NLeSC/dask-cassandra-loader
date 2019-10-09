@@ -14,6 +14,7 @@ services:
   - docker
 
 before_script:
+  - pip install cassandra-driver=3.19.0
   - docker run --name cassandra -d -p 9042:9042 cassandra:3.11.4
   - sleep 20
   - docker ps
