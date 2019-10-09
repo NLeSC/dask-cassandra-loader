@@ -13,7 +13,6 @@ from threading import Event
 
 class PagedResultHandler(object):
     """ An handler for paged loading of a Cassandra's query result. """
-
     def __init__(self, future):
         """
         Initialization of PagedResultHandler
@@ -23,9 +22,8 @@ class PagedResultHandler(object):
         self.error = None
         self.finished_event = Event()
         self.future = future
-        self.future.add_callbacks(
-            callback=self.handle_page,
-            errback=self.handle_error)
+        self.future.add_callbacks(callback=self.handle_page,
+                                  errback=self.handle_error)
         self.df = None
 
     def handle_page(self, rows):
@@ -58,8 +56,8 @@ class PagedResultHandler(object):
 
 class CassandraConnector(object):
     """ It sets and manages a connection to a Cassandra Cluster. """
-
-    def __init__(self, cassandra_clusters, cassandra_keyspace, username, password):
+    def __init__(self, cassandra_clusters, cassandra_keyspace, username,
+                 password):
         """
         Initialization of CassandraConnector. It connects to a Cassandra cluster defined by a list of IPs.
         If the connection is successful, it then establishes a session with a Cassandra keyspace.
@@ -85,7 +83,8 @@ class CassandraConnector(object):
             self.cluster = Cluster(self.clusters)
         else:
             print('Connect with auth.')
-            self.auth = PlainTextAuthProvider(username=username, password=password)
+            self.auth = PlainTextAuthProvider(username=username,
+                                              password=password)
             self.cluster = Cluster(self.clusters, auth_provider=self.auth)
         self.session = self.cluster.connect(self.keyspace)
 
@@ -111,7 +110,6 @@ class CassandraConnector(object):
 
 class CassandraOperators(object):
     """ Operators for a valida SQL select statement over a Cassandra Table. """
-
     def __init__(self):
         """
         Initialization of CassandraOperators.
@@ -121,9 +119,14 @@ class CassandraOperators(object):
         """
         self.error = None
         self.warning = None
-        self.operators = ["less_than_equal", "less_than", "greater_than_equal", "greater_than", "equal", "between",
-                          "like", "in_", "notin_"]
-        self.si_operators = ["less_than_equal", "less_than", "greater_than_equal", "greater_than", "equal", "like"]
+        self.operators = [
+            "less_than_equal", "less_than", "greater_than_equal",
+            "greater_than", "equal", "between", "like", "in_", "notin_"
+        ]
+        self.si_operators = [
+            "less_than_equal", "less_than", "greater_than_equal",
+            "greater_than", "equal", "like"
+        ]
         self.bi_operators = ["between"]
         self.li_operators = ["in_", "notin_"]
         return
@@ -170,14 +173,16 @@ class CassandraOperators(object):
         > print_operators()
 
         """
-        print("The single value operators - op(x) - are: " + str(self.si_operators) + ".")
-        print("The binary operators - op(x,y) - are: " + str(self.bi_operators) + ".")
-        print("The list of values operators - op([x,y,...,z]) - are: " + str(self.li_operators) + ".")
+        print("The single value operators - op(x) - are: " +
+              str(self.si_operators) + ".")
+        print("The binary operators - op(x,y) - are: " +
+              str(self.bi_operators) + ".")
+        print("The list of values operators - op([x,y,...,z]) - are: " +
+              str(self.li_operators) + ".")
 
 
 class CassandraLoadingQuery(object):
     """ Class to define a SQL select statement over a Cassandra table. """
-
     def __init__(self):
         """
         Initialization of CassandraLoadingQuery
@@ -207,8 +212,9 @@ class CassandraLoadingQuery(object):
         else:
             for col in projections:
                 if col not in table.cols:
-                    raise Exception("Invalid column, please use one of the following columns: " + str(table.cols)
-                                    + "!!!")
+                    raise Exception(
+                        "Invalid column, please use one of the following columns: "
+                        + str(table.cols) + "!!!")
             self.projections = list(dict.fromkeys(projections))
         return
 
@@ -234,20 +240,26 @@ class CassandraLoadingQuery(object):
          prints all available operators. It should only contain columns which are not partition columns.
         """
         if predicates is None or len(predicates) == 0:
-            print("No predicates over the non primary key columns were defined!!!")
+            print(
+                "No predicates over the non primary key columns were defined!!!"
+            )
         else:
             operators = CassandraOperators()
             for predicate in predicates:
                 (col, op, values) = predicate
                 if col not in table.predicate_cols:
-                    raise Exception("Predicate: " + str(predicate)
-                                    + " has an primary key column. Pick a non-primary key column "
-                                    + str(table.predicate_cols.keys() + "!!!\n"))
+                    raise Exception(
+                        "Predicate: " + str(predicate) +
+                        " has an primary key column. Pick a non-primary key column "
+                        + str(table.predicate_cols.keys() + "!!!\n"))
                 else:
                     if self.and_predicates is None:
-                        self.and_predicates = [operators.create_predicate(table, col, op, values)]
+                        self.and_predicates = [
+                            operators.create_predicate(table, col, op, values)
+                        ]
                     else:
-                        self.and_predicates.append(operators.create_predicate(table, col, op, values))
+                        self.and_predicates.append(
+                            operators.create_predicate(table, col, op, values))
         return
 
     def remove_and_predicates(self):
@@ -279,24 +291,29 @@ class CassandraLoadingQuery(object):
             if force is True:
                 return
             else:
-                raise Exception("ATTENTION: All partitions will be loaded, query might be aborted!!!"
-                                + "To proceed re-call the function with force = True.")
+                raise Exception(
+                    "ATTENTION: All partitions will be loaded, query might be aborted!!!"
+                    + "To proceed re-call the function with force = True.")
         else:
             for partition in partitions_to_load:
                 (col, part_keys) = partition
                 if col not in table.partition_cols:
-                    raise Exception("Column " + str(col) + " is not a partition column. It should be one of "
-                                    + str(table.partition_cols) + ".")
+                    raise Exception(
+                        "Column " + str(col) +
+                        " is not a partition column. It should be one of " +
+                        str(table.partition_cols) + ".")
                 else:
                     try:
                         part_cols_prun[col] = list(map(float, part_keys))
                     except Exception as e:
-                        raise("Invalid value in the partition keys list: " + str(e) + " !!!")
+                        raise ("Invalid value in the partition keys list: " +
+                               str(e) + " !!!")
 
         for col in list(part_cols_prun.keys()):
             if col in list(table.partition_cols):
                 if part_cols_prun[col] is not None:
-                    table.partition_keys = table.partition_keys[table.partition_keys[col].isin(part_cols_prun[col])]
+                    table.partition_keys = table.partition_keys[
+                        table.partition_keys[col].isin(part_cols_prun[col])]
         return
 
     def build_query(self, table):
@@ -308,12 +325,15 @@ class CassandraLoadingQuery(object):
         :param table: Instance of CassandraTable.
         """
         if self.projections is None:
-            self.sql_query = sql.select([text('*')]).select_from(text(table.name))
+            self.sql_query = sql.select([text('*')
+                                         ]).select_from(text(table.name))
         else:
-            self.sql_query = sql.select([text(f) for f in self.projections]).select_from(text(table.name))
+            self.sql_query = sql.select([text(f) for f in self.projections
+                                         ]).select_from(text(table.name))
 
         if self.and_predicates is not None:
-            self.sql_query = self.sql_query.where(sql.expression.and_(*self.and_predicates))
+            self.sql_query = self.sql_query.where(
+                sql.expression.and_(*self.and_predicates))
         return
 
     def print_query(self):
@@ -327,13 +347,13 @@ class CassandraLoadingQuery(object):
             self.error = "The query needs first to be defined!!! "
             self.finished_event.set()
         else:
-            print(self.sql_query.compile(compile_kwargs={"literal_binds": True}))
+            print(
+                self.sql_query.compile(compile_kwargs={"literal_binds": True}))
         return
 
 
 class CassandraTable():
     """It stores and manages metadata and data from a Cassandra table loaded into a Dask DataFrame."""
-
     def __init__(self, keyspace, name):
         """
         Initialization of a CassandraTable.
@@ -366,11 +386,18 @@ class CassandraTable():
 
         :param cassandra_connection: It is an instance from a CassandraConnector
         """
-        self.cols = list(cassandra_connection.session.cluster.metadata.keyspaces[self.keyspace].tables[self.name].columns.keys())
-        self.partition_cols = [f.name for f in cassandra_connection.session.cluster.metadata.keyspaces[self.keyspace].tables[self.name].partition_key[:]]
+        self.cols = list(
+            cassandra_connection.session.cluster.metadata.keyspaces[
+                self.keyspace].tables[self.name].columns.keys())
+        self.partition_cols = [
+            f.name
+            for f in cassandra_connection.session.cluster.metadata.keyspaces[
+                self.keyspace].tables[self.name].partition_key[:]
+        ]
 
         # load partition keys
-        sql_query = sql.select([text(f) for f in self.partition_cols]).distinct().select_from(text(self.name))
+        sql_query = sql.select([text(f) for f in self.partition_cols
+                                ]).distinct().select_from(text(self.name))
         future = cassandra_connection.session.execute_async(str(sql_query))
         handler = PagedResultHandler(future)
         handler.finished_event.wait()
@@ -381,7 +408,8 @@ class CassandraTable():
             self.partition_keys = handler.df
 
         # Create dictionary for columns which are not partition columns.
-        self.predicate_cols = dict.fromkeys([f for f in self.cols if f not in list(self.partition_cols)])
+        self.predicate_cols = dict.fromkeys(
+            [f for f in self.cols if f not in list(self.partition_cols)])
         for col in self.cols:
             self.predicate_cols[col] = sql.expression.column(col)
         return
@@ -413,7 +441,6 @@ class CassandraTable():
         :param username: It is a string.
         :param password: It is a string.
         """
-
         def pandas_factory(colnames, rows):
             return pd.DataFrame(rows, columns=colnames)
 
@@ -472,11 +499,17 @@ class CassandraTable():
             print("schedule read")
             sql_query = copy.deepcopy(self.loading_query.sql_query)
             sql_query.append_whereclause(
-                text(' and '.join('%s=%s' % t for t in zip(self.partition_cols, key_values)) + ' ALLOW FILTERING'))
-            query = str(sql_query.compile(compile_kwargs={"literal_binds": True}))
+                text(' and '.join(
+                    '%s=%s' % t
+                    for t in zip(self.partition_cols, key_values)) +
+                     ' ALLOW FILTERING'))
+            query = str(
+                sql_query.compile(compile_kwargs={"literal_binds": True}))
             # future = dask.delayed(self.__read_data)(query, cassandra_connection.session.cluster.contact_points,
             #                                       self.keyspace, cassandra_connection.auth.username, cassandra_connection.auth.password)
-            future = dask.delayed(self.__read_data)(query, ['127.0.0.1'], self.keyspace, 'cassandra', 'cassandra')
+            future = dask.delayed(self.__read_data)(query, ['127.0.0.1'],
+                                                    self.keyspace, 'cassandra',
+                                                    'cassandra')
             futures.append(future)
 
         # Collect results
@@ -493,7 +526,6 @@ class CassandraTable():
 
 class DaskCassandraLoader(object):
     """  A loader to populate a Dask Dataframe with data from a Cassandra table. """
-
     def __init__(self):
         """
         Initialization of DaskCassandraLoader
@@ -537,7 +569,8 @@ class DaskCassandraLoader(object):
         self.dask_cluster.close(10)
         return
 
-    def connect_to_cassandra(self, cassandra_clusters, cassandra_keyspace, username, password):
+    def connect_to_cassandra(self, cassandra_clusters, cassandra_keyspace,
+                             username, password):
         """
         Connects to a Cassandra cluster specified by a list of IPs.
 
@@ -551,9 +584,13 @@ class DaskCassandraLoader(object):
         if cassandra_keyspace == "":
             raise Exception("Key space can't be an empty string!!!")
         try:
-            self.cassandra_con = CassandraConnector(cassandra_clusters, cassandra_keyspace, username, password)
+            self.cassandra_con = CassandraConnector(cassandra_clusters,
+                                                    cassandra_keyspace,
+                                                    username, password)
         except Exception as e:
-            raise Exception("It was not possible to set a connection with the Cassandra cluster: " + str(e))
+            raise Exception(
+                "It was not possible to set a connection with the Cassandra cluster: "
+                + str(e))
         return
 
     def disconnect_from_cassandra(self):
@@ -567,7 +604,8 @@ class DaskCassandraLoader(object):
             self.cassandra_con.shutdown()
         return
 
-    def load_cassandra_table(self, table_name, projections, and_predicates, partitions_to_load, force):
+    def load_cassandra_table(self, table_name, projections, and_predicates,
+                             partitions_to_load, force):
         """
         It loads a Cassandra table into a Dask dataframe.
 
@@ -588,7 +626,9 @@ class DaskCassandraLoader(object):
         """
         if table_name in self.keyspace_tables.keys():
             raise Exception(
-                "Table " + table_name + " was already loaded!!!\n To reloaded it, you must first unload it.")
+                "Table " + table_name +
+                " was already loaded!!!\n To reloaded it, you must first unload it."
+            )
 
         table = CassandraTable(self.cassandra_con.keyspace, table_name)
 
@@ -599,19 +639,23 @@ class DaskCassandraLoader(object):
         loading_query = CassandraLoadingQuery()
         loading_query.set_projections(table, projections)
         if loading_query.error:
-            raise Exception("load_cassandra_table failed: " + loading_query.error)
+            raise Exception("load_cassandra_table failed: " +
+                            loading_query.error)
 
         loading_query.set_and_predicates(table, and_predicates)
         if loading_query.error:
-            raise Exception("load_cassandra_table failed: " + loading_query.error)
+            raise Exception("load_cassandra_table failed: " +
+                            loading_query.error)
 
         loading_query.partition_elimination(table, partitions_to_load, force)
         if loading_query.error:
-            raise Exception("load_cassandra_table failed: " + loading_query.error)
+            raise Exception("load_cassandra_table failed: " +
+                            loading_query.error)
 
         loading_query.build_query(table)
         if loading_query.error:
-            raise Exception("load_cassandra_table failed: " + loading_query.error)
+            raise Exception("load_cassandra_table failed: " +
+                            loading_query.error)
 
         loading_query.print_query()
 
