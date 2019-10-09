@@ -1,8 +1,6 @@
 #!/bin/bash
 
 alias cqlsh="docker run --rm -ti cassandra cqlsh"
-echo `pwd`
-echo `ls`
 source travis/setup_cassandra.sh
 pip3 install pytz
 
