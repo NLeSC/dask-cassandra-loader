@@ -18,7 +18,7 @@ API Reference
 .. toctree::
    :maxdepth: 1
 
-   API reference <apidocs/dask_cassandra_loader.rst>
+   API reference <apidocs/dask_cassandra_loader.dask_cassandra_loader.rst>
 
 Indices and tables
 ==================
