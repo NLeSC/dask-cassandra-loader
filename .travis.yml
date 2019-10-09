@@ -14,9 +14,10 @@ services:
   - docker
 
 before_script:
-  - docker run -d -p 9042:9042 -e CASSANDRA_BROADCAST_ADDRESS=10.2.2.2 cassandra:3.11.4
-  - sleep 60  
+  - docker run -d -p 9042:9042 -e CASSANDRA_BROADCAST_ADDRESS=127.0.0.1 cassandra:3.11.4
+  - sleep 20
   - docker ps
+  - pip install cqlsh==5.0.4
   - pip install pytz
   - bash travis/setup_cassandra.sh
 
