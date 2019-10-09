@@ -33,7 +33,7 @@ setup(
     include_package_data=True,
     license="Apache Software License 2.0",
     zip_safe=False,
-    keywords='dask-cassandra-loader',
+    keywords='dask_cassandra_loader',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
@@ -50,11 +50,12 @@ setup(
         # dependency for `python setup.py test`
         'pytest-runner',
         # dependencies for `python setup.py build_sphinx`
-        'sphinx',
-        'sphinx_rtd_theme',
+        'sphinx<2',
+        'sphinx-rtd-theme',
         'recommonmark'
     ],
     tests_require=[
+        'coverage',
         'pytest',
         'pytest-cov',
         'pycodestyle',

@@ -63,7 +63,9 @@ class CassandraConnector(object):
         """
         Initialization of CassandraConnector. It connects to a Cassandra cluster defined by a list of IPs.
         If the connection is successful, it then establishes a session with a Cassandra keyspace.
+        
         > CassandraConnector(['10.0.1.1', '10.0.1.2'], 'test')
+        
         :param cassandra_clusters: It is a list of IPs with each IP represented as a string.
         :param cassandra_keyspace: It is a string which contains an existent Cassandra keyspace.
         :param username: It is a String.
@@ -98,8 +100,9 @@ class CassandraConnector(object):
     def shutdown(self):
         """
         Shutdowns the existing connection with a Cassandra cluster.
+        
         > shutdown()
-        :return:
+        
         """
         self.session.shutdown()
         self.cluster.shutdown()
@@ -112,7 +115,9 @@ class CassandraOperators(object):
     def __init__(self):
         """
         Initialization of CassandraOperators.
+        
          > CassandraOperators()
+         
         """
         self.error = None
         self.warning = None
@@ -130,11 +135,11 @@ class CassandraOperators(object):
          to print all available operators.
 
         > create_predicate(table, 'month', 'les_than', 1)
+        
         :param table: Instance of CassandraTable.
         :param col_name: Table's column name as string.
         :param op_name: Operators name as string.
         :param values: List of values. The number of values depends on the operator.
-        :return:
         """
         if op_name == "less_than_equal":
             return table.predicate_cols[col_name] <= values[0]
@@ -161,8 +166,9 @@ class CassandraOperators(object):
     def print_operators(self):
         """
         Print all the operators that can be used in a SQL select statement over a Cassandra's table.
+        
         > print_operators()
-        :return:
+        
         """
         print("The single value operators - op(x) - are: " + str(self.si_operators) + ".")
         print("The binary operators - op(x,y) - are: " + str(self.bi_operators) + ".")
@@ -175,7 +181,9 @@ class CassandraLoadingQuery(object):
     def __init__(self):
         """
         Initialization of CassandraLoadingQuery
+        
         > CassandraLoadingQuery()
+        
         """
         self.error = None
         self.warning = None
@@ -187,10 +195,11 @@ class CassandraLoadingQuery(object):
     def set_projections(self, table, projections):
         """
         It set the list of columns to be projected, i.e., selected.
+        
         > set_projections(table, ['id', 'year', 'month', 'day'])
+        
         :param table: Instance of class CassandraTable
         :param projections: A list of columns names. Each column name is a String.
-        :return:
         """
         if projections is None or len(projections) == 0:
             print("All columns will be projected!!!")
@@ -206,8 +215,9 @@ class CassandraLoadingQuery(object):
     def drop_projections(self):
         """
         It drops the list of columns to be projected, i.e., selected.
+        
         > drop_projections()
-        :return:
+        
         """
         self.projections = None
         return
@@ -215,12 +225,13 @@ class CassandraLoadingQuery(object):
     def set_and_predicates(self, table, predicates):
         """
         It sets a list of predicates with 'and' clause over the non partition columns of a Cassandra's table.
+        
         > set_and_predicates(table, [('month', 'less_than', 1), ('day', 'in\_', [1,2,3,8,12,30])])
+        
         :param table: Instance of class CassandraTable.
         :param predicates: List of triples. Each triple contains column name as String,
-        operator name as String, and a list of values depending on the operator. CassandraOperators.print_operators()
-        prints all available operators. It should only contain columns which are not partition columns.
-        :return:
+         operator name as String, and a list of values depending on the operator. CassandraOperators.print_operators()
+         prints all available operators. It should only contain columns which are not partition columns.
         """
         if predicates is None or len(predicates) == 0:
             print("No predicates over the non primary key columns were defined!!!")
@@ -242,8 +253,9 @@ class CassandraLoadingQuery(object):
     def remove_and_predicates(self):
         """
         It drops the list of predicates with 'and' clause over the non partition columns of a Cassandra's table.
+        
         > remove_and_predicates()
-        :return:
+        
         """
         self.and_predicates = None
         return
@@ -252,13 +264,14 @@ class CassandraLoadingQuery(object):
     def partition_elimination(table, partitions_to_load, force):
         """
         It does partition elimination when by selecting only a range of partition key values.
+        
         > partition_elimination( table, [(id, [1, 2, 3, 4, 5, 6]), ('year',[2019])] )
+        
         :param table: Instance of a CassandraTable
         :param partitions_to_eliminate: List of tuples. Each tuple as a column name as String
-        and a list of keys which should be selected. It should only contain columns which are partition columns.
+         and a list of keys which should be selected. It should only contain columns which are partition columns.
         :param force: It is a boolean. In case all the partitions need to be loaded, which is not recommended,
-        it should be set to 'True'.
-        :return:
+         it should be set to 'True'.
         """
         part_cols_prun = dict.fromkeys(table.partition_cols)
 
@@ -289,9 +302,10 @@ class CassandraLoadingQuery(object):
     def build_query(self, table):
         """
         It builds and compiles the query which will be used to load data from a Cassandra table into a Dask Dataframe.
+        
         > build_query(table)
+        
         :param table: Instance of CassandraTable.
-        :return:
         """
         if self.projections is None:
             self.sql_query = sql.select([text('*')]).select_from(text(table.name))
@@ -305,8 +319,9 @@ class CassandraLoadingQuery(object):
     def print_query(self):
         """
         It prints the query which will be used to load data from a Cassandra table into a Dask Dataframe.
+        
         > print_query()
-        :return:
+        
         """
         if self.sql_query is None:
             self.error = "The query needs first to be defined!!! "
@@ -322,7 +337,9 @@ class CassandraTable():
     def __init__(self, keyspace, name):
         """
         Initialization of a CassandraTable.
+        
         > table = CassandraTable('test', 'tab1')
+        
         :param keyspace: It is a string which contains an existent Cassandra keyspace.
         :param name: It is a String.
         """
@@ -344,9 +361,10 @@ class CassandraTable():
         """
         It loads metadata from a Cassandra Table. It loads the columns names, partition columns,
         and partition columns keys.
+        
         > load_metadata( cassandra_con)
+        
         :param cassandra_connection: It is an instance from a CassandraConnector
-        :return:
         """
         self.cols = list(cassandra_connection.session.cluster.metadata.keyspaces[self.keyspace].tables[self.name].columns.keys())
         self.partition_cols = [f.name for f in cassandra_connection.session.cluster.metadata.keyspaces[self.keyspace].tables[self.name].partition_key[:]]
@@ -371,8 +389,9 @@ class CassandraTable():
     def print_metadata(self):
         """
         It prints the metadata of a CassandraTable.
+        
         > print_metadata()
-        :return:
+        
         """
         print("The table columns are:" + str(self.cols))
         print("The partition columns are:" + str(self.partition_cols))
@@ -382,16 +401,17 @@ class CassandraTable():
     def __read_data(sql_query, clusters, keyspace, username, password):
         """
         It sets a connection with a Cassandra Cluster and loads a partition from a Cassandra table using a SQL statement.
+        
         > __read_data(
             'SELECT id, year, month, day from tab1 where month<1 and day in (1,2,3,8,12,30) and id=1 and year=2019',
             ['10.0.1.1', '10.0.1.2'],
             'test' )
+        
         :param sql_query: A SQL query as string.
         :param clusters: It is a list of IPs with each IP represented as a string.
         :param keyspace: It is a string which contains an existent Cassandra keyspace.
         :param username: It is a string.
         :param password: It is a string.
-        :return:
         """
 
         def pandas_factory(colnames, rows):
@@ -432,10 +452,11 @@ class CassandraTable():
     def load_data(self, cassandra_connection, ca_loading_query):
         """
         It defines a set of SQL queries to load partitions of a Cassandra table in parallel into a Dask DataFrame.
+        
         > load_data( cassandra_con, ca_loading_query)
+        
         :param cassandra_connection: Instance of CassandraConnector.
         :param ca_loading_query: Instance of CassandraLoadingQuery.
-        :return:
         """
         futures = []
 
@@ -476,7 +497,9 @@ class DaskCassandraLoader(object):
     def __init__(self):
         """
         Initialization of DaskCassandraLoader
+        
         > DaskCassandraLoader()
+        
         """
         self.logger = logging.getLogger(__name__)
         self.error = None
@@ -490,8 +513,9 @@ class DaskCassandraLoader(object):
     def connect_to_local_dask(self, cluster, client):
         """
         Connects to a local Dask cluster.
+        
         > connect_to_local_dask()
-        :return:
+        
         """
         print("Connecting to Dask")
         self.logger.info('Create and connect to a local Dask cluster.')
@@ -505,8 +529,9 @@ class DaskCassandraLoader(object):
     def disconnect_from_dask(self):
         """
         Ends the established Dask connection.
+
         > disconnect_from_dask()
-        :return:
+
         """
         self.dask_client.close()
         self.dask_cluster.close(10)
@@ -515,12 +540,13 @@ class DaskCassandraLoader(object):
     def connect_to_cassandra(self, cassandra_clusters, cassandra_keyspace, username, password):
         """
         Connects to a Cassandra cluster specified by a list of IPs.
+
         > connect_to_cassandra('test', ['10.0.1.1', '10.0.1.2'])
+
         :param cassandra_keyspace: It is a string which contains an existent Cassandra keyspace.
         :param cassandra_clusters: It is a list of IPs with each IP represented as a string.
         :param username: It is a string.
         :param password: It is a string.
-        :return:
         """
         if cassandra_keyspace == "":
             raise Exception("Key space can't be an empty string!!!")
@@ -533,8 +559,9 @@ class DaskCassandraLoader(object):
     def disconnect_from_cassandra(self):
         """
         Ends the established Cassandra connection.
+        
         > disconnect_from_cassandra()
-        :return:
+        
         """
         if self.cassandra_con is not None:
             self.cassandra_con.shutdown()
@@ -558,7 +585,6 @@ class DaskCassandraLoader(object):
          and a list of keys which should be selected. It should only contain columns which are partition columns.
         :param force: It is a boolean. In case all the partitions need to be loaded, which is not recommended,
          it should be set to 'True'.
-        :return:
         """
         if table_name in self.keyspace_tables.keys():
             raise Exception(
@@ -597,8 +623,10 @@ class DaskCassandraLoader(object):
     def unload_cassandra_table(self, table_name):
         """
         Deletes the DaskDataframe and removes the table from the list of 'loaded' tables.
+        
+        > unload_cassandra_table('tab1')
+        
         :param table_name: It is a String.
-        :return:
         """
         del self.keyspace_tables[table_name].data
         del self.keyspace_tables[table_name]
