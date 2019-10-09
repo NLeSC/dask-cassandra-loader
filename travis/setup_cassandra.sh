@@ -1,6 +1,7 @@
 #!/bin/bash
 
-cqlsh=docker run --rm -ti cassandra cqlsh
+alias cqlsh="docker run --rm -ti cassandra cqlsh"
+source ./setup_cassandra.sh
 pip3 install pytz
 
 function cassandra_ready() {
