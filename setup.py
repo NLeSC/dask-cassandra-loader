@@ -61,6 +61,6 @@ setup(
         'pycodestyle',
     ],
     extras_require={
-        'dev':  ['prospector[with_pyroma]', 'yapf', 'isort'],
+        'dev':  ['prospector[with_pyroma]', 'isort'],
     }
 )
