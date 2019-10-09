@@ -5,7 +5,7 @@ pip3 install pytz
 function cassandra_ready() {
     count=0
     echo "waiting for Cassandra"
-    while ! docker run --rm -ti cassandra cqlsh -e "describe cluster;" 2>&1 ; do
+    while ! docker run --rm -ti cassandra:3.11.4 cqlsh -e "describe cluster;" 2>&1 ; do
         echo "waiting for cassandra"
         if [ $count -gt 30 ]
         then
