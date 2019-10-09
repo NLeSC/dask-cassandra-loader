@@ -14,7 +14,7 @@ services:
   - docker
 
 before_script:
-  - docker run -d -p 9042:9042 cassandra:3.11.4
+  - docker run --name cassandra -d -p 9042:9042 cassandra:3.11.4
   - sleep 20
   - docker ps
   - pip install pytz
