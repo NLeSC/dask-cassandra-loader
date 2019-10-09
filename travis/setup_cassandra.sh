@@ -1,7 +1,7 @@
 #!/bin/bash
 
 pip3 install pytz
-export HOST_IP=`ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1`
+export HOST_IP=`ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1`
 
 function cassandra_ready() {
     count=0
