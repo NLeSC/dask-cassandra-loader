@@ -1,5 +1,5 @@
 fsspec>=0.3.3
 pandas
 dask[complete]
-cassandra-driver==3.7.1
+cassandra-driver --install-option="--no-cython"
 sqlalchemy

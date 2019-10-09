@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 """Tests for the dask_cassandra_loader module.
 """
 import unittest
@@ -11,7 +10,7 @@ from cassandra.cluster import Cluster
 from cassandra.protocol import NumpyProtocolHandler
 from cassandra.auth import PlainTextAuthProvider
 from dask_cassandra_loader import PagedResultHandler, DaskCassandraLoader
-from dask.distributed import Client,LocalCluster
+from dask.distributed import Client, LocalCluster
 
 
 def test_cassandra_connection():
@@ -68,7 +67,7 @@ def test_dask_connection():
     client = Client(cluster, asynchronous=False)
 
     def square(x):
-        return x ** 2
+        return x**2
 
     def neg(x):
         return -x
@@ -80,7 +79,7 @@ def test_dask_connection():
     result = total.result()
 
     if result != -285:
-        raise AssertionError("Result is "+ str(result))
+        raise AssertionError("Result is " + str(result))
 
     client.close()
     cluster.close()
@@ -93,7 +92,10 @@ def test_table_load_empty():
 
     # Connect to Cassandra
     dask_cassandra_loader = DaskCassandraLoader()
-    dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
+    dask_cassandra_loader.connect_to_cassandra(clusters,
+                                               keyspace,
+                                               username='cassandra',
+                                               password='cassandra')
 
     # Connect to Dask
     cluster = LocalCluster(
@@ -108,12 +110,11 @@ def test_table_load_empty():
 
     # Load table 'tab1'
     dask_cassandra_loader.load_cassandra_table(
-            'tab1',
-            ['id', 'year', 'month', 'day'],
-            [('month', 'less_than', [1]), ('day', 'in_', [1, 2, 3, 8, 12, 30])],
-            [('id', [1, 2, 3, 4, 5, 6]), ('year', [2019])],
-            force=False
-            )
+        'tab1', ['id', 'year', 'month', 'day'],
+        [('month', 'less_than', [1]),
+         ('day', 'in_', [1, 2, 3, 8, 12, 30])], [('id', [1, 2, 3, 4, 5, 6]),
+                                                 ('year', [2019])],
+        force=False)
     table = dask_cassandra_loader.keyspace_tables['tab1']
 
     if table is None:
@@ -138,7 +139,10 @@ def test_table_load_with_data():
 
     # Connect to Cassandra
     dask_cassandra_loader = DaskCassandraLoader()
-    dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
+    dask_cassandra_loader.connect_to_cassandra(clusters,
+                                               keyspace,
+                                               username='cassandra',
+                                               password='cassandra')
 
     # Connect to Dask
     cluster = LocalCluster(
@@ -151,13 +155,12 @@ def test_table_load_with_data():
     client = Client(cluster, asynchronous=False)
     dask_cassandra_loader.connect_to_local_dask(cluster, client)
     # Load table 'tab1'
-    dask_cassandra_loader.load_cassandra_table(
-            'tab1',
-            ['id', 'year', 'month', 'day'],
-            [('day', 'equal', [8])],
-            [('id', [18]), ('year', [2018]), ('month', [11])],
-            force=False
-            )
+    dask_cassandra_loader.load_cassandra_table('tab1',
+                                               ['id', 'year', 'month', 'day'],
+                                               [('day', 'equal', [8])],
+                                               [('id', [18]), ('year', [2018]),
+                                                ('month', [11])],
+                                               force=False)
     table = dask_cassandra_loader.keyspace_tables['tab1']
 
     if table is None:
@@ -182,11 +185,13 @@ def test_table_load_with_data():
 def test_with_error():
     with pytest.raises(ValueError):
         # Do something that raises a ValueError
-        raise(ValueError)
+        raise (ValueError)
+
 
 @pytest.fixture
 def an_object():
     return {}
+
 
 def test_dask_cassandra_loader(an_object):
     if an_object != {}:
