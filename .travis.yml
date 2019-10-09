@@ -13,11 +13,8 @@ sudo: false
 services:
   - docker
 
-env:
-  - CASSANDRA_RPC_ADDRESS=127.0.0.1   
-
 before_script:
-  - docker run -p 9042:9042 -d cassandra:3.11.4
+  - docker run -d -p 9042:9042 -e CASSANDRA_BROADCAST_ADDRESS=10.2.2.2 cassandra:3.11.4
   - sleep 60  
   - docker ps
   - pip install pytz
