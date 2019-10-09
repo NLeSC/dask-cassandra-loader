@@ -1,7 +1,7 @@
 #!/bin/bash
 
 pip3 install pytz
-cqlsh=docker run --network="host" --rm -ti cassandra cqlsh -e
+cqlsh='docker run --network="host" --rm -ti cassandra cqlsh -e'
 
 function cassandra_ready() {
     count=0
