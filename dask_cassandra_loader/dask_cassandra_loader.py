@@ -1,6 +1,7 @@
 from cassandra.cluster import Cluster
 from cassandra.protocol import NumpyProtocolHandler
 from cassandra.auth import PlainTextAuthProvider
+from cassandra.policies import RoundRobinPolicy
 import copy
 import dask
 import dask.dataframe as dd
@@ -80,7 +81,7 @@ class CassandraConnector(object):
         # Connect to Cassandra
         print("connecting to:" + str(self.clusters) + ".\n")
         if username is None:
-            self.cluster = Cluster(self.clusters)
+            self.cluster = Cluster(self.clusters, lbp = RoundRobinPolicy())
         else:
             print('Connect with auth.')
             self.auth = PlainTextAuthProvider(username=username,
