@@ -14,6 +14,8 @@
     :target: https://www.codacy.com/manual/r.goncalves/dask-cassandra-loader
     :alt: Code Coverage
     
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3482935.svg
+   :target: https://doi.org/10.5281/zenodo.3482935
 ################################################################################
 dask-cassandra-loader
 ################################################################################
