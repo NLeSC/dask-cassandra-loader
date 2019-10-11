@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Tests for the dask_cassandra_loader module.
+"""Tests for the dask_cassandra module.
 """
 import unittest
 import pytest
@@ -9,7 +9,7 @@ import pandas as pd
 from cassandra.cluster import Cluster
 from cassandra.protocol import NumpyProtocolHandler
 from cassandra.auth import PlainTextAuthProvider
-from dask_cassandra_loader import PagedResultHandler, DaskCassandraLoader
+from dask_cassandra import PagedResultHandler, DaskCassandraLoader
 from dask.distributed import Client, LocalCluster
 
 
