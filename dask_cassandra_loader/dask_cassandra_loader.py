@@ -392,13 +392,9 @@ class CassandraTable():
 
         :param cassandra_connection: It is an instance from a CassandraConnector
         """
-        self.cols = list(
-            cassandra_connection.session.cluster.metadata.keyspaces[
-                self.keyspace].tables[self.name].columns.keys())
-        self.partition_cols = [
-            f.name
-            for f in cassandra_connection.session.cluster.metadata.keyspaces[
-                         self.keyspace].tables[self.name].partition_key[:]]
+        keyspaces = cassandra_connection.session.cluster.metadata.keyspaces
+        self.cols = list(keyspaces[self.keyspace].tables[self.name].columns.keys())
+        self.partition_cols = [f.name for f in keyspaces[self.keyspace].tables[self.name].partition_key[:]]
 
         # load partition keys
         sql_query = sql.select([text(f) for f in self.partition_cols
