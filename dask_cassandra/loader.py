@@ -56,7 +56,7 @@ class PagedResultHandler(object):
         self.finished_event.set()
 
 
-class CassandraConnector(object):
+class Connector(object):
     """ It sets and manages a connection to a Cassandra Cluster. """
 
     def __init__(self, cassandra_clusters, cassandra_keyspace, username,
@@ -112,7 +112,7 @@ class CassandraConnector(object):
         return
 
 
-class CassandraOperators(object):
+class Operators(object):
     """ Operators for a valida SQL select statement over a Cassandra Table. """
 
     def __init__(self):
@@ -186,7 +186,7 @@ class CassandraOperators(object):
               str(self.li_operators) + ".")
 
 
-class CassandraLoadingQuery(object):
+class LoadingQuery(object):
     """ Class to define a SQL select statement over a Cassandra table. """
 
     def __init__(self):
@@ -250,7 +250,7 @@ class CassandraLoadingQuery(object):
                 "No predicates over the non primary key columns were defined!!!"
             )
         else:
-            operators = CassandraOperators()
+            operators = Operators()
             for predicate in predicates:
                 (col, op, values) = predicate
                 if col not in table.predicate_cols:
@@ -358,7 +358,7 @@ class CassandraLoadingQuery(object):
         return
 
 
-class CassandraTable():
+class Table():
     """It stores and manages metadata and data from a Cassandra table loaded into a Dask DataFrame."""
 
     def __init__(self, keyspace, name):
@@ -531,7 +531,7 @@ class CassandraTable():
         return
 
 
-class DaskCassandraLoader(object):
+class Loader(object):
     """  A loader to populate a Dask Dataframe with data from a Cassandra table. """
 
     def __init__(self):
@@ -611,9 +611,9 @@ class DaskCassandraLoader(object):
         if cassandra_keyspace == "":
             raise Exception("Key space can't be an empty string!!!")
         try:
-            self.cassandra_con = CassandraConnector(cassandra_clusters,
-                                                    cassandra_keyspace,
-                                                    username, password)
+            self.cassandra_con = Connector(cassandra_clusters,
+                                           cassandra_keyspace,
+                                           username, password)
         except Exception as e:
             raise Exception(
                 "It was not possible to set a connection with the Cassandra cluster: "
@@ -657,13 +657,13 @@ class DaskCassandraLoader(object):
                 " was already loaded!!!\n To reloaded it, you must first unload it."
             )
 
-        table = CassandraTable(self.cassandra_con.keyspace, table_name)
+        table = Table(self.cassandra_con.keyspace, table_name)
 
         table.load_metadata(self.cassandra_con)
         if table.error:
             raise Exception("load_cassandra_table failed: " + table.error)
 
-        loading_query = CassandraLoadingQuery()
+        loading_query = LoadingQuery()
         loading_query.set_projections(table, projections)
         if loading_query.error:
             raise Exception("load_cassandra_table failed: " +

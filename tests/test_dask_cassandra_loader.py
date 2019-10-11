@@ -9,7 +9,7 @@ import pandas as pd
 from cassandra.cluster import Cluster
 from cassandra.protocol import NumpyProtocolHandler
 from cassandra.auth import PlainTextAuthProvider
-from dask_cassandra import PagedResultHandler, DaskCassandraLoader
+from dask_cassandra import PagedResultHandler, Loader
 from dask.distributed import Client, LocalCluster
 
 
@@ -101,7 +101,7 @@ def test_table_load_empty():
     clusters = ['127.0.0.1']
 
     # Connect to Cassandra
-    dask_cassandra_loader = DaskCassandraLoader()
+    dask_cassandra_loader = Loader()
     dask_cassandra_loader.connect_to_cassandra(clusters,
                                                keyspace,
                                                username='cassandra',
@@ -140,7 +140,7 @@ def test_table_load_with_data():
     clusters = ['127.0.0.1']
 
     # Connect to Cassandra
-    dask_cassandra_loader = DaskCassandraLoader()
+    dask_cassandra_loader = Loader()
     dask_cassandra_loader.connect_to_cassandra(clusters,
                                                keyspace,
                                                username='cassandra',
