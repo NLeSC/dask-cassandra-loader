@@ -1,0 +1,21 @@
+{
+    "creators": [
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "Goncalves, Romulo"
+        },
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "Verhoeven, Stefan"
+        }
+    ],
+    "keywords": [
+        "Cassandra",
+        "Dask",
+        "Python"
+    ],
+    "license": {
+        "id": "Apache-2.0"
+    },
+    "title": "Dask Cassandra Loader"
+}
