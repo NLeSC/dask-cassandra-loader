@@ -68,7 +68,7 @@ def test_cassandra_connection():
 def test_dask_connection():
     cluster = LocalCluster(
         scheduler_port=0,
-        silence_logs=False,
+        silence_logs=True,
         processes=False,
         asynchronous=False,
     )
@@ -110,7 +110,7 @@ def test_table_load_empty():
     # Connect to Dask
     cluster = LocalCluster(
         scheduler_port=0,
-        silence_logs=False,
+        silence_logs=True,
         processes=False,
         asynchronous=False,
     )
@@ -158,7 +158,7 @@ def test_table_load_with_data():
     # Connect to Dask
     cluster = LocalCluster(
         scheduler_port=0,
-        silence_logs=False,
+        silence_logs=True,
         processes=False,
         asynchronous=False,
     )
