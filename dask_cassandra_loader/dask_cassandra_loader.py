@@ -1,7 +1,6 @@
 from cassandra.cluster import Cluster
 from cassandra.protocol import NumpyProtocolHandler
 from cassandra.auth import PlainTextAuthProvider
-from cassandra.policies import RoundRobinPolicy
 import copy
 import dask
 import dask.dataframe as dd
@@ -83,15 +82,13 @@ class CassandraConnector(object):
         # Connect to Cassandra
         print("connecting to:" + str(self.clusters) + ".\n")
         if username is None:
-            self.cluster = Cluster(self.clusters,
-                                   load_balancing_policy=RoundRobinPolicy())
+            self.cluster = Cluster(self.clusters)
         else:
             print('Connect with auth.')
             self.auth = PlainTextAuthProvider(username=username,
                                               password=password)
             self.cluster = Cluster(self.clusters,
-                                   auth_provider=self.auth,
-                                   load_balancing_policy=RoundRobinPolicy())
+                                   auth_provider=self.auth)
         self.session = self.cluster.connect(self.keyspace)
 
         # Configure session to return a Pandas dataframe
@@ -453,7 +450,6 @@ class CassandraTable():
         from cassandra.cluster import Cluster
         from cassandra.protocol import NumpyProtocolHandler
         from cassandra.auth import PlainTextAuthProvider
-        from cassandra.policies import RoundRobinPolicy
 
         def pandas_factory(colnames, rows):
             return pd.DataFrame(rows, columns=colnames)
@@ -463,13 +459,11 @@ class CassandraTable():
         # Set connection to a Cassandra Cluster
 
         if username is None:
-            cluster = Cluster(clusters,
-                              load_balancing_policy=RoundRobinPolicy())
+            cluster = Cluster(clusters),
         else:
             auth = PlainTextAuthProvider(username=username, password=password)
             cluster = Cluster(clusters,
-                              auth_provider=auth,
-                              load_balancing_policy=RoundRobinPolicy())
+                              auth_provider=auth)
 
         session = cluster.connect(keyspace)
 
