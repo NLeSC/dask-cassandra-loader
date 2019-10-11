@@ -85,7 +85,8 @@ class CassandraConnector(object):
         else:
             print('Connect with auth.')
             self.auth = PlainTextAuthProvider(username=username,
-                                              password=password)
+                                              password=password,
+                                              lbp = RoundRobinPolicy())
             self.cluster = Cluster(self.clusters, auth_provider=self.auth)
         self.session = self.cluster.connect(self.keyspace)
 
@@ -442,6 +443,11 @@ class CassandraTable():
         :param username: It is a string.
         :param password: It is a string.
         """
+        from cassandra.cluster import Cluster
+        from cassandra.protocol import NumpyProtocolHandler
+        from cassandra.auth import PlainTextAuthProvider
+        from cassandra.policies import RoundRobinPolicy
+
         def pandas_factory(colnames, rows):
             return pd.DataFrame(rows, columns=colnames)
 
@@ -450,9 +456,9 @@ class CassandraTable():
         # Set connection to a Cassandra Cluster
 
         if username is None:
-            cluster = Cluster(clusters)
+            cluster = Cluster(clusters, lbp = RoundRobinPolicy())
         else:
-            auth = PlainTextAuthProvider(username=username, password=password)
+            auth = PlainTextAuthProvider(username=username, password=password, lbp = RoundRobinPolicy())
             cluster = Cluster(clusters, auth_provider=auth)
 
         session = cluster.connect(keyspace)
