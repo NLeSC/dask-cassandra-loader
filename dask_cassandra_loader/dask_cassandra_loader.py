@@ -14,6 +14,7 @@ from threading import Event
 
 class PagedResultHandler(object):
     """ An handler for paged loading of a Cassandra's query result. """
+
     def __init__(self, future):
         """
         Initialization of PagedResultHandler
@@ -57,6 +58,7 @@ class PagedResultHandler(object):
 
 class CassandraConnector(object):
     """ It sets and manages a connection to a Cassandra Cluster. """
+
     def __init__(self, cassandra_clusters, cassandra_keyspace, username,
                  password):
         """
@@ -81,11 +83,15 @@ class CassandraConnector(object):
         # Connect to Cassandra
         print("connecting to:" + str(self.clusters) + ".\n")
         if username is None:
-            self.cluster = Cluster(self.clusters, load_balancing_policy=RoundRobinPolicy())
+            self.cluster = Cluster(self.clusters,
+                                   load_balancing_policy=RoundRobinPolicy())
         else:
             print('Connect with auth.')
-            self.auth = PlainTextAuthProvider(username=username, password=password)
-            self.cluster = Cluster(self.clusters, auth_provider=self.auth, load_balancing_policy=RoundRobinPolicy())
+            self.auth = PlainTextAuthProvider(username=username,
+                                              password=password)
+            self.cluster = Cluster(self.clusters,
+                                   auth_provider=self.auth,
+                                   load_balancing_policy=RoundRobinPolicy())
         self.session = self.cluster.connect(self.keyspace)
 
         # Configure session to return a Pandas dataframe
@@ -110,6 +116,7 @@ class CassandraConnector(object):
 
 class CassandraOperators(object):
     """ Operators for a valida SQL select statement over a Cassandra Table. """
+
     def __init__(self):
         """
         Initialization of CassandraOperators.
@@ -183,6 +190,7 @@ class CassandraOperators(object):
 
 class CassandraLoadingQuery(object):
     """ Class to define a SQL select statement over a Cassandra table. """
+
     def __init__(self):
         """
         Initialization of CassandraLoadingQuery
@@ -354,6 +362,7 @@ class CassandraLoadingQuery(object):
 
 class CassandraTable():
     """It stores and manages metadata and data from a Cassandra table loaded into a Dask DataFrame."""
+
     def __init__(self, keyspace, name):
         """
         Initialization of a CassandraTable.
@@ -392,7 +401,7 @@ class CassandraTable():
         self.partition_cols = [
             f.name
             for f in cassandra_connection.session.cluster.metadata.keyspaces[
-                self.keyspace].tables[self.name].partition_key[:]
+                         self.keyspace].tables[self.name].partition_key[:]
         ]
 
         # load partition keys
@@ -454,10 +463,13 @@ class CassandraTable():
         # Set connection to a Cassandra Cluster
 
         if username is None:
-            cluster = Cluster(clusters, load_balancing_policy=RoundRobinPolicy())
+            cluster = Cluster(clusters,
+                              load_balancing_policy=RoundRobinPolicy())
         else:
             auth = PlainTextAuthProvider(username=username, password=password)
-            cluster = Cluster(clusters, auth_provider=auth, load_balancing_policy=RoundRobinPolicy())
+            cluster = Cluster(clusters,
+                              auth_provider=auth,
+                              load_balancing_policy=RoundRobinPolicy())
 
         session = cluster.connect(keyspace)
 
@@ -473,7 +485,8 @@ class CassandraTable():
             raise AssertionError("The __read_data failed: " + str(e))
         else:
             if handler.error:
-                raise Exception("The __read_data failed: " + str(handler.error))
+                raise Exception("The __read_data failed: " +
+                                str(handler.error))
             else:
                 df = handler.df
 
@@ -531,6 +544,7 @@ class CassandraTable():
 
 class DaskCassandraLoader(object):
     """  A loader to populate a Dask Dataframe with data from a Cassandra table. """
+
     def __init__(self):
         """
         Initialization of DaskCassandraLoader
