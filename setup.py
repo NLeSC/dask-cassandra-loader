@@ -7,20 +7,13 @@ from setuptools import setup
 here = os.path.abspath(os.path.dirname(__file__))
 
 # To update the package version number, edit dask-cassandra-loader/__version__.py
-version = {}
-with open(os.path.join(here, 'dask_cassandra_loader', '__version__.py')) as f:
-    d = {}
-    for line in f:
-        (key, val) = line.split(' = ')
-        d[key] = val
-    version = d
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
 setup(
     name='dask_cassandra_loader',
-    version=version['__version__'],
+    version='1.0.0',
     description="""A data loader which loads data from a Cassandra table into a Dask dataframe. It allows partition elimination,
         selection and projections pushdown.""",
     long_description=readme + '\n\n',
