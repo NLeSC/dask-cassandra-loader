@@ -89,6 +89,8 @@ def test_dask_connection():
 
     if result != -285:
         raise AssertionError("Result is " + str(result))
+    else:
+        print("The result is correct!!!")
 
     client.close()
     cluster.close()
@@ -131,6 +133,8 @@ def test_table_load_empty():
 
     if table.data is not None:
         raise AssertionError("Table.data is supposed to be None!!!")
+    else:
+        print("As expected table data is empty!!!")
 
     # Disconnect from Dask
     #dask_cassandra_loader.disconnect_from_dask()
