@@ -29,16 +29,22 @@ def test_cassandra_connection():
     session.row_factory = pandas_factory
 
     sql_query = 'SELECT title from play WHERE code = 1'
+    table_df = None
 
     # Eexecute an asynchronous query
-    future = session.execute_async(str(sql_query))
-    handler = PagedResultHandler(future)
-    handler.finished_event.wait()
-
-    table_df = handler.df
+    try:
+        future = session.execute_async(str(sql_query))
+        handler = PagedResultHandler(future)
+        handler.finished_event.wait()
+    except Exception as e:
+        raise AssertionError(str(e))
+    else:
+        table_df = handler.df
 
     # Inspect the query result
-    if table_df.empty:
+    if table_df is None:
+        raise AssertionError("No dataframe returned")
+    elif table_df.empty:
         session.shutdown()
         cluster.shutdown()
         raise AssertionError()
