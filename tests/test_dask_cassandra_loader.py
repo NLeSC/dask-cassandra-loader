@@ -70,7 +70,6 @@ def test_dask_connection():
         scheduler_port=0,
         silence_logs=False,
         processes=False,
-        dashboard_address=None,
         asynchronous=False,
     )
     client = Client(cluster, asynchronous=False)
@@ -113,7 +112,6 @@ def test_table_load_empty():
         scheduler_port=0,
         silence_logs=False,
         processes=False,
-        dashboard_address=None,
         asynchronous=False,
     )
     client = Client(cluster, asynchronous=False)
@@ -162,7 +160,6 @@ def test_table_load_with_data():
         scheduler_port=0,
         silence_logs=False,
         processes=False,
-        dashboard_address=None,
         asynchronous=False,
     )
     client = Client(cluster, asynchronous=False)
