@@ -401,8 +401,7 @@ class CassandraTable():
         self.partition_cols = [
             f.name
             for f in cassandra_connection.session.cluster.metadata.keyspaces[
-                         self.keyspace].tables[self.name].partition_key[:]
-        ]
+                         self.keyspace].tables[self.name].partition_key[:]]
 
         # load partition keys
         sql_query = sql.select([text(f) for f in self.partition_cols
@@ -437,7 +436,8 @@ class CassandraTable():
     @staticmethod
     def __read_data(sql_query, clusters, keyspace, username, password):
         """
-        It sets a connection with a Cassandra Cluster and loads a partition from a Cassandra table using a SQL statement.
+        It sets a connection with a Cassandra Cluster and loads a partition from a Cassandra table using a SQL
+        statement.
 
         > __read_data(
             'SELECT id, year, month, day from tab1 where month<1 and day in (1,2,3,8,12,30) and id=1 and year=2019',
@@ -517,17 +517,15 @@ class CassandraTable():
             print("schedule read")
             sql_query = copy.deepcopy(self.loading_query.sql_query)
             sql_query.append_whereclause(
-                text(' and '.join(
-                    '%s=%s' % t
-                    for t in zip(self.partition_cols, key_values)) +
-                     ' ALLOW FILTERING'))
+                text(' and '.join('%s=%s' % t for t in zip(self.partition_cols, key_values)) + ' ALLOW FILTERING'))
             query = str(
                 sql_query.compile(compile_kwargs={"literal_binds": True}))
-            # future = dask.delayed(self.__read_data)(query, cassandra_connection.session.cluster.contact_points,
-            #                                       self.keyspace, cassandra_connection.auth.username, cassandra_connection.auth.password)
-            future = dask.delayed(self.__read_data)(query, ['127.0.0.1'],
-                                                    self.keyspace, 'cassandra',
-                                                    'cassandra')
+            future = dask.delayed(self.__read_data)(query,
+                                                    cassandra_connection.session.cluster.contact_points,
+                                                    self.keyspace,
+                                                    cassandra_connection.auth.username,
+                                                    cassandra_connection.auth.password)
+
             futures.append(future)
 
         # Collect results
