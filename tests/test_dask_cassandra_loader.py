@@ -37,9 +37,12 @@ def test_cassandra_connection():
         handler = PagedResultHandler(future)
         handler.finished_event.wait()
     except Exception as e:
-        raise AssertionError(str(e))
+        raise AssertionError("The __read_data failed: " + str(e))
     else:
-        table_df = handler.df
+        if handler.error:
+            raise Exception("The __read_data failed: " + str(handler.error))
+        else:
+            table_df = handler.df
 
     # Inspect the query result
     if table_df is None:

@@ -468,7 +468,7 @@ class CassandraTable():
             raise AssertionError("The __read_data failed: " + str(e))
         else:
             if handler.error:
-                raise Exception("__read_data failed: " + str(handler.error))
+                raise Exception("The __read_data failed: " + str(handler.error))
             else:
                 df = handler.df
 
