@@ -81,13 +81,11 @@ class CassandraConnector(object):
         # Connect to Cassandra
         print("connecting to:" + str(self.clusters) + ".\n")
         if username is None:
-            self.cluster = Cluster(self.clusters, lbp = RoundRobinPolicy())
+            self.cluster = Cluster(self.clusters, load_balancing_policy=RoundRobinPolicy())
         else:
             print('Connect with auth.')
-            self.auth = PlainTextAuthProvider(username=username,
-                                              password=password,
-                                              lbp = RoundRobinPolicy())
-            self.cluster = Cluster(self.clusters, auth_provider=self.auth)
+            self.auth = PlainTextAuthProvider(username=username, password=password)
+            self.cluster = Cluster(self.clusters, auth_provider=self.auth, load_balancing_policy=RoundRobinPolicy())
         self.session = self.cluster.connect(self.keyspace)
 
         # Configure session to return a Pandas dataframe
@@ -456,10 +454,10 @@ class CassandraTable():
         # Set connection to a Cassandra Cluster
 
         if username is None:
-            cluster = Cluster(clusters, lbp = RoundRobinPolicy())
+            cluster = Cluster(clusters, load_balancing_policy=RoundRobinPolicy())
         else:
-            auth = PlainTextAuthProvider(username=username, password=password, lbp = RoundRobinPolicy())
-            cluster = Cluster(clusters, auth_provider=auth)
+            auth = PlainTextAuthProvider(username=username, password=password)
+            cluster = Cluster(clusters, auth_provider=auth, load_balancing_policy=RoundRobinPolicy())
 
         session = cluster.connect(keyspace)
 
