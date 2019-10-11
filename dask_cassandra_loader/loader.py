@@ -1,6 +1,7 @@
 from cassandra.cluster import Cluster
 from cassandra.protocol import NumpyProtocolHandler
 from cassandra.auth import PlainTextAuthProvider
+from dask.distributed import Client, LocalCluster
 import copy
 import dask
 import dask.dataframe as dd
@@ -549,7 +550,7 @@ class DaskCassandraLoader(object):
         self.dask_cluster = None
         return
 
-    def connect_to_local_dask(self, cluster, client):
+    def connect_to_local_dask(self):
         """
         Connects to a local Dask cluster.
 
@@ -558,10 +559,29 @@ class DaskCassandraLoader(object):
         """
         print("Connecting to Dask")
         self.logger.info('Create and connect to a local Dask cluster.')
-        # self.dask_cluster = LocalCluster(silence_logs=False)
-        # self.dask_client = Client(self.dask_cluster, processes=False)
+        self.dask_cluster = LocalCluster(
+            scheduler_port=0,
+            silence_logs=True,
+            processes=False,
+            asynchronous=False,
+        )
+        self.dask_client = Client(self.dask_cluster, asynchronous=False)
+        print("Connected to Dask")
+        return
+
+    def connect_to_Dask(self, cluster):
+        """
+        Connect to a Dask Cluster
+
+        > connect_to_Dask(cluster)
+
+        :param cluster: Cluster instance of Dask Distributed.
+        """
+
+        print("Connecting to Dask")
+        self.logger.info('Create and connect to a local Dask cluster.')
         self.dask_cluster = cluster
-        self.dask_client = client
+        self.dask_client = Client(self.dask_cluster, asynchronous=False)
         print("Connected to Dask")
         return
 
@@ -573,7 +593,7 @@ class DaskCassandraLoader(object):
 
         """
         self.dask_client.close()
-        self.dask_cluster.close(10)
+        self.dask_cluster.close()
         return
 
     def connect_to_cassandra(self, cassandra_clusters, cassandra_keyspace,

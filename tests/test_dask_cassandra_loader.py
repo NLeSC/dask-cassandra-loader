@@ -108,14 +108,7 @@ def test_table_load_empty():
                                                password='cassandra')
 
     # Connect to Dask
-    cluster = LocalCluster(
-        scheduler_port=0,
-        silence_logs=True,
-        processes=False,
-        asynchronous=False,
-    )
-    client = Client(cluster, asynchronous=False)
-    dask_cassandra_loader.connect_to_local_dask(cluster, client)
+    dask_cassandra_loader.connect_to_local_dask()
 
     # Load table 'tab1'
     dask_cassandra_loader.load_cassandra_table(
@@ -135,9 +128,7 @@ def test_table_load_empty():
         print("As expected table data is empty!!!")
 
     # Disconnect from Dask
-    #dask_cassandra_loader.disconnect_from_dask()
-    client.close()
-    cluster.close()
+    dask_cassandra_loader.disconnect_from_dask()
 
     # Disconnect from Cassandra
     dask_cassandra_loader.disconnect_from_cassandra()
@@ -156,14 +147,7 @@ def test_table_load_with_data():
                                                password='cassandra')
 
     # Connect to Dask
-    cluster = LocalCluster(
-        scheduler_port=0,
-        silence_logs=True,
-        processes=False,
-        asynchronous=False,
-    )
-    client = Client(cluster, asynchronous=False)
-    dask_cassandra_loader.connect_to_local_dask(cluster, client)
+    dask_cassandra_loader.connect_to_local_dask()
     # Load table 'tab1'
     dask_cassandra_loader.load_cassandra_table('tab1',
                                                ['id', 'year', 'month', 'day'],
@@ -183,9 +167,7 @@ def test_table_load_with_data():
     #print(table.data.head())
 
     # Disconnect from Dask
-    #dask_cassandra_loader.disconnect_from_dask()
-    client.close()
-    cluster.close()
+    dask_cassandra_loader.disconnect_from_dask()
 
     # Disconnect from Cassandra
     dask_cassandra_loader.disconnect_from_cassandra()
