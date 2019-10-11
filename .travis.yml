@@ -35,6 +35,6 @@ script:
 
 # upload coverage information to Codacy
 after_success:
-  - python-codacy-coverage -r coverage.xml
   - coverage report -m
+  - python-codacy-coverage -r coverage.xml
   
