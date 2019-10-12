@@ -569,7 +569,7 @@ class Loader(object):
         print("Connected to Dask")
         return
 
-    def connect_to_Dask(self, cluster):
+    def connect_to_dask(self, cluster):
         """
         Connect to a Dask Cluster
 
