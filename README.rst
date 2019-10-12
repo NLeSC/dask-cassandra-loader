@@ -49,7 +49,7 @@ Documentation
 
 .. _README:
 
-If you want mode information about the API and a little tutorial, have a look at the `_dask_cassandra_loader documentation<https://dask-cassandra-loader.readthedocs.io/en/latest/?badge=latest>`__.
+If you want mode information about the API and a little tutorial, have a look at the `dask_cassandra_loader documentation <https://dask-cassandra-loader.readthedocs.io/en/latest/?badge=latest>`_.
 
 Contributing
 ************
