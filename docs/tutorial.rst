@@ -8,7 +8,6 @@ Dask cassandra loader using either a local or a remote Cassandra database.
 To install Dask cassandra loader, use
 
 .. code-block:: bash
-
   pip install dask_cassandra_loader
 
 If you're using dask cassandra loader in a program, you will probably want to use a
@@ -43,9 +42,9 @@ The first step to load a table from Cassandra into a Dask data-frame is to creat
 To do that the user should do the following:
 
 .. code-block:: python
-    from dask_cassandra_loader import Loader
-    
-    dask_cassandra_loader = Loader()
+  from dask_cassandra_loader import Loader
+  
+  dask_cassandra_loader = Loader()
 
 
 Connect to Cassandra
@@ -55,10 +54,10 @@ With the loader the user is then able to set a connection to an existent Cassand
 In this example we assume the user is connecting to local cluster using the default credentials.
 
 .. code-block:: python
-    keyspace = 'tutorial'
-    clusters = ['127.0.0.1']
+  keyspace = 'tutorial'
+  clusters = ['127.0.0.1']
 
-    dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
+  dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
 
 
 Connect to Dask
@@ -70,12 +69,12 @@ the following examples will show.
 
 To create and connect to a local Dask cluster you use the following code:
 .. code-block:: python
-    dask_cassandra_loader.connect_to_local_dask()
+  dask_cassandra_loader.connect_to_local_dask()
 
 To connect to a remote cluster you use the following code:
 .. code-block:: python
-    cluster = "host1.domain.nl:9091"
-    dask_cassandra_loader.connect_to_dask(cluster):
+  cluster = "host1.domain.nl:9091"
+  dask_cassandra_loader.connect_to_dask(cluster):
 
 
 Read Table
@@ -88,23 +87,23 @@ case the query qualifies all of them for loading. For more details about the fun
 read :doc:`API documentation for dask_cassandra_loader.loader.load_cassandra_table <https://dask-cassandra-loader.readthedocs.io/en/latest/apidocs/dask_cassandra_loader.loader.html#dask_cassandra_loader.loader.Loader.load_cassandra_table>`_.
 
 .. code-block:: python
-    dask_cassandra_loader.load_cassandra_table('tab1',
-                                               ['id', 'year', 'month', 'day'],
-                                               [('day', 'equal', [8])],
-                                               [('id', [18]), ('year', [2018]),
-                                                ('month', [11])],
-                                               force=False)
+  dask_cassandra_loader.load_cassandra_table('tab1',
+                                             ['id', 'year', 'month', 'day'],
+                                             [('day', 'equal', [8])],
+                                             [('id', [18]), ('year', [2018]),
+                                              ('month', [11])],
+                                             force=False)
 
-    table = dask_cassandra_loader.keyspace_tables['tab1']
+  table = dask_cassandra_loader.keyspace_tables['tab1']
 
-    if table is None:
-        raise AssertionError("Table is not supposed to be None!!!")
+  if table is None:
+      raise AssertionError("Table is not supposed to be None!!!")
 
-    if table.data is None:
-        raise AssertionError("Table.data is not supposed to be None!!!")
+  if table.data is None:
+      raise AssertionError("Table.data is not supposed to be None!!!")
 
-    # Inspect table information
-    print(table.data.head())
+  # Inspect table information
+  print(table.data.head())
 
 
 More information
