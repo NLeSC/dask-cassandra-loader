@@ -93,7 +93,7 @@ In this example the user will load table `tab1`, project columns `id`, `year`, `
 have a predicate on column `day` (`day = 18`) and only select the partitions for which `id in [18]`,
 `year in [2018]` and `month in [11]`. In this example, it is requested to not load all partitions in
 case the query qualifies all of them for loading. For more details about the function, the user should
-read :doc:`API documentation for dask_cassandra_loader.loader.load_cassandra_table <https://dask-cassandra-loader.readthedocs.io/en/latest/apidocs/dask_cassandra_loader.loader.html#dask_cassandra_loader.loader.Loader.load_cassandra_table>`_.
+read `API documentation for dask_cassandra_loader.loader.Loader.load_cassandra_table<https://dask-cassandra-loader.readthedocs.io/en/latest/apidocs/dask_cassandra_loader.loader.html#dask_cassandra_loader.loader.Loader.load_cassandra_table>`_.
 
 .. code-block:: python
 
