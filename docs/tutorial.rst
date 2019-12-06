@@ -19,7 +19,7 @@ Setup
 =====
 
 The tutorial requires the creation of a keyspace in an existent Cassandra cluster. For this
-tutorial it is used the keyspace called `tutorial`. In this example it is assume the local
+tutorial it is used the keyspace called **tutorial**. In this example it is assume the local
 client cqlsh is installed and configured accordingly.
 
 .. code-block:: bash
@@ -27,21 +27,21 @@ client cqlsh is installed and configured accordingly.
     cqlsh -e "create keyspace tutorial with replication = {'class': 'SimpleStrategy', 'replication_factor': 1};"
 
 Once the keyspace is created the user needs to create a table and load it. To do that the
-user needs to run the `.cql` file under the `dask-cassandra-loader/docs` directory as follow:
+user needs to run the **.cql** file under the **dask-cassandra-loader/docs** directory as follow:
 
 .. code-block:: bash
 
     cqlsh --keyspace=tutorial -f tutorial.cql
 
-Once the table is loaded, the user will have a table called `tab1` with the following schema: 
-`create table tab1(id int, year int, month int, day int, timest timestamp, lat float, lon float, PRIMARY KEY((id, year, month)));`
+Once the table is loaded, the user will have a table called **tab1** with the following schema: 
+**create table tab1(id int, year int, month int, day int, timest timestamp, lat float, lon float, PRIMARY KEY((id, year, month)));**
 The loaded data has two partitions due two distinct months.
 
 
 Dask cassandra loader
 =====================
 
-The first step to load a table from Cassandra into a Dask data-frame is to create `Loader`.
+The first step to load a table from Cassandra into a Dask data-frame is to create :class:`dask_cassandra_loader.loader.Loader`.
 To do that the user should do the following:
 
 .. code-block:: python
@@ -69,7 +69,7 @@ Connect to Dask
 ---------------
 
 Before a table is loaded it is necessary to connect to a Dask Cluster. For testing proposes
-it might be handy to have the option to create a `LocalCluster`. Both options are supported as
+it might be handy to have the option to create a **LocalCluster**. Both options are supported as
 the following examples will show.
 
 To create and connect to a local Dask cluster you use the following code:
@@ -89,9 +89,9 @@ To connect to a remote cluster you use the following code:
 Read Table
 ----------
 
-In this example the user will load table `tab1`, project columns `id`, `year`, `month`, `day`,
-have a predicate on column `day` (`day = 18`) and only select the partitions for which `id in [18]`,
-`year in [2018]` and `month in [11]`. In this example, it is requested to not load all partitions in
+In this example the user will load table *tab1*, project columns *id*, *year*, *month*, *day*,
+have a predicate on column *day* (*day = 18*) and only select the partitions for which *id in [18]*,
+*year in [2018]* and *month in [11]*. In this example, it is requested to not load all partitions in
 case the query qualifies all of them for loading. For more details about the function, the user should
 read :doc:`API documentation <dask_cassandra_loader.loader.Loader.load_cassandra_table>`.
 
