@@ -34,7 +34,10 @@ user needs to run the **.cql** file under the **dask-cassandra-loader/docs** dir
     cqlsh --keyspace=tutorial -f tutorial.cql
 
 Once the table is loaded, the user will have a table called **tab1** with the following schema: 
-**create table tab1(id int, year int, month int, day int, timest timestamp, lat float, lon float, PRIMARY KEY((id, year, month)));**
+
+.. code-block:: sql
+  create table tab1(id int, year int, month int, day int, timest timestamp, lat float, lon float, PRIMARY KEY((id, year, month)));
+  
 The loaded data has two partitions due two distinct months.
 
 
