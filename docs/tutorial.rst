@@ -8,6 +8,7 @@ Dask cassandra loader using either a local or a remote Cassandra database.
 To install Dask cassandra loader, use
 
 .. code-block:: bash
+
   pip install dask_cassandra_loader
 
 If you're using dask cassandra loader in a program, you will probably want to use a
@@ -22,12 +23,14 @@ tutorial it is used the keyspace called `tutorial`. In this example it is assume
 client cqlsh is installed and configured accordingly.
 
 .. code-block:: bash
+
     cqlsh -e "create keyspace tutorial with replication = {'class': 'SimpleStrategy', 'replication_factor': 1};"
 
 Once the keyspace is created the user needs to create a table and load it. To do that the
 user needs to run the `.cql` file under the `dask-cassandra-loader/docs` directory as follow:
 
 .. code-block:: bash
+
     cqlsh --keyspace=tutorial -f tutorial.cql
 
 Once the table is loaded, the user will have a table called `tab1` with the following schema: 
@@ -42,6 +45,7 @@ The first step to load a table from Cassandra into a Dask data-frame is to creat
 To do that the user should do the following:
 
 .. code-block:: python
+
   from dask_cassandra_loader import Loader
   
   dask_cassandra_loader = Loader()
@@ -54,6 +58,7 @@ With the loader the user is then able to set a connection to an existent Cassand
 In this example we assume the user is connecting to local cluster using the default credentials.
 
 .. code-block:: python
+
   keyspace = 'tutorial'
   clusters = ['127.0.0.1']
 
@@ -68,11 +73,15 @@ it might be handy to have the option to create a `LocalCluster`. Both options ar
 the following examples will show.
 
 To create and connect to a local Dask cluster you use the following code:
+
 .. code-block:: python
+
   dask_cassandra_loader.connect_to_local_dask()
 
 To connect to a remote cluster you use the following code:
+
 .. code-block:: python
+
   cluster = "host1.domain.nl:9091"
   dask_cassandra_loader.connect_to_dask(cluster):
 
@@ -87,6 +96,7 @@ case the query qualifies all of them for loading. For more details about the fun
 read :doc:`API documentation for dask_cassandra_loader.loader.load_cassandra_table <https://dask-cassandra-loader.readthedocs.io/en/latest/apidocs/dask_cassandra_loader.loader.html#dask_cassandra_loader.loader.Loader.load_cassandra_table>`_.
 
 .. code-block:: python
+
   dask_cassandra_loader.load_cassandra_table('tab1',
                                              ['id', 'year', 'month', 'day'],
                                              [('day', 'equal', [8])],
