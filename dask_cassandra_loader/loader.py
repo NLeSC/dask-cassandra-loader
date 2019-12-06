@@ -547,7 +547,6 @@ class Loader(object):
         self.keyspace_tables = {}
         self.cassandra_con = None
         self.dask_client = None
-        self.dask_cluster = None
         return
 
     def connect_to_local_dask(self):
@@ -559,29 +558,28 @@ class Loader(object):
         """
         print("Connecting to Dask")
         self.logger.info('Create and connect to a local Dask cluster.')
-        self.dask_cluster = LocalCluster(
+        dask_cluster = LocalCluster(
             scheduler_port=0,
             silence_logs=True,
             processes=False,
             asynchronous=False,
         )
-        self.dask_client = Client(self.dask_cluster, asynchronous=False)
+        self.dask_client = Client(dask_cluster, asynchronous=False)
         print("Connected to Dask")
         return
 
-    def connect_to_dask(self, cluster):
+    def connect_to_dask(self, dask_cluster):
         """
         Connect to a Dask Cluster
 
         > connect_to_Dask(cluster)
 
-        :param cluster: Cluster instance of Dask Distributed.
+        :param dask_cluster: String with format url:port.
         """
 
         print("Connecting to Dask")
         self.logger.info('Create and connect to a local Dask cluster.')
-        self.dask_cluster = cluster
-        self.dask_client = Client(self.dask_cluster, asynchronous=False)
+        self.dask_client = Client(dask_cluster, asynchronous=False)
         print("Connected to Dask")
         return
 
@@ -593,7 +591,6 @@ class Loader(object):
 
         """
         self.dask_client.close()
-        self.dask_cluster.close()
         return
 
     def connect_to_cassandra(self, cassandra_clusters, cassandra_keyspace,
