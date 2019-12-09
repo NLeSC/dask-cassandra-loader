@@ -64,7 +64,7 @@ In this example we assume the user is connecting to local cluster using the defa
 .. code-block:: python
 
   keyspace = 'tutorial'
-  clusters = ['127.0.0.1']
+  cluster = ['127.0.0.1']
 
   dask_cassandra_loader.connect_to_cassandra(clusters, keyspace, username='cassandra', password='cassandra')
 
