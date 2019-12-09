@@ -21,7 +21,6 @@ class PagedResultHandler(object):
         > handler = PagedResultHandler(future)
         :param future: Future from Cassandra session asynchronous execution.
         """
-        self.logger = logging.getLogger(__name__)
         self.error = None
         self.finished_event = Event()
         self.future = future
