@@ -82,12 +82,11 @@ class Connector(object):
 
         # Connect to Cassandra
         print("connecting to:" + str(self.clusters) + ".\n")
+        self.auth = PlainTextAuthProvider(username=username,
+                                          password=password)
         if username is None:
             self.cluster = Cluster(self.clusters)
         else:
-            print('Connect with auth.')
-            self.auth = PlainTextAuthProvider(username=username,
-                                              password=password)
             self.cluster = Cluster(self.clusters,
                                    auth_provider=self.auth)
         self.session = self.cluster.connect(self.keyspace)
