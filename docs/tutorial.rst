@@ -124,4 +124,4 @@ More information
 ================
 
 To find all the details of what dask cassandra loader can do and how to do it, please refer
-to the :doc:`API documentation<apidocs/dask_cassandra_loader>`.
+to the :doc:`API documentation<apidocs/dask_cassandra_loader.loader>`.
