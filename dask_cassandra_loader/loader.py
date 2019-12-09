@@ -21,6 +21,7 @@ class PagedResultHandler(object):
         > handler = PagedResultHandler(future)
         :param future: Future from Cassandra session asynchronous execution.
         """
+        self.logger = logging.getLogger(__name__)
         self.error = None
         self.finished_event = Event()
         self.future = future
@@ -72,6 +73,7 @@ class Connector(object):
         :param username: It is a String.
         :param password: It is a String.
         """
+        self.logger = logging.getLogger(__name__)
         self.error = None
         self.clusters = cassandra_clusters
         self.keyspace = cassandra_keyspace
@@ -121,6 +123,7 @@ class Operators(object):
          > CassandraOperators()
 
         """
+        self.logger = logging.getLogger(__name__)
         self.error = None
         self.warning = None
         self.operators = [
@@ -195,6 +198,7 @@ class LoadingQuery(object):
         > CassandraLoadingQuery()
 
         """
+        self.logger = logging.getLogger(__name__)
         self.error = None
         self.warning = None
         self.projections = None
@@ -369,6 +373,7 @@ class Table():
         :param keyspace: It is a string which contains an existent Cassandra keyspace.
         :param name: It is a String.
         """
+        self.logger = logging.getLogger(__name__)
         self.error = None
         self.warning = None
         self.keyspace = keyspace
