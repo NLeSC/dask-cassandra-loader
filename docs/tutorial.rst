@@ -27,7 +27,7 @@ client cqlsh is installed and configured accordingly.
     cqlsh -e "create keyspace tutorial with replication = {'class': 'SimpleStrategy', 'replication_factor': 1};"
 
 Once the keyspace is created the user needs to create a table and load it. To do that the
-user needs to run the **.cql** file under the **dask-cassandra-loader/docs** directory as follow:
+user needs to run the :download:`tutorial.cql <tutorial.cql>` file as follow:
 
 .. code-block:: bash
 
