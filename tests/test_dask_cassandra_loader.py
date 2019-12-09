@@ -160,8 +160,6 @@ def test_table_load_with_data():
 
     if table.data is None:
         raise AssertionError("Table.data is not supposed to be None!!!")
-    else:
-        table.data.compute()
 
     # Inspect table information
     #print(table.data.head())
