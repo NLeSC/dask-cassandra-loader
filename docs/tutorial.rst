@@ -101,14 +101,12 @@ read :func:`dask_cassandra_loader.loader.Loader.load_cassandra_table`.
 
 .. code-block:: python
 
-  dask_cassandra_loader.load_cassandra_table('tab1',
+  table = dask_cassandra_loader.load_cassandra_table('tab1',
                                              ['id', 'year', 'month', 'day'],
                                              [('day', 'equal', [8])],
                                              [('id', [18]), ('year', [2018]),
                                               ('month', [11])],
                                              force=False)
-
-  table = dask_cassandra_loader.keyspace_tables['tab1']
 
   if table is None:
       raise AssertionError("Table is not supposed to be None!!!")
