@@ -548,7 +548,6 @@ class Loader(object):
         self.logger = logging.getLogger(__name__)
         self.error = None
         self.warning = None
-        self.keyspace_tables = {}
         self.cassandra_con = None
         self.dask_client = None
         self.dask_cluster = None
@@ -655,11 +654,6 @@ class Loader(object):
         :param force: It is a boolean. In case all the partitions need to be loaded, which is not recommended,
          it should be set to 'True'.
         """
-        if table_name in self.keyspace_tables.keys():
-            raise Exception(
-                "Table " + table_name +
-                " was already loaded!!!\n To reloaded it, you must first unload it."
-            )
 
         table = Table(self.cassandra_con.keyspace, table_name)
 
@@ -691,17 +685,4 @@ class Loader(object):
         loading_query.print_query()
 
         table.load_data(self.cassandra_con, loading_query)
-        self.keyspace_tables[table_name] = table
-        return
-
-    def unload_cassandra_table(self, table_name):
-        """
-        Deletes the DaskDataframe and removes the table from the list of 'loaded' tables.
-
-        > unload_cassandra_table('tab1')
-
-        :param table_name: It is a String.
-        """
-        del self.keyspace_tables[table_name].data
-        del self.keyspace_tables[table_name]
-        return
+        return table
