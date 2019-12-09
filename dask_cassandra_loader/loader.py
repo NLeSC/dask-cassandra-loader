@@ -81,11 +81,10 @@ class Connector(object):
             return pd.DataFrame(rows, columns=colnames)
 
         # Connect to Cassandra
-        print("connecting to:" + str(self.clusters) + ".\n")
+        self.logger.info("connecting to:" + str(self.clusters) + ".\n")
         if username is None:
             self.cluster = Cluster(self.clusters)
         else:
-            print('Connect with auth.')
             self.auth = PlainTextAuthProvider(username=username,
                                               password=password)
             self.cluster = Cluster(self.clusters,
@@ -213,7 +212,7 @@ class LoadingQuery(object):
         :param projections: A list of columns names. Each column name is a String.
         """
         if projections is None or len(projections) == 0:
-            print("All columns will be projected!!!")
+            self.logger.info("All columns will be projected!!!")
             self.projections = projections
         else:
             for col in projections:
@@ -246,7 +245,7 @@ class LoadingQuery(object):
          prints all available operators. It should only contain columns which are not partition columns.
         """
         if predicates is None or len(predicates) == 0:
-            print(
+            self.logger.info(
                 "No predicates over the non primary key columns were defined!!!"
             )
         else:
@@ -353,7 +352,7 @@ class LoadingQuery(object):
             self.error = "The query needs first to be defined!!! "
             self.finished_event.set()
         else:
-            print(
+            self.logger.info(
                 self.sql_query.compile(compile_kwargs={"literal_binds": True}))
         return
 
@@ -423,8 +422,8 @@ class Table():
         > print_metadata()
 
         """
-        print("The table columns are:" + str(self.cols))
-        print("The partition columns are:" + str(self.partition_cols))
+        self.logger.info("The table columns are:" + str(self.cols))
+        self.logger.info("The partition columns are:" + str(self.partition_cols))
         return
 
     @staticmethod
@@ -505,7 +504,7 @@ class Table():
         # Schedule the reads
         partition_keys = self.partition_keys.to_numpy()
         for key_values in partition_keys:
-            print("schedule read")
+            self.logger.info("Schedule a read.")
             sql_query = copy.deepcopy(self.loading_query.sql_query)
             sql_query.append_whereclause(
                 text(' and '.join('%s=%s' % t for t in zip(self.partition_cols, key_values)) + ' ALLOW FILTERING'))
@@ -523,11 +522,11 @@ class Table():
         if len(futures) == 0:
             self.data = None
         else:
-            print("Wait for reads")
+            self.logger.info("Wait for reads.")
             df = dd.from_delayed(futures)
-            print("Start computing")
+            self.logger.info("Start computing.")
             self.data = df.compute()
-            print("Computing endede")
+            self.logger.info("Computing ended.")
         return
 
 
@@ -557,7 +556,7 @@ class Loader(object):
         > connect_to_local_dask()
 
         """
-        print("Connecting to Dask")
+        self.logger.info("Connecting to Dask")
         self.logger.info('Create and connect to a local Dask cluster.')
         self.dask_cluster = LocalCluster(
             scheduler_port=0,
@@ -566,7 +565,7 @@ class Loader(object):
             asynchronous=False,
         )
         self.dask_client = Client(self.dask_cluster, asynchronous=False)
-        print("Connected to Dask")
+        self.logger.info("Connected to Dask")
         return
 
     def connect_to_dask(self, cluster):
@@ -578,11 +577,11 @@ class Loader(object):
         :param cluster: Cluster instance of Dask Distributed.
         """
 
-        print("Connecting to Dask")
+        self.logger.info("Connecting to Dask")
         self.logger.info('Create and connect to a local Dask cluster.')
         self.dask_cluster = cluster
         self.dask_client = Client(self.dask_cluster, asynchronous=False)
-        print("Connected to Dask")
+        self.logger.info("Connected to Dask")
         return
 
     def disconnect_from_dask(self):
@@ -686,7 +685,6 @@ class Loader(object):
 
         loading_query.print_query()
 
-        print("We go to load the data!!!")
         table.load_data(self.cassandra_con, loading_query)
         self.keyspace_tables[table_name] = table
         return
