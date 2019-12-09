@@ -526,7 +526,7 @@ class Table():
             print("Wait for reads")
             df = dd.from_delayed(futures)
             print("Start computing")
-            self.data = df.compute()
+            self.data = df
             print("Computing endede")
         return
 
