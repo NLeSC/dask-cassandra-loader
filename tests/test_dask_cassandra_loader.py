@@ -127,8 +127,6 @@ def test_table_load_empty():
 
         if table.data is not None:
             raise AssertionError("Table.data is supposed to be None!!!")
-        else:
-            print("As expected table data is empty!!!")
 
     # Disconnect from Dask
     dask_cassandra_loader.disconnect_from_dask()
@@ -169,10 +167,12 @@ def test_table_load_with_data():
         if table.data is None:
             raise AssertionError("Table.data is not supposed to be None!!!")
 
+        # Compute the Dask DataFrame and collect it as a Pandas DataFrame
+        local_table = table.data.compute()
+
         # Inspect table information
-        table.compute()
-        if table.data.count() != 5:
-            raise AssertionError("The number of records is incorrect, it should be " + str(table.data.count()))
+        if local_table.count() != 5:
+            raise AssertionError("The number of records is incorrect, it should be " + str(local_table.count()))
 
     # Disconnect from Dask
     dask_cassandra_loader.disconnect_from_dask()
