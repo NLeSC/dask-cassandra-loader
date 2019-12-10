@@ -104,21 +104,27 @@ read :func:`dask_cassandra_loader.loader.Loader.load_cassandra_table`.
 
 .. code-block:: python
 
-  table = dask_cassandra_loader.load_cassandra_table('tab1',
+  try:
+    table = dask_cassandra_loader.load_cassandra_table('tab1',
                                              ['id', 'year', 'month', 'day'],
                                              [('day', 'equal', [8])],
                                              [('id', [18]), ('year', [2018]),
                                               ('month', [11])],
                                              force=False)
+  except Exception as e:
+    print("Table load failed: " + str(e))
+  else:
+    if table is None:
+        raise AssertionError("Table is not supposed to be None!!!")
 
-  if table is None:
-      raise AssertionError("Table is not supposed to be None!!!")
+    if table.data is None:
+        raise AssertionError("Table.data is not supposed to be None!!!")
 
-  if table.data is None:
-      raise AssertionError("Table.data is not supposed to be None!!!")
+    # Compute the Dask DataFrame and collect it as a Pandas DataFrame
+    local_table = table.data.compute()
 
-  # Inspect table information
-  print(table.data.head())
+    # Inspect table information
+    print(local_table.head())
 
 
 More information
