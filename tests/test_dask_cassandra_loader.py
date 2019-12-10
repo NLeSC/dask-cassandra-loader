@@ -171,7 +171,7 @@ def test_table_load_with_data():
         local_table = table.data.compute()
 
         # Inspect the number of rows
-        if local_table['id'].count() != 5:
+        if local_table['id'].count() != 1:
             raise AssertionError("The number of records is incorrect, it should be " + str(local_table['id'].count()))
 
     # Disconnect from Dask
