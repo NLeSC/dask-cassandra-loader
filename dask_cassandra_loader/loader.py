@@ -574,9 +574,11 @@ class Loader(object):
         """
         Connect to a Dask Cluster
 
-        > connect_to_Dask(cluster)
+        > connect_to_Dask('127.0.0.1:8786')
+        or
+        > connect_to_Dask(cluser)
 
-        :param dask_cluster: String with format url:port.
+        :param dask_cluster: String with format url:port or an instance of Cluster
         """
 
         self.logger.info("Connecting to Dask")
