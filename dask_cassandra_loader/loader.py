@@ -73,7 +73,6 @@ class Connector(object):
         :param password: It is a String.
         """
         self.logger = logging.getLogger(__name__)
-        self.error = None
         self.clusters = cassandra_clusters
         self.keyspace = cassandra_keyspace
         self.auth = None
@@ -123,8 +122,6 @@ class Operators(object):
 
         """
         self.logger = logging.getLogger(__name__)
-        self.error = None
-        self.warning = None
         self.operators = [
             "less_than_equal", "less_than", "greater_than_equal",
             "greater_than", "equal", "between", "like", "in_", "notin_"
@@ -198,8 +195,6 @@ class LoadingQuery(object):
 
         """
         self.logger = logging.getLogger(__name__)
-        self.error = None
-        self.warning = None
         self.projections = None
         self.and_predicates = None
         self.sql_query = None
@@ -352,8 +347,7 @@ class LoadingQuery(object):
 
         """
         if self.sql_query is None:
-            self.error = "The query needs first to be defined!!! "
-            self.finished_event.set()
+            raise Exception("The query needs first to be defined!!! ")
         else:
             self.logger.info(
                 self.sql_query.compile(compile_kwargs={"literal_binds": True}))
@@ -373,8 +367,6 @@ class Table():
         :param name: It is a String.
         """
         self.logger = logging.getLogger(__name__)
-        self.error = None
-        self.warning = None
         self.keyspace = keyspace
         self.name = name
         self.cols = None
@@ -545,8 +537,6 @@ class Loader(object):
 
         """
         self.logger = logging.getLogger(__name__)
-        self.error = None
-        self.warning = None
         self.cassandra_con = None
         self.dask_client = None
         self.dask_cluster = None
@@ -634,7 +624,7 @@ class Loader(object):
         return
 
     def load_cassandra_table(self, table_name, projections, and_predicates,
-                             partitions_to_load, force):
+                             partitions_to_load, force, debug):
         """
         It loads a Cassandra table into a Dask dataframe.
 
@@ -652,6 +642,7 @@ class Loader(object):
          and a list of keys which should be selected. It should only contain columns which are partition columns.
         :param force: It is a boolean. In case all the partitions need to be loaded, which is not recommended,
          it should be set to 'True'.
+        :param debug: It is a boolean. If set to True it prints to the logs the query to be sent to Cassandra.
         """
 
         table = Table(self.cassandra_con.keyspace, table_name)
@@ -661,27 +652,38 @@ class Loader(object):
             raise Exception("load_cassandra_table failed: " + table.error)
 
         loading_query = LoadingQuery()
-        loading_query.set_projections(table, projections)
-        if loading_query.error:
+
+        try:
+            loading_query.set_projections(table, projections)
+        except Exception as e:
             raise Exception("load_cassandra_table failed: " +
-                            loading_query.error)
+                            str(e))
 
-        loading_query.set_and_predicates(table, and_predicates)
-        if loading_query.error:
+        try:
+            loading_query.set_and_predicates(table, and_predicates)
+        except Exception as e:
             raise Exception("load_cassandra_table failed: " +
-                            loading_query.error)
+                            str(e))
 
-        loading_query.partition_elimination(table, partitions_to_load, force)
-        if loading_query.error:
+        try:
+            loading_query.partition_elimination(table, partitions_to_load, force)
+        except Exception as e:
             raise Exception("load_cassandra_table failed: " +
-                            loading_query.error)
+                            str(e))
 
-        loading_query.build_query(table)
-        if loading_query.error:
+        try:
+            loading_query.build_query(table)
+        except Exception as e:
             raise Exception("load_cassandra_table failed: " +
-                            loading_query.error)
+                            str(e))
 
-        loading_query.print_query()
+        if debug == True:
+            loading_query.print_query()
 
-        table.load_data(self.cassandra_con, loading_query)
+        try:
+            table.load_data(self.cassandra_con, loading_query)
+        except Exception as e:
+            raise Exception("Table load failed: " +
+                            str(e))
+
         return table
