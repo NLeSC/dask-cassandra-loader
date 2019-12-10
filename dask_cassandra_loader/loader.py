@@ -521,7 +521,7 @@ class Table():
             self.logger.info("Wait for reads.")
             df = dd.from_delayed(futures)
             self.logger.info("Start computing.")
-            self.data = df.compute()
+            self.data = df
             self.logger.info("Computing ended.")
         return
 
@@ -539,7 +539,6 @@ class Loader(object):
         self.logger = logging.getLogger(__name__)
         self.cassandra_con = None
         self.dask_client = None
-        self.dask_cluster = None
         return
 
     def connect_to_local_dask(self):
@@ -551,29 +550,30 @@ class Loader(object):
         """
         self.logger.info("Connecting to Dask")
         self.logger.info('Create and connect to a local Dask cluster.')
-        self.dask_cluster = LocalCluster(
+        dask_cluster = LocalCluster(
             scheduler_port=0,
             silence_logs=True,
             processes=False,
             asynchronous=False,
         )
-        self.dask_client = Client(self.dask_cluster, asynchronous=False)
+        self.dask_client = Client(dask_cluster, asynchronous=False)
         self.logger.info("Connected to Dask")
         return
 
-    def connect_to_dask(self, cluster):
+    def connect_to_dask(self, dask_cluster):
         """
         Connect to a Dask Cluster
 
-        > connect_to_Dask(cluster)
+        > connect_to_Dask('127.0.0.1:8786')
+        or
+        > connect_to_Dask(cluser)
 
-        :param cluster: Cluster instance of Dask Distributed.
+        :param dask_cluster: String with format url:port or an instance of Cluster
         """
 
         self.logger.info("Connecting to Dask")
         self.logger.info('Create and connect to a local Dask cluster.')
-        self.dask_cluster = cluster
-        self.dask_client = Client(self.dask_cluster, asynchronous=False)
+        self.dask_client = Client(dask_cluster, asynchronous=False)
         self.logger.info("Connected to Dask")
         return
 
@@ -585,7 +585,6 @@ class Loader(object):
 
         """
         self.dask_client.close()
-        self.dask_cluster.close()
         return
 
     def connect_to_cassandra(self, cassandra_clusters, cassandra_keyspace,
