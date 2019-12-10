@@ -11,6 +11,7 @@ A data loader which loads data from a Cassandra table into a Dask dataframe. It 
    :maxdepth: 2
    :caption: Contents:
 
+   tutorial
 
 API Reference
 =============
