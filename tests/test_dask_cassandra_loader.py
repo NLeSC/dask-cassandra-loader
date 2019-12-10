@@ -170,9 +170,9 @@ def test_table_load_with_data():
         # Compute the Dask DataFrame and collect it as a Pandas DataFrame
         local_table = table.data.compute()
 
-        # Inspect table information
-        if local_table.count() != 5:
-            raise AssertionError("The number of records is incorrect, it should be " + str(local_table.count()))
+        # Inspect the number of rows
+        if local_table['id'].count() != 5:
+            raise AssertionError("The number of records is incorrect, it should be " + str(local_table['id'].count()))
 
     # Disconnect from Dask
     dask_cassandra_loader.disconnect_from_dask()
