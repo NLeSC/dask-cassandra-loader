@@ -170,7 +170,9 @@ def test_table_load_with_data():
             raise AssertionError("Table.data is not supposed to be None!!!")
 
         # Inspect table information
-        #print(table.data.head())
+        table.compute()
+        if table.data.count() != 5:
+            raise AssertionError("The number of records is incorrect, it should be " + str(table.data.count()))
 
     # Disconnect from Dask
     dask_cassandra_loader.disconnect_from_dask()
