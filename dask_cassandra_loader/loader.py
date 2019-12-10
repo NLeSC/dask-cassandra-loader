@@ -623,7 +623,7 @@ class Loader(object):
         return
 
     def load_cassandra_table(self, table_name, projections, and_predicates,
-                             partitions_to_load, force, debug):
+                             partitions_to_load, force=False, debug=False):
         """
         It loads a Cassandra table into a Dask dataframe.
 
@@ -640,8 +640,9 @@ class Loader(object):
         :param partitions_to_load: List of tuples. Each tuple as a column name as String.
          and a list of keys which should be selected. It should only contain columns which are partition columns.
         :param force: It is a boolean. In case all the partitions need to be loaded, which is not recommended,
-         it should be set to 'True'.
-        :param debug: It is a boolean. If set to True it prints to the logs the query to be sent to Cassandra.
+         it should be set to 'True'. By Default it is set to 'False'.
+        :param debug: It is a boolean. If set to True it prints to the logs the query to be sent to Cassandra. By
+         default it is set to 'False'.
         """
 
         table = Table(self.cassandra_con.keyspace, table_name)
