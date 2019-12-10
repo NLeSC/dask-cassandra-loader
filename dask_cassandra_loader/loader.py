@@ -647,9 +647,10 @@ class Loader(object):
 
         table = Table(self.cassandra_con.keyspace, table_name)
 
-        table.load_metadata(self.cassandra_con)
-        if table.error:
-            raise Exception("load_cassandra_table failed: " + table.error)
+        try:
+            table.load_metadata(self.cassandra_con)
+        except Exception as e:
+            raise Exception("load_cassandra_table failed: " + str(e))
 
         loading_query = LoadingQuery()
 
