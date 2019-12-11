@@ -216,7 +216,7 @@ class LoadingQuery(object):
             for col in projections:
                 if col not in table.cols:
                     raise Exception(
-                        "Invalid column, please use one of the following columns: "
+                        "set_projections failed: Invalid column, please use one of the following columns: "
                         + str(table.cols) + "!!!")
             self.projections = list(dict.fromkeys(projections))
         return
@@ -252,7 +252,7 @@ class LoadingQuery(object):
                 (col, op, values) = predicate
                 if col not in table.predicate_cols:
                     raise Exception(
-                        "Predicate: " + str(predicate) +
+                        "set_and_predicates failed: Predicate " + str(predicate) +
                         " has an primary key column. Pick a non-primary key column "
                         + str(table.predicate_cols.keys() + "!!!\n"))
                 else:
@@ -295,21 +295,21 @@ class LoadingQuery(object):
                 return
             else:
                 raise Exception(
-                    "ATTENTION: All partitions will be loaded, query might be aborted!!!"
-                    + "To proceed re-call the function with force = True.")
+                    "partition_elimination failed: ATTENTION, all partitions will be loaded, query might be aborted!!!"
+                    + " To proceed re-call the function with force = True.")
         else:
             for partition in partitions_to_load:
                 (col, part_keys) = partition
                 if col not in table.partition_cols:
                     raise Exception(
-                        "Column " + str(col) +
+                        "partition_elimination failed: Column " + str(col) +
                         " is not a partition column. It should be one of " +
                         str(table.partition_cols) + ".")
                 else:
                     try:
                         part_cols_prun[col] = list(map(float, part_keys))
                     except Exception as e:
-                        raise ("Invalid value in the partition keys list: " +
+                        raise ("partition_elimination failed: Invalid value in the partition keys list: " +
                                str(e) + " !!!")
 
         for col in list(part_cols_prun.keys()):
@@ -347,7 +347,7 @@ class LoadingQuery(object):
 
         """
         if self.sql_query is None:
-            raise Exception("The query needs first to be defined!!! ")
+            raise Exception("print_query failed: The query needs first to be defined!!! ")
         else:
             self.logger.info(
                 self.sql_query.compile(compile_kwargs={"literal_binds": True}))
@@ -468,10 +468,10 @@ class Table():
             handler = PagedResultHandler(future)
             handler.finished_event.wait()
         except Exception as e:
-            raise AssertionError("The __read_data failed: " + str(e))
+            raise AssertionError("__read_data failed: " + str(e)) from e
         else:
             if handler.error:
-                raise Exception("The __read_data failed: " +
+                raise Exception("__read_data failed: " +
                                 str(handler.error))
             else:
                 df = handler.df
@@ -524,6 +524,11 @@ class Table():
             self.data = df
             self.logger.info("Computing ended.")
         return
+
+
+class DaskCassandraLoaderException(Exception):
+    """ Raise when the DaskCassandraLoader fails. """
+    pass
 
 
 class Loader(object):
@@ -600,14 +605,14 @@ class Loader(object):
         :param password: It is a string.
         """
         if cassandra_keyspace == "":
-            raise Exception("Key space can't be an empty string!!!")
+            raise DaskCassandraLoaderException("connect_to_cassandra failed: Key space can't be an empty string!!!")
         try:
             self.cassandra_con = Connector(cassandra_clusters,
                                            cassandra_keyspace,
                                            username, password)
         except Exception as e:
-            raise Exception(
-                "It was not possible to set a connection with the Cassandra cluster: "
+            raise DaskCassandraLoaderException(
+                "connect_to_cassandra failed: It was not possible to set a connection with the Cassandra cluster: "
                 + str(e))
         return
 
@@ -648,38 +653,39 @@ class Loader(object):
         try:
             table.load_metadata(self.cassandra_con)
         except Exception as e:
-            raise Exception("load_cassandra_table failed: " + str(e))
+            raise DaskCassandraLoaderException("load_cassandra_table failed: " +
+                            str(e)) from e
 
         loading_query = LoadingQuery()
 
         try:
             loading_query.set_projections(table, projections)
         except Exception as e:
-            raise Exception("load_cassandra_table failed: " +
-                            str(e))
+            raise DaskCassandraLoaderException("load_cassandra_table failed: " +
+                            str(e)) from e
 
         try:
             loading_query.set_and_predicates(table, and_predicates)
         except Exception as e:
-            raise Exception("load_cassandra_table failed: " +
-                            str(e))
+            raise DaskCassandraLoaderException("load_cassandra_table failed: " +
+                            str(e)) from e
 
         try:
             loading_query.partition_elimination(table, partitions_to_load, force)
         except Exception as e:
-            raise Exception("load_cassandra_table failed: " +
-                            str(e))
+            raise DaskCassandraLoaderException("load_cassandra_table failed: " +
+                            str(e)) from e
 
         try:
             loading_query.build_query(table)
         except Exception as e:
-            raise Exception("load_cassandra_table failed: " +
-                            str(e))
+            raise DaskCassandraLoaderException("load_cassandra_table failed: " +
+                            str(e)) from e
 
         try:
             table.load_data(self.cassandra_con, loading_query)
         except Exception as e:
-            raise Exception("Table load failed: " +
-                            str(e))
+            raise DaskCassandraLoaderException("load_cassandra_table failed: " +
+                            str(e)) from e
 
         return table
