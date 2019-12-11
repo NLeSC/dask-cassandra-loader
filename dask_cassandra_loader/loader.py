@@ -654,7 +654,7 @@ class Loader(object):
             table.load_metadata(self.cassandra_con)
         except Exception as e:
             raise DaskCassandraLoaderException("load_cassandra_table failed: " +
-                            str(e)) from e
+                                                str(e)) from e
 
         loading_query = LoadingQuery()
 
@@ -668,7 +668,7 @@ class Loader(object):
             loading_query.set_and_predicates(table, and_predicates)
         except Exception as e:
             raise DaskCassandraLoaderException("load_cassandra_table failed: " +
-                            str(e)) from e
+                                                str(e)) from e
 
         try:
             loading_query.partition_elimination(table, partitions_to_load, force)
