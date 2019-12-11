@@ -90,7 +90,7 @@ To connect to a remote cluster you use the following code:
 .. code-block:: python
 
   cluster = "host1.domain.nl:9091"
-  dask_cassandra_loader.connect_to_dask(cluster):
+  dask_cassandra_loader.connect_to_dask(cluster)
 
 
 Read Table
