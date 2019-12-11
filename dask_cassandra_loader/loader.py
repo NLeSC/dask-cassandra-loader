@@ -468,7 +468,7 @@ class Table():
             handler = PagedResultHandler(future)
             handler.finished_event.wait()
         except Exception as e:
-            raise AssertionError("__read_data failed: " + str(e)) from e
+            raise AssertionError("__read_data failed: " + str(e))
         else:
             if handler.error:
                 raise Exception("__read_data failed: " +
