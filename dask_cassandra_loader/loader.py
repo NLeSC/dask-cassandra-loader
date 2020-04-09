@@ -653,33 +653,33 @@ class Loader(object):
         try:
             table.load_metadata(self.cassandra_con)
         except Exception as e:
-            raise DaskCassandraLoaderException("load_cassandra_table failed: " + str(e)) from e
+            raise DaskCassandraLoaderException("load_cassandra_table failed: ") from e
 
         loading_query = LoadingQuery()
 
         try:
             loading_query.set_projections(table, projections)
         except Exception as e:
-            raise DaskCassandraLoaderException("load_cassandra_table failed: " + str(e)) from e
+            raise DaskCassandraLoaderException("load_cassandra_table failed: ") from e
 
         try:
             loading_query.set_and_predicates(table, and_predicates)
         except Exception as e:
-            raise DaskCassandraLoaderException("load_cassandra_table failed: " + str(e)) from e
+            raise DaskCassandraLoaderException("load_cassandra_table failed: ") from e
 
         try:
             loading_query.partition_elimination(table, partitions_to_load, force)
         except Exception as e:
-            raise DaskCassandraLoaderException("load_cassandra_table failed: " + str(e)) from e
+            raise DaskCassandraLoaderException("load_cassandra_table failed: ") from e
 
         try:
             loading_query.build_query(table)
         except Exception as e:
-            raise DaskCassandraLoaderException("load_cassandra_table failed: " + str(e)) from e
+            raise DaskCassandraLoaderException("load_cassandra_table failed: ") from e
 
         try:
             table.load_data(self.cassandra_con, loading_query)
         except Exception as e:
-            raise DaskCassandraLoaderException("load_cassandra_table failed: " + str(e)) from e
+            raise DaskCassandraLoaderException("load_cassandra_table failed: ") from e
 
         return table
