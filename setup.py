@@ -18,7 +18,7 @@ setup(
         selection and projections pushdown.""",
     long_description=readme + '\n\n',
     author="Romulo Goncalves",
-    author_email='r.goncalves@esciencecenter.nl',
+    author_email='romulopergon@gmail.com',
     maintainer="Stefan Verhoeven",
     maintainer_email="s.verhoeven@esciencecenter.nl",
     url='https://github.com/NLeSC/dask-cassandra-loader',
