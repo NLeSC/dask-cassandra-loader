@@ -90,7 +90,7 @@ To connect to a remote cluster you use the following code:
 .. code-block:: python
 
   cluster = "host1.domain.nl:9091"
-  dask_cassandra_loader.connect_to_dask(cluster):
+  dask_cassandra_loader.connect_to_dask(cluster)
 
 
 Read Table
@@ -105,20 +105,22 @@ read :func:`dask_cassandra_loader.loader.Loader.load_cassandra_table`.
 .. code-block:: python
 
   table = dask_cassandra_loader.load_cassandra_table('tab1',
-                                             ['id', 'year', 'month', 'day'],
-                                             [('day', 'equal', [8])],
-                                             [('id', [18]), ('year', [2018]),
-                                              ('month', [11])],
-                                             force=False)
-
+                                           ['id', 'year', 'month', 'day'],
+                                           [('day', 'equal', [8])],
+                                           [('id', [18]), ('year', [2018]),
+                                            ('month', [11])],
+                                           force=False)
   if table is None:
       raise AssertionError("Table is not supposed to be None!!!")
 
   if table.data is None:
       raise AssertionError("Table.data is not supposed to be None!!!")
 
+  # Compute the Dask DataFrame and collect it as a Pandas DataFrame
+  local_table = table.data.compute()
+
   # Inspect table information
-  print(table.data.head())
+  print(local_table.head())
 
 
 More information

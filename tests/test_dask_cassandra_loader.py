@@ -111,20 +111,22 @@ def test_table_load_empty():
     dask_cassandra_loader.connect_to_local_dask()
 
     # Load table 'tab1'
-    table = dask_cassandra_loader.load_cassandra_table(
-        'tab1', ['id', 'year', 'month', 'day'],
-        [('month', 'less_than', [1]),
-         ('day', 'in_', [1, 2, 3, 8, 12, 30])], [('id', [1, 2, 3, 4, 5, 6]),
+    try:
+        table = dask_cassandra_loader.load_cassandra_table(
+            'tab1', ['id', 'year', 'month', 'day'],
+            [('month', 'less_than', [1]),
+            ('day', 'in_', [1, 2, 3, 8, 12, 30])], [('id', [1, 2, 3, 4, 5, 6]),
                                                  ('year', [2019])],
-        force=False)
-
-    if table is None:
-        raise AssertionError()
-
-    if table.data is not None:
-        raise AssertionError("Table.data is supposed to be None!!!")
+            force=False)
+    except Exception as e:
+        raise AssertionError("It is not supposed to raise the following Exception: " +
+                             str(e))
     else:
-        print("As expected table data is empty!!!")
+        if table is None:
+            raise AssertionError("Table is not suppose to be None!!!")
+
+        if table.data is not None:
+            raise AssertionError("Table.data is supposed to be None!!!")
 
     # Disconnect from Dask
     dask_cassandra_loader.disconnect_from_dask()
@@ -148,21 +150,29 @@ def test_table_load_with_data():
     # Connect to Dask
     dask_cassandra_loader.connect_to_local_dask()
     # Load table 'tab1'
-    table = dask_cassandra_loader.load_cassandra_table('tab1',
+    try:
+        table = dask_cassandra_loader.load_cassandra_table('tab1',
                                                ['id', 'year', 'month', 'day'],
                                                [('day', 'equal', [8])],
                                                [('id', [18]), ('year', [2018]),
                                                 ('month', [11])],
                                                force=False)
+    except Exception as e:
+        raise AssertionError("It is not supposed to raise the following Exception: " +
+                             str(e))
+    else:
+        if table is None:
+            raise AssertionError("Table is not supposed to be None!!!")
 
-    if table is None:
-        raise AssertionError("Table is not supposed to be None!!!")
+        if table.data is None:
+            raise AssertionError("Table.data is not supposed to be None!!!")
 
-    if table.data is None:
-        raise AssertionError("Table.data is not supposed to be None!!!")
+        # Compute the Dask DataFrame and collect it as a Pandas DataFrame
+        local_table = table.data.compute()
 
-    # Inspect table information
-    #print(table.data.head())
+        # Inspect the number of rows
+        if local_table['id'].count() != 1:
+            raise AssertionError("The number of records is incorrect, it should be " + str(local_table['id'].count()))
 
     # Disconnect from Dask
     dask_cassandra_loader.disconnect_from_dask()
