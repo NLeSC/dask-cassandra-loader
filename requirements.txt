@@ -3,4 +3,3 @@ pandas
 dask[complete]
 cassandra-driver
 sqlalchemy
-MarkupSafe==1.1.1
