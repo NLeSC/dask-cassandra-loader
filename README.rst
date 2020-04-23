@@ -7,11 +7,11 @@
     :alt: Build Status
 
 .. image:: https://api.codacy.com/project/badge/Grade/e0685caa122140f582c64c479a5a1da5
-    :target: https://www.codacy.com/manual/r.goncalves/dask-cassandra-loader
+    :target: https://www.codacy.com/manual/romulogoncalves/dask-cassandra-loader
     :alt: Codacy Grade
     
 .. image:: https://api.codacy.com/project/badge/Coverage/e0685caa122140f582c64c479a5a1da5
-    :target: https://www.codacy.com/manual/r.goncalves/dask-cassandra-loader
+    :target: https://www.codacy.com/manual/romulogoncalves/dask-cassandra-loader
     :alt: Code Coverage
     
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3482935.svg
