@@ -6,7 +6,7 @@
     :target: https://travis-ci.org/NLeSC/dask-cassandra-loader
     :alt: Build Status
 
-.. image:: https://api.codacy.com/project/badge/Grade/e0685caa122140f582c64c479a5a1da5
+.. image:: https://api.codacy.com/project/badge/Grade/599cefa45a08493a8913d86c2b893a55
     :target: https://www.codacy.com/manual/romulogoncalves/dask-cassandra-loader
     :alt: Codacy Grade
     
