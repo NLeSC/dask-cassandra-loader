@@ -6,12 +6,12 @@
     :target: https://travis-ci.org/NLeSC/dask-cassandra-loader
     :alt: Build Status
 
-.. image:: https://api.codacy.com/project/badge/Grade/e0685caa122140f582c64c479a5a1da5
-    :target: https://www.codacy.com/manual/r.goncalves/dask-cassandra-loader
+.. image:: https://api.codacy.com/project/badge/Grade/599cefa45a08493a8913d86c2b893a55
+    :target: https://www.codacy.com/manual/romulogoncalves/dask-cassandra-loader
     :alt: Codacy Grade
     
-.. image:: https://api.codacy.com/project/badge/Coverage/e0685caa122140f582c64c479a5a1da5
-    :target: https://www.codacy.com/manual/r.goncalves/dask-cassandra-loader
+.. image:: https://api.codacy.com/project/badge/Coverage/599cefa45a08493a8913d86c2b893a55
+    :target: https://www.codacy.com/manual/romulogoncalves/dask-cassandra-loader
     :alt: Code Coverage
     
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3482935.svg
