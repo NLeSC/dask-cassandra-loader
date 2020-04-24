@@ -19,8 +19,6 @@ setup(
     long_description=readme + '\n\n',
     author="Romulo Goncalves",
     author_email='romulopergon@gmail.com',
-    maintainer="Romulo Goncalves",
-    maintainer_email="romulopergon@gmail.com",
     maintainer="Stefan Verhoeven",
     maintainer_email="s.verhoeven@esciencecenter.nl",
     url='https://github.com/NLeSC/dask-cassandra-loader',
