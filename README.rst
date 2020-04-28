@@ -16,6 +16,12 @@
     
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3482935.svg
    :target: https://doi.org/10.5281/zenodo.3482935
+    :alt: Archive reference
+
+.. image:: https://img.shields.io/pypi/v/dask-cassandra-loader.svg
+   :target: https://pypi.org/project/dask-cassandra-loader/
+    :alt: PyPI
+
 
 ################################################################################
 dask-cassandra-loader
@@ -33,17 +39,7 @@ To install dask-cassandra-loader, do:
 
 .. code-block:: console
 
-  git clone https://github.com/NLeSC/dask-cassandra-loader.git
-  cd dask-cassandra-loader
-  pip install . -r requirements.txt
-
-
-Run tests (including coverage) with:
-
-.. code-block:: console
-
-  python setup.py test
-
+  pip install dask-cassandra-loader
 
 Documentation
 *************

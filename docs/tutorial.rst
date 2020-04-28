@@ -9,7 +9,7 @@ To install Dask cassandra loader, use
 
 .. code-block:: bash
 
-  pip install dask_cassandra_loader
+  pip install dask-cassandra-loader
 
 If you're using dask cassandra loader in a program, you will probably want to use a
 virtualenv and install Cerulean into that, together with your other
