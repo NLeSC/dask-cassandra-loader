@@ -20,7 +20,7 @@
 
 .. image:: https://img.shields.io/pypi/v/dask-cassandra-loader.svg
    :target: https://pypi.org/project/dask-cassandra-loader/
-    :alt: PyPI
+   :alt: PyPI
 
 
 ################################################################################
