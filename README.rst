@@ -6,16 +6,22 @@
     :target: https://travis-ci.org/NLeSC/dask-cassandra-loader
     :alt: Build Status
 
-.. image:: https://api.codacy.com/project/badge/Grade/e0685caa122140f582c64c479a5a1da5
-    :target: https://www.codacy.com/manual/r.goncalves/dask-cassandra-loader
+.. image:: https://api.codacy.com/project/badge/Grade/599cefa45a08493a8913d86c2b893a55
+    :target: https://www.codacy.com/manual/romulogoncalves/dask-cassandra-loader
     :alt: Codacy Grade
     
-.. image:: https://api.codacy.com/project/badge/Coverage/e0685caa122140f582c64c479a5a1da5
-    :target: https://www.codacy.com/manual/r.goncalves/dask-cassandra-loader
+.. image:: https://api.codacy.com/project/badge/Coverage/599cefa45a08493a8913d86c2b893a55
+    :target: https://www.codacy.com/manual/romulogoncalves/dask-cassandra-loader
     :alt: Code Coverage
     
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3482935.svg
    :target: https://doi.org/10.5281/zenodo.3482935
+    :alt: Archive reference
+
+.. image:: https://img.shields.io/pypi/v/dask-cassandra-loader.svg
+   :target: https://pypi.org/project/dask-cassandra-loader/
+   :alt: PyPI
+
 
 ################################################################################
 dask-cassandra-loader
@@ -33,17 +39,7 @@ To install dask-cassandra-loader, do:
 
 .. code-block:: console
 
-  git clone https://github.com/NLeSC/dask-cassandra-loader.git
-  cd dask-cassandra-loader
-  pip install . -r requirements.txt
-
-
-Run tests (including coverage) with:
-
-.. code-block:: console
-
-  python setup.py test
-
+  pip install dask-cassandra-loader
 
 Documentation
 *************
@@ -61,7 +57,7 @@ have a look at the `contribution guidelines <CONTRIBUTING.rst>`_.
 License
 *******
 
-Copyright (c) 2019, Netherlands eScience Center
+Copyright (c) 2020, Netherlands eScience Center
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

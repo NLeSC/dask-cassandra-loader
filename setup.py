@@ -13,12 +13,14 @@ with open('README.rst') as readme_file:
 
 setup(
     name='dask_cassandra_loader',
-    version='1.0.0',
+    version='1.1.0',
     description="""A data loader which loads data from a Cassandra table into a Dask dataframe. It allows partition elimination,
         selection and projections pushdown.""",
     long_description=readme + '\n\n',
     author="Romulo Goncalves",
-    author_email='r.goncalves@esciencecenter.nl',
+    author_email='romulopergon@gmail.com',
+    maintainer="Stefan Verhoeven",
+    maintainer_email="s.verhoeven@esciencecenter.nl",
     url='https://github.com/NLeSC/dask-cassandra-loader',
     packages=[
         'dask_cassandra_loader',
@@ -33,9 +35,9 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
     test_suite='tests',
     install_requires=[
